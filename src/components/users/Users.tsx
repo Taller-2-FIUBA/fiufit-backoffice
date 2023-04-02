@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -6,26 +7,25 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { getUsers, User } from '../api/UsersService';
 
-function createData(
-  firstName: string,
-  lastName: string,
-  email: string,
-  registrationDate: string,
-  role: string,
-) {
-  return { firstName, lastName, email, registrationDate, role };
-}
-
-const rows = [
-  createData('Valeria', 'Rocha', 'valeria.mrb@gmail.com', '1/04/2023', 'trainer'),
-  createData('Laura', 'Diaz', 'ldiaz@gmail.com', '1/04/2023', 'trainer'),
-  createData('Lautaro', 'React', 'lautr@gmail.com', '1/04/2023', 'athlete'),
-  createData('Mario', 'Paz', 'mpaz@gmail.com', '1/04/2023', 'athlete'),
-  createData('Gimena', 'Lara', 'glara@gmail.com', '1/04/2023', 'athlete'),
-];
 
 export default function BasicTable() {
+  const [rows, setRows] = useState<User[]>([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const data: User[] = await getUsers();
+      setRows(data);
+    }
+  
+    fetchData()
+      .catch(console.error);
+  }, []);
+
+  const handleRowClick = (user: User) => {
+    console.log(user);
+  };
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -43,6 +43,7 @@ export default function BasicTable() {
             <TableRow
               key={row.firstName}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              onClick={() => handleRowClick(row)}
             >
               <TableCell component="th" scope="row">
                 {row.firstName}
