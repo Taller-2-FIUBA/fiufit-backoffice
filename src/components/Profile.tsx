@@ -1,4 +1,4 @@
-import { Avatar } from '@mui/material';
+import { Avatar, Card, CardContent } from '@mui/material';
 import React from 'react';
 
 interface User {
@@ -15,18 +15,19 @@ interface Props {
 const Profile: React.FC<Props> = ({ user }) => {
   return (
     <div className="user-profile">
-      <div className="user-avatar">
-        {user.avatar && <img src={user.avatar} alt={user.name} />}
-      </div>
       <Avatar
         alt={user.name}
         src={user.avatar}
         sx={{ width: 56, height: 56 }}
         />
       <div className="user-details">
-        <h2>{user.name}</h2>
-        <p>{user.email}</p>
-        {user.bio && <p>{user.bio}</p>}
+        <Card sx={{ minWidth: 275 }}>
+            <CardContent>
+                <h2>{user.name}</h2>
+                <p>{user.email}</p>
+                {user.bio && <p>{user.bio}</p>}
+            </CardContent>
+        </Card>
       </div>
     </div>
   );
