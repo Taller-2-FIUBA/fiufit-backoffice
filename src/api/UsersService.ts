@@ -1,6 +1,7 @@
 //import axios from 'axios';
 
 export interface User {
+    id: string;
     firstName: string,
     lastName: string,
     email: string,
@@ -11,11 +12,11 @@ export interface User {
 }
   
 const rows: User[] = [
-    { firstName: 'Valeria', lastName: 'Rocha', email: 'valeria.mrb@gmail.com', registrationDate: '1/04/2023', role: 'trainer' },
-    { firstName: 'Laura', lastName: 'Diaz', email: 'ldiaz@gmail.com', registrationDate: '1/04/2023', role: 'trainer' },
-    { firstName: 'Lautaro', lastName: 'React', email: 'lautr@gmail.com', registrationDate: '1/04/2023', role: 'athlete' },
-    { firstName: 'Mario', lastName: 'Paz', email: 'mpaz@gmail.com', registrationDate: '1/04/2023', role: 'athlete' },
-    { firstName: 'Gimena', lastName:'Lara', email: 'glara@gmail.com', registrationDate: '1/04/2023', role: 'athlete' },
+    { id: '123', firstName: 'Valeria', lastName: 'Rocha', email: 'valeria.mrb@gmail.com', registrationDate: '1/04/2023', role: 'trainer' },
+    { id: '124', firstName: 'Laura', lastName: 'Diaz', email: 'ldiaz@gmail.com', registrationDate: '1/04/2023', role: 'trainer' },
+    { id: '125', firstName: 'Lautaro', lastName: 'React', email: 'lautr@gmail.com', registrationDate: '1/04/2023', role: 'athlete' },
+    { id: '126', firstName: 'Mario', lastName: 'Paz', email: 'mpaz@gmail.com', registrationDate: '1/04/2023', role: 'athlete' },
+    { id: '127', firstName: 'Gimena', lastName:'Lara', email: 'glara@gmail.com', registrationDate: '1/04/2023', role: 'athlete' },
 ];
 
 /* export async function getUsers(): Promise<User[]> {
