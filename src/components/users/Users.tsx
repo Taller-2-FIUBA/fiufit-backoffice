@@ -2,17 +2,16 @@ import { useEffect, useState } from 'react';
 import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { getUsers, User } from '../../api/UsersService';
 import './Users.scss';
-import Profile from '../profile/Profile';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function BasicTable() {
   const [rows, setRows] = useState<User[]>([]);
-  const [user, setUser] = useState<User>();
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
       const data: User[] = await getUsers();
       setRows(data);
-      setUser(data[0]);
     }
   
     fetchData()
@@ -20,7 +19,7 @@ export default function BasicTable() {
   }, []);
 
   const handleRowClick = (user: User) => {
-    setUser(user);
+    navigate(`/profile/${user.id}`);
   };
 
   return (
@@ -55,7 +54,6 @@ export default function BasicTable() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Profile user={user}/>
     </div>
   );
 }
