@@ -1,5 +1,3 @@
-//import axios from 'axios';
-
 export interface User {
     id: string;
     firstName: string,
@@ -36,4 +34,8 @@ const rows: User[] = [
 
 export async function getUsers(): Promise<User[]> {
     return rows;
+}
+
+export async function getUser(userId?: string): Promise<User | undefined> {
+    return rows.find(user => user.id === userId);
 }

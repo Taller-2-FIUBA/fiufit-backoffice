@@ -1,12 +1,8 @@
 import { Avatar, Card, CardContent, Box, Stack, Paper, styled } from '@mui/material';
 import React from 'react';
 import './Profile.scss';
-import { User } from '../../api/UsersService';
-
-interface Props {
-  user: User | undefined;
-}
-
+import { User, getUser } from '../../api/UsersService';
+import { useParams } from 'react-router-dom';
 interface ItemProps {
   title: string;
   value?: string;
@@ -39,7 +35,21 @@ const ProfileItem: React.FC<ItemProps> = ({title, value}) => {
 }
 
 
-const Profile: React.FC<Props> = ({ user }) => {
+const Profile = () => {
+
+  const [user, setUser] = React.useState<User | undefined>();
+  const { userId } = useParams();
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const data: User | undefined = await getUser(userId);
+      setUser(data);
+    }
+
+    fetchData()
+      .catch(console.error);
+  }, [userId]);
+
   return (
     <Card className="user-profile">
       <CardContent>
