@@ -6,6 +6,8 @@ export interface User {
     email: string,
     registrationDate: string,
     role: string,
+    avatar? : string,
+    bio? : string
 }
   
 const rows: User[] = [
@@ -31,6 +33,6 @@ const rows: User[] = [
     }
 } */
 
-export function getUsers(): User[] {
+export async function getUsers(): Promise<User[]> {
     return rows;
 }
