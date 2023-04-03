@@ -13,7 +13,6 @@ interface ItemProps {
 }
 
 const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '',
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: 'center',
@@ -44,10 +43,10 @@ const Profile: React.FC<Props> = ({ user }) => {
   return (
     <Card className="user-profile">
       <CardContent>
-        {user?.firstName && <Avatar className='user-avatar'
+        {user && <Avatar className='user-avatar'
           alt={user?.firstName}
           src={user?.avatar}
-          >{user?.firstName[0]}</Avatar>
+          >{user?.firstName[0] + user?.lastName[0]}</Avatar>
         }
         <div className="user-details">
           <ProfileItem title='First Name' value={user?.firstName}/>
