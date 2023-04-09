@@ -17,24 +17,20 @@ const rows: User[] = [
     { id: '127', firstName: 'Gimena', lastName:'Lara', email: 'glara@gmail.com', registrationDate: '1/04/2023', role: 'athlete' },
 ];
 
-/* export async function getUsers(): Promise<User[]> {
+export async function getUsers(): Promise<User[]> {
     try {
-        const response = await fetch('/api/users');
+        const response = await fetch('http://localhost:8000/users/');
         if (response.ok) {
           const data = await response.json();
-          //return data;
-          return rows;
+          return data;
         } else {
           throw new Error(`Request failed with status ${response.status}`);
         }
     } catch (error: any) {
         throw new Error(`Failed to fetch data: ${error.message}`);
     }
-} */
-
-export async function getUsers(): Promise<User[]> {
-    return rows;
 }
+
 
 export async function getUser(userId?: string): Promise<User | undefined> {
     return rows.find(user => user.id === userId);
