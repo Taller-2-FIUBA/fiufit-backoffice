@@ -33,5 +33,6 @@ export async function getUsers(): Promise<User[]> {
 
 
 export async function getUser(userId?: string): Promise<User | undefined> {
-    return rows.find(user => user.id === userId);
+    const users = await getUsers();
+    return users.find(user => user.id === userId);
 }
