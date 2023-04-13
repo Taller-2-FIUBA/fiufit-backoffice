@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Container,
   Paper,
@@ -19,6 +20,7 @@ const LoginScreen: React.FC = () => {
   // Manejo de estados
   const [emailError, setEmailError] = useState(false);
   const [serverError, setServerError] = useState(false);
+  const navigate = useNavigate();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -29,7 +31,7 @@ const LoginScreen: React.FC = () => {
     }
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     // Valido el formato de email
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     if (!emailRegex.test(formData.email)) {
@@ -37,13 +39,14 @@ const LoginScreen: React.FC = () => {
       return;
     }
 
-    loginAdmin(formData.email, formData.password)
-      .then((response) => {
-        // OK
-      })
-      .catch((error) => {
-        setServerError(true); // Establecer estado de error del servidor en caso de fallo en la llamada
-      });
+    try {
+      await loginAdmin(formData.email, formData.password);
+      // OK
+      navigate("/"); //Página principal para ver el listado de users
+    } catch (error) {
+      //TODO esto para el caso de 500, sino identificar el error en particular
+      setServerError(true);
+    }
   };
 
   return (
@@ -119,6 +122,7 @@ const LoginScreen: React.FC = () => {
                 style={{ marginTop: 10 }}
               >
                 Error en el servidor. Por favor, intenta de nuevo más tarde.
+                {/* TODO sacar el mensaje de acá.*/}
               </Typography>
             )}
           </Paper>
