@@ -19,13 +19,13 @@ const rows: User[] = [
 
 export async function getUsers(): Promise<User[]> {
     try {
-        const response = await fetch('http://localhost:8000/users/');
-        if (response.ok) {
-          const data = await response.json();
-          return data;
-        } else {
-          throw new Error(`Request failed with status ${response.status}`);
-        }
+      //  const response = await fetch('http://localhost:8000/users/');
+     //   if (response.ok) {
+       //   const data = await response.json();
+          return rows;
+      //  } else {
+     //     throw new Error(`Request failed with status ${response.status}`);
+        //}
     } catch (error: any) {
         throw new Error(`Failed to fetch data: ${error.message}`);
     }
