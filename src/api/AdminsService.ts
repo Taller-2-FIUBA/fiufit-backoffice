@@ -1,9 +1,14 @@
 export interface Admin {
-    id: string;
+    id: string
     username: string,
     password: string,
     email: string,
 
+}
+
+export interface LoggedAdmin {
+    id: string,
+    token: string
 }
   
 const rows: Admin[] = [
@@ -27,7 +32,7 @@ export async function createAdmin(): Promise<Admin[]> {
         });
         if (response.ok) {
           const data = await response.json();
-          return un_admin;
+          return un_admin;  
         //  return data;
         } else {
           throw new Error(`Request failed with status ${response.status}`);
@@ -37,22 +42,26 @@ export async function createAdmin(): Promise<Admin[]> {
     }
 }
 
-export async function loginAdmin(email: string ,password: string): Promise<Admin[]> {
-    const body = {username: 'Valeria123', password: 'vale123', email: 'valeria.mrb@gmail.com'};
- //   try {
-//        const response = await fetch('http://localhost:8000/users/admin', {
-//            method: 'post',
-//            body: JSON.stringify(body),
-//            headers: {'Content-Type': 'application/json'}
-//        });
-/*        if (response.ok) {
+export async function loginAdmin(email: string ,password: string): Promise<LoggedAdmin> {
+    const body = {password: password, email: email};
+    try {
+        const response = await fetch('https://users-ingress-taller2-marianocinalli.cloud.okteto.net/admins/login', {
+            method: 'post',
+            body: JSON.stringify(body),
+           headers: {'Content-Type': 'application/json'}
+        });
+        console.log(response)
+        if (response.ok) {
           const data = await response.json();
-          return un_admin;
-        //  return data;
-        } else {*/
-          throw new Error(`Request failed with status ${500/*response.status*/}`);
-    /*    }
+          console.log(data)
+          return data;
+        } else {
+            console.log(response)
+          throw new Error(`Request failed with status ${response.status}`);
+        }
     } catch (error: any) {
+        console.log(error)
+
         throw new Error(`Failed to fetch data: ${error.message}`);
-    }*/
+    }
 }
