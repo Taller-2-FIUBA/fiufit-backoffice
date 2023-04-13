@@ -65,3 +65,16 @@ export async function loginAdmin(email: string ,password: string): Promise<Logge
         throw new Error(`Failed to fetch data: ${error.message}`);
     }
 }
+
+export async function getAdmins(): Promise<Admin[]> {
+  //  try {
+     //   const response = await fetch('http://localhost:8000/admins/');
+      /**/
+          return rows;
+      /*  } else {
+          throw new Error(`Request failed with status ${response.status}`);
+       }
+    } catch (error: any) {
+        throw new Error(`Failed to fetch data: ${error.message}`);
+    }*/
+}

@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router";
 import Profile from "./components/profile/Profile";
 import Users from "./components/users/Users";
 import LoginScreen from "./components/admins/Login";
+import Admins from "./components/admins/Admins";
 
 const AppRouter = () => {
   return (
@@ -11,6 +12,7 @@ const AppRouter = () => {
         <Route path="/" element={<Users />} />
         <Route path="/login" element={<LoginScreen />} />
         <Route path="/profile/:userId" element={<Profile />} />
+        <Route path="/admins" element={<Admins />} />
       </Routes>
     </Router>
   );
