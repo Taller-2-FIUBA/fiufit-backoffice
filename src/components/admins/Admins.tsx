@@ -45,6 +45,16 @@ const AdminsTablePage: React.FC = () => {
   const handleAddAdmin = async () => {
     if (isAdding) {
       console.log("Guardar admin");
+      if (!newAdmin.email || !newAdmin.password || !newAdmin.username) {
+        setError("Todos campos son requeridos."); // Mostrar mensaje de error si falta algún campo requerido
+        return;
+      }
+
+      const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+      if (!emailRegex.test(newAdmin.email)) {
+        setError("El email no tiene el formato correcto");
+        return;
+      }
 
       try {
         const savedAdmin = await createAdmin(newAdmin);
@@ -109,6 +119,7 @@ const AdminsTablePage: React.FC = () => {
                     name="username"
                     value={newAdmin.username}
                     onChange={handleNewAdminChange}
+                    required
                   />
                 </TableCell>
                 <TableCell>
@@ -117,6 +128,7 @@ const AdminsTablePage: React.FC = () => {
                     name="email"
                     value={newAdmin.email}
                     onChange={handleNewAdminChange}
+                    required
                   />
                 </TableCell>
                 <TableCell>
@@ -125,6 +137,7 @@ const AdminsTablePage: React.FC = () => {
                     name="password"
                     value={newAdmin.password}
                     onChange={handleNewAdminChange}
+                    required
                   />
                 </TableCell>
               </TableRow>
