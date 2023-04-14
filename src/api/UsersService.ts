@@ -47,17 +47,3 @@ export async function getUser(userId?: string): Promise<User | undefined> {
     }
     return data.get(userId || '');
 }
-
-
-/* const testMap = new Map<string, User>([
-    ["123", { id: '123', username: 'VRocha',  name: 'Valeria', surname: 'Rocha', email: 'valeria.mrb@gmail.com', registration_date: '1/04/2023', role: 'trainer' }],
-    ["124", { id: '124', username: 'LDiaz', name: 'Laura', surname: 'Diaz', email: 'ldiaz@gmail.com', registration_date: '1/04/2023', role: 'trainer' }],
-    ["125", { id: '125', username: 'LReact', name: 'Lautaro', surname: 'React', email: 'lautr@gmail.com', registration_date: '1/04/2023', role: 'athlete' }],
-    ["126", { id: '126', username: 'MPaz', name: 'Mario', surname: 'Paz', email: 'mpaz@gmail.com', registration_date: '1/04/2023', role: 'athlete' }],
-    ["127", { id: '127', username: 'GLara', name: 'Gimena', surname:'Lara', email: 'glara@gmail.com', registration_date: '1/04/2023', role: 'athlete' }],
-]); */
-
-/* */
-
-
-
