@@ -25,4 +25,5 @@ yarn-error.log*
 node_modules
 
 #coding
- .vscode/
+ .vscode
+.env

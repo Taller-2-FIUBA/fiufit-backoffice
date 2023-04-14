@@ -1,0 +1,11 @@
+@import '../../index.scss';
+
+.logo {
+    width: 56px;
+    height: 64px;
+    padding-right: 16px;
+
+    @media (max-width: 767px) {
+       display: none;
+    }
+}
