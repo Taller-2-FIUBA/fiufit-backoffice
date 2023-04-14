@@ -56,6 +56,11 @@ const AdminsTablePage: React.FC = () => {
         return;
       }
 
+      if (newAdmin.password.length < 6) {
+        setError("La password tiene que tener al menos 6 caracteres");
+        return;
+      }
+
       try {
         const savedAdmin = await createAdmin(newAdmin);
         setAdmins([...admins, savedAdmin]); // Agrego el nuevo admin a la lista
