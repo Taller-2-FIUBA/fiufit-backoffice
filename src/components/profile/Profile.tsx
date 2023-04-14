@@ -64,7 +64,7 @@ const Profile = () => {
           <ProfileItem title="Last Name" value={user?.surname}/>
           <ProfileItem title="Email" value={user?.email}/>
           <ProfileItem title="Registration Date" value={user?.registration_date}/>
-          <ProfileItem title="Role" value={user?.role}/>
+          <ProfileItem title="role" value={user?.is_athlete ? "Athlete" : "Trainer"}/>
         </div>
       </CardContent>
     </Card>

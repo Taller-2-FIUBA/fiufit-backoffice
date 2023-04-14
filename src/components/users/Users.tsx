@@ -52,7 +52,7 @@ export default function Users() {
                 <TableCell>{row.surname}</TableCell>
                 <TableCell>{row.email}</TableCell>
                 <TableCell>{row.registration_date}</TableCell>
-                <TableCell>{row.role}</TableCell>
+                <TableCell>{row?.is_athlete ? "Athlete" : "Trainer"}</TableCell>
               </TableRow>
             ))}
           </TableBody>

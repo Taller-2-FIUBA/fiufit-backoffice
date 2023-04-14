@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 export interface User {
     id: string;
     username: string,
@@ -11,7 +9,7 @@ export interface User {
     location?: string,
     birth_date?: string,
     name: string,
-    role: string,
+    is_athlete: boolean,
     avatar?: string
 }
 
