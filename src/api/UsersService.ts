@@ -1,38 +1,49 @@
 export interface User {
     id: string;
-    firstName: string,
-    lastName: string,
+    username: string,
+    surname: string,
     email: string,
-    registrationDate: string,
-    role: string,
-    avatar? : string,
-    bio? : string
+    registration_date: string,
+    height?: number,
+    weight?: number,
+    location?: string,
+    birth_date?: string,
+    name: string,
+    is_athlete: boolean,
+    avatar?: string
 }
-  
-const rows: User[] = [
-    { id: '123', firstName: 'Valeria', lastName: 'Rocha', email: 'valeria.mrb@gmail.com', registrationDate: '1/04/2023', role: 'trainer' },
-    { id: '124', firstName: 'Laura', lastName: 'Diaz', email: 'ldiaz@gmail.com', registrationDate: '1/04/2023', role: 'trainer' },
-    { id: '125', firstName: 'Lautaro', lastName: 'React', email: 'lautr@gmail.com', registrationDate: '1/04/2023', role: 'athlete' },
-    { id: '126', firstName: 'Mario', lastName: 'Paz', email: 'mpaz@gmail.com', registrationDate: '1/04/2023', role: 'athlete' },
-    { id: '127', firstName: 'Gimena', lastName:'Lara', email: 'glara@gmail.com', registrationDate: '1/04/2023', role: 'athlete' },
-];
+
+
+const data = new Map<String, User>();
 
 export async function getUsers(): Promise<User[]> {
+    if (data.size > 0) {
+        console.log('Uso la cache, data es: {}', data);
+        return [...data.values()];
+        
+    }
     try {
-      //  const response = await fetch('http://localhost:8000/users/');
-     //   if (response.ok) {
-       //   const data = await response.json();
-          return rows;
-      //  } else {
-     //     throw new Error(`Request failed with status ${response.status}`);
-        //}
+        console.log('Hago la pegada a /users', data);
+        const response = await fetch(`${process.env.REACT_APP_USERS_URL}`);
+        if (response.ok) {
+            const userResponse = await response.json();
+            for (const user of userResponse) {
+                data.set(user.id, user);
+            }
+            console.log('data es: {}', data);
+            console.log('El tamaño de data es: {}', data.size);
+            return [...data.values()];
+        } else {
+            throw new Error(`Request failed with status ${response.status}`);
+        }
     } catch (error: any) {
         throw new Error(`Failed to fetch data: ${error.message}`);
     }
 }
 
-
 export async function getUser(userId?: string): Promise<User | undefined> {
-    const users = await getUsers();
-    return users.find(user => user.id === userId);
+    if (data.size === 0) {
+        await getUsers();
+    }
+    return data.get(userId || '');
 }
