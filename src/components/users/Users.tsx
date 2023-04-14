@@ -5,7 +5,7 @@ import './Users.scss';
 import { useNavigate } from 'react-router-dom';
 
 
-export default function BasicTable() {
+export default function Users() {
   const [rows, setRows] = useState<User[]>([]);
   const navigate = useNavigate();
   useEffect(() => {
@@ -24,12 +24,13 @@ export default function BasicTable() {
 
   return (
     <div className="users">
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} className='user-table-container'>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead className='user-table-header'>
-            <TableRow>
-              <TableCell>First Name</TableCell>
-              <TableCell>Last Name</TableCell>
+            <TableRow hover>
+              <TableCell>Username</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Surname</TableCell>
               <TableCell>Email</TableCell>
               <TableCell>Registration date</TableCell>
               <TableCell>Role</TableCell>
@@ -37,17 +38,20 @@ export default function BasicTable() {
           </TableHead>
           <TableBody>
             {rows.map((row) => (
-              <TableRow
-                key={row.firstName}
+              <TableRow 
+                hover
+                selected
+                key={row.username}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 onClick={() => handleRowClick(row)}
               >
                 <TableCell component="th" scope="row">
-                  {row.firstName}
+                  {row.username}
                 </TableCell>
-                <TableCell>{row.lastName}</TableCell>
+                <TableCell>{row.name}</TableCell>
+                <TableCell>{row.surname}</TableCell>
                 <TableCell>{row.email}</TableCell>
-                <TableCell>{row.registrationDate}</TableCell>
+                <TableCell>{row.registration_date}</TableCell>
                 <TableCell>{row.role}</TableCell>
               </TableRow>
             ))}
