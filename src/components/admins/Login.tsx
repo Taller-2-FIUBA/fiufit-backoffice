@@ -9,7 +9,7 @@ import {
   Grid,
 } from "@mui/material";
 
-import { loginAdmin, Admin } from "../../api/AdminsService";
+import { loginAdmin, LoggedAdmin } from "../../api/AdminsService";
 
 const LoginScreen: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -40,12 +40,17 @@ const LoginScreen: React.FC = () => {
     }
 
     try {
-      await loginAdmin(formData.email, formData.password);
+      const loggedAdmin: LoggedAdmin = await loginAdmin(
+        formData.email,
+        formData.password
+      );
+      console.log("Admin loggeado: ", loggedAdmin);
       // OK
-      navigate("/"); //Página principal para ver el listado de users
-    } catch (error) {
+      navigate("/users"); //Página principal para ver el listado de users
+    } catch (error: any) {
       //TODO esto para el caso de 500, sino identificar el error en particular
       setServerError(true);
+      console.log(error.message);
     }
   };
 
