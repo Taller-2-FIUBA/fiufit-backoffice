@@ -45,7 +45,8 @@ export async function createAdmin(admin: Admin): Promise<Admin> {
 export async function loginAdmin(email: string ,password: string): Promise<LoggedAdmin> {
     const body = {password: password, email: email};
     try {
-        const response = await fetch('https://users-ingress-taller2-marianocinalli.cloud.okteto.net/admins/login', {
+        console.log("Login con ", body)
+        const response = await fetch(`${process.env.REACT_APP_ADMIN_LOGIN}`, {
             method: 'post',
             body: JSON.stringify(body),
            headers: {'Content-Type': 'application/json'}
