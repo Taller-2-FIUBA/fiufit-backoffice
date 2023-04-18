@@ -14,7 +14,7 @@ export interface LoggedAdmin {
 export async function createAdmin(admin: Admin): Promise<Admin> {
     const body = {password: admin.password, email: admin.email, username: admin.username};
     try {
-        const response = await fetch(`${process.env.REACT_CREATE_ADMIN}`, {
+        const response = await fetch(`${process.env.REACT_APP_ADMINS_URL}`, {
             method: 'post',
             body: JSON.stringify(body),
             headers: {'Content-Type': 'application/json'}
@@ -34,7 +34,7 @@ export async function loginAdmin(email: string ,password: string): Promise<Logge
     const body = {password: password, email: email};
     try {
         console.log("Login con ", body)
-        const response = await fetch(`${process.env.REACT_APP_ADMINS_URL}`, {
+        const response = await fetch(`${process.env.REACT_APP_ADMIN_LOGIN}`, {
             method: 'post',
             body: JSON.stringify(body),
            headers: {'Content-Type': 'application/json'}
