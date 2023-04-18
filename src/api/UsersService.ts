@@ -19,7 +19,7 @@ const data = new Map<String, User>();
 export async function getUsers(): Promise<User[]> {
     if (data.size > 0) {
         console.log('Uso la cache, data es: {}', data);
-        return [...data.values()];
+        return Array.from(data.values());
         
     }
     try {
@@ -32,7 +32,7 @@ export async function getUsers(): Promise<User[]> {
             }
             console.log('data es: {}', data);
             console.log('El tamaño de data es: {}', data.size);
-            return [...data.values()];
+            return Array.from(data.values());
         } else {
             throw new Error(`Request failed with status ${response.status}`);
         }
