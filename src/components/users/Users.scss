@@ -2,10 +2,69 @@
 
 .users {
 
+    padding: 25px;
+
     .user-table-header {
         background-color: $color-secondary;
-        font-weight: bold;
-        text-align: center;
-        padding: 10px;
+       
+        .user-table-row-cell{
+            font-size: 20px;
+            color: $color-white;
+            text-align: left;
+            font-weight: bold;
+        }
     }
+    .user-table-body {
+        background-color: $color-primary;
+
+        .user-table-row.blocked {
+            
+            .user-table-row-cell {
+                color: $color-grey-one;
+            }
+
+            .user-table-row-status {
+                background: $color-red;
+            }
+        }
+
+        .user-table-row-cell {
+            color: $color-tertiary;
+            padding: 10px;
+        }
+
+        .user-table-row-status {
+            position: relative;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: $color-tertiary;
+            margin-left: 15px;
+
+            span {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                background: inherit;
+                border-radius: inherit;
+                opacity: .8;
+                -webkit-animation: circleAnimate 1s ease-out infinite;
+                animation: circleAnimate 1s ease-out infinite;
+            }
+        }
+    }
+
+    .user-table-icon {
+        color: $color-white;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    @keyframes circleAnimate {
+        100% {
+            transform: scale(2);
+            opacity: 0;
+        }
+    }
+   
 }
