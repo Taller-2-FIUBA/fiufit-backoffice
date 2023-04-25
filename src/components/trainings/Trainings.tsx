@@ -4,6 +4,7 @@ import './Trainings.scss';
 import { useNavigate } from 'react-router-dom';
 import { getTrainings, Training } from '../../api/TrainingService';
 
+const headerRowItems = ['Title', 'Description', 'Type', 'Difficulty', 'Media', 'Goals'];
 
 export default function Trainings() {
   const [rows, setRows] = useState<Training[]>([]);
@@ -25,35 +26,30 @@ export default function Trainings() {
 
   return (
     <div className="trainings">
-      <TableContainer component={Paper} className='user-table-container'>
+      <TableContainer component={Paper} className='table-container'>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead className='user-table-header'>
+          <TableHead className='table-header'>
             <TableRow hover>
-              <TableCell>Title</TableCell>
-              <TableCell>Description</TableCell>
-              <TableCell>Type</TableCell>
-              <TableCell>Difficulty</TableCell>
-              <TableCell>Media</TableCell>
-              <TableCell>Goals</TableCell>
+              {headerRowItems.map((item) => (
+                <TableCell className='table-row-cell' key={item}>{item}</TableCell>
+              ))}
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody className='table-body'>
             {rows.map((row) => (
-              <TableRow 
+              <TableRow
+                className='table-row' 
                 hover
-                selected
                 key={row.title}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 onClick={() => handleRowClick(row)}
               >
-                <TableCell component="th" scope="row">
-                  {row.title}
-                </TableCell>
-                <TableCell>{row.description}</TableCell>
-                <TableCell>{row.type}</TableCell>
-                <TableCell>{row.difficulty}</TableCell>
-                <TableCell>{row.media}</TableCell>
-                <TableCell>{row.goals}</TableCell>
+                <TableCell className='table-row-cell'>{row.title}</TableCell>
+                <TableCell className='table-row-cell'>{row.description}</TableCell>
+                <TableCell className='table-row-cell'>{row.type}</TableCell>
+                <TableCell className='table-row-cell'>{row.difficulty}</TableCell>
+                <TableCell className='table-row-cell'>{row.media}</TableCell>
+                <TableCell className='table-row-cell'>{row.goals}</TableCell>
               </TableRow>
             ))}
           </TableBody>
