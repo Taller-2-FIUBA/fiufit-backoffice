@@ -1,25 +1,33 @@
 import { useEffect, useState } from 'react';
-import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton} from '@mui/material';
 import { getUsers, User } from '../../api/UsersService';
 import './Users.scss';
 import { useNavigate } from 'react-router-dom';
+import BlockIcon from '@mui/icons-material/Block';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
+const headerRowItems = ['Status', 'Username', 'Name', 'Surname', 'Email', 'Registration date', 'Location', 'Role', 'Actions'];
 
 export default function Users() {
-  const [rows, setRows] = useState<User[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
       const data: User[] = await getUsers();
-      setRows(data);
+      setUsers(data);
     }
   
     fetchData()
       .catch(console.error);
   }, []);
 
-  const handleRowClick = (user: User) => {
+  const handleProfileClick = (user: User) => {
     navigate(`/profile/${user.id}`);
+  };
+
+  const handleBlockClick = (user: User) => { 
+    user.is_blocked = !user.is_blocked;
+    setUsers([...users]);
   };
 
   return (
@@ -28,31 +36,41 @@ export default function Users() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead className='user-table-header'>
             <TableRow hover>
-              <TableCell>Username</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Surname</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Registration date</TableCell>
-              <TableCell>Role</TableCell>
+              {headerRowItems.map((item) => (
+                <TableCell className='user-table-row-cell' key={item}>{item}</TableCell>
+              ))}
             </TableRow>
           </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow 
+          <TableBody className='user-table-body'>
+            {users.map((user) => (
+              <TableRow
+                className={user.is_blocked ? 'user-table-row blocked' : 'user-table-row'}
                 hover
-                selected
-                key={row.username}
+                key={user.username}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                onClick={() => handleRowClick(row)}
               >
-                <TableCell component="th" scope="row">
-                  {row.username}
+                <TableCell>
+                  <div className='user-table-row-status'>
+                    <span></span>
+                  </div>
                 </TableCell>
-                <TableCell>{row.name}</TableCell>
-                <TableCell>{row.surname}</TableCell>
-                <TableCell>{row.email}</TableCell>
-                <TableCell>{row.registration_date}</TableCell>
-                <TableCell>{row?.is_athlete ? "Athlete" : "Trainer"}</TableCell>
+                <TableCell className='user-table-row-cell' component="th" scope="row">
+                  {user.username}
+                </TableCell>
+                <TableCell className='user-table-row-cell'>{user.name}</TableCell>
+                <TableCell className='user-table-row-cell'>{user.surname}</TableCell>
+                <TableCell className='user-table-row-cell'>{user.email}</TableCell>
+                <TableCell className='user-table-row-cell'>{user.registration_date}</TableCell>
+                <TableCell className='user-table-row-cell'>{user.location}</TableCell>
+                <TableCell className='user-table-row-cell'>{user.is_athlete ? "Athlete" : "Trainer"}</TableCell>
+                <TableCell>
+                  <IconButton className='user-table-icon' size="large" onClick={() => handleProfileClick(user)}>
+                    <VisibilityIcon></VisibilityIcon>
+                  </IconButton>
+                  <IconButton className='user-table-icon' size="large" onClick={() => handleBlockClick(user)}>
+                    <BlockIcon></BlockIcon>
+                  </IconButton>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

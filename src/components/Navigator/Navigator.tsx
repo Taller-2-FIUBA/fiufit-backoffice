@@ -36,7 +36,7 @@ function Navigator() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar className='app-bar-container' position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <img className="logo"

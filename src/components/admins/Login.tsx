@@ -57,7 +57,7 @@ const LoginScreen: React.FC = () => {
   return (
     <Container
       maxWidth="xs"
-      style={{ backgroundColor: "#012030", minHeight: "100vh" }}
+      style={{minHeight: "100%" }}
     >
       <Grid
         container
