@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import BlockIcon from '@mui/icons-material/Block';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
+const headerRowItems = ['Status', 'Username', 'Name', 'Surname', 'Email', 'Registration date', 'Location', 'Role', 'Actions'];
 
 export default function Users() {
   const [users, setUsers] = useState<User[]>([]);
@@ -35,18 +36,9 @@ export default function Users() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead className='user-table-header'>
             <TableRow hover>
-              <TableCell className='user-table-row-cell'>Status</TableCell>
-              <TableCell className='user-table-row-cell'>Username</TableCell>
-              <TableCell className='user-table-row-cell'>Name</TableCell>
-              <TableCell className='user-table-row-cell'>Surname</TableCell>
-              <TableCell className='user-table-row-cell'>Email</TableCell>
-              <TableCell className='user-table-row-cell'>Registration date</TableCell>
-              <TableCell className='user-table-row-cell'>Birth date</TableCell>
-              <TableCell className='user-table-row-cell'>Location</TableCell>
-              <TableCell className='user-table-row-cell'>Weight</TableCell>
-              <TableCell className='user-table-row-cell'>Height</TableCell>
-              <TableCell className='user-table-row-cell'>Role</TableCell>
-              <TableCell className='user-table-row-cell'>Actions</TableCell>
+              {headerRowItems.map((item) => (
+                <TableCell className='user-table-row-cell' key={item}>{item}</TableCell>
+              ))}
             </TableRow>
           </TableHead>
           <TableBody className='user-table-body'>
@@ -69,10 +61,7 @@ export default function Users() {
                 <TableCell className='user-table-row-cell'>{user.surname}</TableCell>
                 <TableCell className='user-table-row-cell'>{user.email}</TableCell>
                 <TableCell className='user-table-row-cell'>{user.registration_date}</TableCell>
-                <TableCell className='user-table-row-cell'>{user.birth_date}</TableCell>
                 <TableCell className='user-table-row-cell'>{user.location}</TableCell>
-                <TableCell className='user-table-row-cell'>{user.weight}</TableCell>
-                <TableCell className='user-table-row-cell'>{user.height}</TableCell>
                 <TableCell className='user-table-row-cell'>{user.is_athlete ? "Athlete" : "Trainer"}</TableCell>
                 <TableCell>
                   <IconButton className='user-table-icon' size="large" onClick={() => handleProfileClick(user)}>
