@@ -32,37 +32,35 @@ export default function Users() {
 
   return (
     <div className="users">
-      <TableContainer component={Paper} className='user-table-container'>
+      <TableContainer component={Paper} className='table-container'>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead className='user-table-header'>
+          <TableHead className='table-header'>
             <TableRow hover>
               {headerRowItems.map((item) => (
-                <TableCell className='user-table-row-cell' key={item}>{item}</TableCell>
+                <TableCell className='table-row-cell' key={item}>{item}</TableCell>
               ))}
             </TableRow>
           </TableHead>
-          <TableBody className='user-table-body'>
+          <TableBody className='table-body'>
             {users.map((user) => (
               <TableRow
-                className={user.is_blocked ? 'user-table-row blocked' : 'user-table-row'}
+                className={user.is_blocked ? 'table-row blocked' : 'table-row'}
                 hover
                 key={user.username}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                 <TableCell>
-                  <div className='user-table-row-status'>
+                  <div className='table-row-cell status'>
                     <span></span>
                   </div>
                 </TableCell>
-                <TableCell className='user-table-row-cell' component="th" scope="row">
-                  {user.username}
-                </TableCell>
-                <TableCell className='user-table-row-cell'>{user.name}</TableCell>
-                <TableCell className='user-table-row-cell'>{user.surname}</TableCell>
-                <TableCell className='user-table-row-cell'>{user.email}</TableCell>
-                <TableCell className='user-table-row-cell'>{user.registration_date}</TableCell>
-                <TableCell className='user-table-row-cell'>{user.location}</TableCell>
-                <TableCell className='user-table-row-cell'>{user.is_athlete ? "Athlete" : "Trainer"}</TableCell>
+                <TableCell className='table-row-cell'>{user.username}</TableCell>
+                <TableCell className='table-row-cell'>{user.name}</TableCell>
+                <TableCell className='table-row-cell'>{user.surname}</TableCell>
+                <TableCell className='table-row-cell'>{user.email}</TableCell>
+                <TableCell className='table-row-cell'>{user.registration_date}</TableCell>
+                <TableCell className='table-row-cell'>{user.location}</TableCell>
+                <TableCell className='table-row-cell'>{user.is_athlete ? "Athlete" : "Trainer"}</TableCell>
                 <TableCell>
                   <IconButton className='user-table-icon' size="large" onClick={() => handleProfileClick(user)}>
                     <VisibilityIcon></VisibilityIcon>

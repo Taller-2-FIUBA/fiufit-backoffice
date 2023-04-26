@@ -1,11 +1,5 @@
-@import '../../index.scss';
+@import '../../table.scss';
 
-.trainingsß {
-
-    .user-table-header {
-        background-color: $color-secondary;
-        font-weight: bold;
-        text-align: center;
-        padding: 10px;
-    }
+.trainings {
+    padding: 25px;
 }
