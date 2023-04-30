@@ -14,26 +14,14 @@ export interface User {
     is_blocked: boolean,
 }
 
-
-const data = new Map<String, User>();
+const baseUsersUrl = `${process.env.REACT_APP_USERS_URL}`;
 
 export async function getUsers(): Promise<User[]> {
-    if (data.size > 0) {
-        console.log('Uso la cache, data es: {}', data);
-        return Array.from(data.values());
-        
-    }
     try {
-        console.log('Hago la pegada a /users', data);
-        const response = await fetch(`${process.env.REACT_APP_USERS_URL}`);
+        const response = await fetch(baseUsersUrl);
         if (response.ok) {
             const userResponse = await response.json();
-            for (const user of userResponse) {
-                data.set(user.id, user);
-            }
-            console.log('data es: {}', data);
-            console.log('El tamaño de data es: {}', data.size);
-            return Array.from(data.values());
+            return userResponse;
         } else {
             throw new Error(`Request failed with status ${response.status}`);
         }
@@ -43,8 +31,15 @@ export async function getUsers(): Promise<User[]> {
 }
 
 export async function getUser(userId?: string): Promise<User | undefined> {
-    if (data.size === 0) {
-        await getUsers();
+    try {
+        const response = await fetch(baseUsersUrl + "/" + userId);
+        if (response.ok) {
+            const userResponse = await response.json();
+            return userResponse;
+        } else {
+            throw new Error(`Request failed with status ${response.status}`);
+        }
+    } catch (error: any) {
+        throw new Error(`Failed to fetch data: ${error.message}`);
     }
-    return data.get(userId || '');
 }

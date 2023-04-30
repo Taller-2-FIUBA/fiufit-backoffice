@@ -1,33 +1,25 @@
 import { useEffect, useState } from 'react';
-import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton} from '@mui/material';
+import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Typography} from '@mui/material';
 import { getUsers, User } from '../../api/UsersService';
 import './Users.scss';
 import { useNavigate } from 'react-router-dom';
 import BlockIcon from '@mui/icons-material/Block';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import { useQuery } from '@tanstack/react-query';
 
 const headerRowItems = ['Status', 'Username', 'Name', 'Surname', 'Email', 'Registration date', 'Location', 'Role', 'Actions'];
 
 export default function Users() {
-  const [users, setUsers] = useState<User[]>([]);
   const navigate = useNavigate();
-  useEffect(() => {
-    const fetchData = async () => {
-      const data: User[] = await getUsers();
-      setUsers(data);
-    }
+  const {isLoading, error, data} = useQuery(['users'],() => getUsers());
   
-    fetchData()
-      .catch(console.error);
-  }, []);
-
   const handleProfileClick = (user: User) => {
     navigate(`/profile/${user.id}`);
   };
 
   const handleBlockClick = (user: User) => { 
     user.is_blocked = !user.is_blocked;
-    setUsers([...users]);
+/*     setUsers([...users]); */
   };
 
   return (
@@ -42,7 +34,7 @@ export default function Users() {
             </TableRow>
           </TableHead>
           <TableBody className='table-body'>
-            {users.map((user) => (
+            {data && data.map((user) => (
               <TableRow
                 className={user.is_blocked ? 'table-row blocked' : 'table-row'}
                 hover
@@ -73,6 +65,7 @@ export default function Users() {
             ))}
           </TableBody>
         </Table>
+        {isLoading && <div>Loading...</div>}
       </TableContainer>
     </div>
   );
