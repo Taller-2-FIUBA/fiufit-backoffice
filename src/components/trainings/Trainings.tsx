@@ -1,25 +1,22 @@
-import { useEffect, useState } from 'react';
-import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material';
 import './Trainings.scss';
 import { useNavigate } from 'react-router-dom';
 import { getTrainings, Training } from '../../api/TrainingService';
+import { useQuery } from '@tanstack/react-query';
 
 const headerRowItems = ['Title', 'Description', 'Type', 'Difficulty', 'Media', 'Goals'];
 
 export default function Trainings() {
-  const [rows, setRows] = useState<Training[]>([]);
-  const navigate = useNavigate();
-  useEffect(() => {
-    const fetchData = async () => {
-      const data: Training[] = await getTrainings();
-      console.log(data);
-      setRows(data);
+  const {isLoading, isError, error, data} = useQuery(['trainings'], () => getTrainings(), 
+    {
+      refetchOnWindowFocus: false,
+      refetchOnMount: true,
+      staleTime: 60000,
     }
-  
-    fetchData()
-      .catch(console.error);
-  }, []);
+  );
 
+  const navigate = useNavigate();
+  
   const handleRowClick = (training: Training) => {
     navigate(`/training/${training.id}`);
   };
@@ -36,7 +33,7 @@ export default function Trainings() {
             </TableRow>
           </TableHead>
           <TableBody className='table-body'>
-            {rows.map((row) => (
+            {data && data.map((row) => (
               <TableRow
                 className='table-row' 
                 hover
@@ -54,6 +51,12 @@ export default function Trainings() {
             ))}
           </TableBody>
         </Table>
+        {isError && <div>
+          <Typography color="error" variant="body1">
+            {(error as Error).message}
+          </Typography>
+        </div>}
+        {isLoading && <div>Loading...</div>}
       </TableContainer>
     </div>
   );

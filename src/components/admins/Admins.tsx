@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Container,
   Typography,
@@ -12,14 +12,17 @@ import {
   Button,
 } from "@mui/material";
 import "./Admins.scss";
-import { Admin, getAdmins, createAdmin } from "../../api/AdminsService";
+import { Admin, useCreateAdmin, useAdminsData } from "../../api/AdminsService";
+
 
 const headerRowItems = ["ID", "Username", "Email", "Password"];
 
 const AdminsTablePage: React.FC = () => {
-  const [admins, setAdmins] = useState<Admin[]>([]);
-  const [error, setError] = useState<string>("");
 
+  const {isLoading, isError, error, data } = useAdminsData();
+  const {mutate: addAdmin} = useCreateAdmin();
+
+  const [errorAdmin, setErrorAdmin] = useState<string>("");
   const [newAdmin, setNewAdmin] = useState<Admin>({
     id: "",
     email: "",
@@ -27,52 +30,35 @@ const AdminsTablePage: React.FC = () => {
     username: "",
   });
   const [isAdding, setIsAdding] = useState(false);
-  const [addAdminButtonText, setAddAdminButtonText] =
-    useState<string>("+ Agregar Admin");
-
-  useEffect(() => {
-    const fetchAdmins = async () => {
-      try {
-        const adminsData = await getAdmins();
-        setAdmins(adminsData); // Actualizo con los datos nuevos
-      } catch (error) {
-        console.error("Error al cargar administradores", error);
-        setError("Error al traer los admins. Por favor, inténtelo de nuevo.");
-      }
-    };
-    fetchAdmins();
-  }, []);
+  const [addAdminButtonText, setAddAdminButtonText] = useState<string>("+ Agregar Admin");
 
   // Función para agregar un nuevo admin a la lista
   const handleAddAdmin = async () => {
     if (isAdding) {
       console.log("Guardar admin");
       if (!newAdmin.email || !newAdmin.password || !newAdmin.username) {
-        setError("Todos campos son requeridos."); // Mostrar mensaje de error si falta algún campo requerido
+        setErrorAdmin("Todos campos son requeridos."); // Mostrar mensaje de error si falta algún campo requerido
         return;
       }
 
       const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
       if (!emailRegex.test(newAdmin.email)) {
-        setError("El email no tiene el formato correcto");
+        setErrorAdmin("El email no tiene el formato correcto");
         return;
       }
 
       if (newAdmin.password.length < 6) {
-        setError("La password tiene que tener al menos 6 caracteres");
+        setErrorAdmin("La password tiene que tener al menos 6 caracteres");
         return;
       }
 
       try {
-        const savedAdmin = await createAdmin(newAdmin);
-        setAdmins([...admins, savedAdmin]); // Agrego el nuevo admin a la lista
-
+        addAdmin(newAdmin)  // Guardo el nuevo admin en la base de datos
         // OK
       } catch (error) {
         //TODO esto para el caso de 500, sino identificar el error en particular
-        setError("Error al guardar el admin. Por favor, inténtelo de nuevo.");
-      }
-
+        setErrorAdmin("Error al guardar el admin. Por favor, inténtelo de nuevo.");
+      } 
       setIsAdding(false); // Vuelvo a la vista normal
       setAddAdminButtonText("+ Agregar Admin");
     } else {
@@ -99,7 +85,7 @@ const AdminsTablePage: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody className='table-body'>
-            {admins.map((admin) => (
+            {data && data.map((admin) => (
               <TableRow 
                 className='table-row'
                 key={admin.id}
@@ -155,11 +141,17 @@ const AdminsTablePage: React.FC = () => {
             )}
           </TableBody>
         </Table>
-        {error && (
+        {isError && (
           <Typography color="error" variant="body1">
-            {error}
+            {(error as Error).message}
           </Typography>
         )}
+        {errorAdmin && (
+          <Typography color="error" variant="body1">
+            {errorAdmin}
+          </Typography>
+        )}
+        {isLoading && <Typography variant="body1">Loading...</Typography>}
       </TableContainer>
       <Button
         variant="contained"

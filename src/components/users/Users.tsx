@@ -1,17 +1,16 @@
-import { useEffect, useState } from 'react';
 import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Typography} from '@mui/material';
-import { getUsers, User } from '../../api/UsersService';
+import { useUsersData, User, useUserUpdate } from '../../api/UsersService';
 import './Users.scss';
 import { useNavigate } from 'react-router-dom';
 import BlockIcon from '@mui/icons-material/Block';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { useQuery } from '@tanstack/react-query';
 
 const headerRowItems = ['Status', 'Username', 'Name', 'Surname', 'Email', 'Registration date', 'Location', 'Role', 'Actions'];
 
 export default function Users() {
   const navigate = useNavigate();
-  const {isLoading, error, data} = useQuery(['users'],() => getUsers());
+  const {isLoading, isError, error, data} = useUsersData();
+  const {mutate: updateUser} = useUserUpdate();
   
   const handleProfileClick = (user: User) => {
     navigate(`/profile/${user.id}`);
@@ -19,7 +18,7 @@ export default function Users() {
 
   const handleBlockClick = (user: User) => { 
     user.is_blocked = !user.is_blocked;
-/*     setUsers([...users]); */
+    updateUser(user);
   };
 
   return (
@@ -65,6 +64,11 @@ export default function Users() {
             ))}
           </TableBody>
         </Table>
+        {isError && <div>
+          <Typography color="error" variant="body1">
+            {(error as Error).message}
+          </Typography>
+        </div>}
         {isLoading && <div>Loading...</div>}
       </TableContainer>
     </div>

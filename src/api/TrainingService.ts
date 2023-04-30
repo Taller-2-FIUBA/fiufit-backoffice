@@ -8,42 +8,32 @@ export interface Training {
     goals: Array<string>,
 }
 
-
-const data = new Map<String, Training>();
+const baseTrainingsUrl = `${process.env.REACT_APP_TRAININGS_URL}`;
 
 export async function getTrainings(): Promise<Training[]> {
-    if (data.size > 0) {
-        return Array.from(data.values());
-        
-    }
     try {
-        /* const response = await fetch(`${process.env.REACT_APP_USERS_URL}`);
+        const response = await fetch(baseTrainingsUrl);
         if (response.ok) {
-            const userResponse = await response.json();
-            for (const user of userResponse) {
-                data.set(user.id, user);
-            }
-            return Array.from(data.values());
+            const trainingResponse = await response.json();
+            return trainingResponse;
         } else {
             throw new Error(`Request failed with status ${response.status}`);
-        } */
-        return [{
-            id: "001",
-            title: "Running",
-            description: "Running training",
-            type: "running",
-            difficulty: "easy",
-            media: "http://localhost",
-            goals:  ["goal1", "goal2", "goal3"]
-        }];
+        }
     } catch (error: any) {
         throw new Error(`Failed to fetch trainings: ${error.message}`);
     }
 }
 
 export async function getTraining(trainingId?: string): Promise<Training | undefined> {
-    if (data.size === 0) {
-        await getTraining();
+    try {
+        const response = await fetch(baseTrainingsUrl + "/" + trainingId);
+        if (response.ok) {
+            const trainingResponse = await response.json();
+            return trainingResponse;
+        } else {
+            throw new Error(`Request failed with status ${response.status}`);
+        }
+    } catch (error: any) {
+        throw new Error(`Failed to fetch data: ${error.message}`);
     }
-    return data.get(trainingId || '');
 }
