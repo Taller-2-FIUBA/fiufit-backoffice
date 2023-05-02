@@ -1,24 +1,17 @@
 import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material';
 import './Trainings.scss';
 import { useNavigate } from 'react-router-dom';
-import { getTrainings, Training } from '../../api/TrainingService';
-import { useQuery } from '@tanstack/react-query';
+import { useTrainingsData, Training } from '../../api/TrainingService';
 
 const headerRowItems = ['Title', 'Description', 'Type', 'Difficulty', 'Media', 'Goals'];
 
 export default function Trainings() {
-  const {isLoading, isError, error, data} = useQuery(['trainings'], () => getTrainings(), 
-    {
-      refetchOnWindowFocus: false,
-      refetchOnMount: true,
-      staleTime: 60000,
-    }
-  );
+  const {isLoading, isError, error, data} = useTrainingsData();
 
   const navigate = useNavigate();
   
   const handleRowClick = (training: Training) => {
-    navigate(`/training/${training.id}`);
+    //navigate(`/training/${training.id}`);
   };
 
   return (

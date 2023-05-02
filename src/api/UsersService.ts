@@ -52,8 +52,7 @@ async function getUsers(): Promise<User[]> {
     }
 }
 
-export async function getUser(userId?: string): Promise<User | undefined> {
-    console.log("Doing fetch to User ID");
+async function getUser(userId?: string): Promise<User | undefined> {
     try {
         const response = await fetch(baseUsersUrl + "/" + userId);
         if (response.ok) {
@@ -69,6 +68,14 @@ export async function getUser(userId?: string): Promise<User | undefined> {
 
 export function useUsersData() {
     return useQuery(['users'], () => getUsers(), {
+        refetchOnWindowFocus: false,
+        refetchOnMount: true,
+        staleTime: 60000,
+    });
+}
+
+export function useUserData(userId?: string) {
+    return useQuery(['users', userId], () => getUser(userId), {
         refetchOnWindowFocus: false,
         refetchOnMount: true,
         staleTime: 60000,

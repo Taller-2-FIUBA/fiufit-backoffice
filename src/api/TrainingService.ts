@@ -1,3 +1,5 @@
+import { useQuery } from '@tanstack/react-query';
+
 export interface Training {
     id: string,
     title: string,
@@ -10,7 +12,7 @@ export interface Training {
 
 const baseTrainingsUrl = `${process.env.REACT_APP_TRAININGS_URL}`;
 
-export async function getTrainings(): Promise<Training[]> {
+async function getTrainings(): Promise<Training[]> {
     try {
         const response = await fetch(baseTrainingsUrl);
         if (response.ok) {
@@ -24,7 +26,7 @@ export async function getTrainings(): Promise<Training[]> {
     }
 }
 
-export async function getTraining(trainingId?: string): Promise<Training | undefined> {
+async function getTraining(trainingId?: string): Promise<Training | undefined> {
     try {
         const response = await fetch(baseTrainingsUrl + "/" + trainingId);
         if (response.ok) {
@@ -36,4 +38,20 @@ export async function getTraining(trainingId?: string): Promise<Training | undef
     } catch (error: any) {
         throw new Error(`Failed to fetch data: ${error.message}`);
     }
+}
+
+export function useTrainingsData() {
+    return useQuery(['trainings'], () => getTrainings(), {
+        refetchOnWindowFocus: false,
+        refetchOnMount: true,
+        staleTime: 60000,
+    });
+}
+
+export function useTrainingData(trainingId?: string) {
+    return useQuery(['training', trainingId], () => getTraining(trainingId), {
+        refetchOnWindowFocus: false,
+        refetchOnMount: true,
+        staleTime: 60000,
+    });
 }
