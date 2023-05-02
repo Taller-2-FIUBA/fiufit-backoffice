@@ -16,7 +16,7 @@ export interface User {
 
 const data = new Map<String, User>();
 
-export async function getUsers(): Promise<User[]> {
+export async function getUsers(token: string): Promise<User[]> {
     if (data.size > 0) {
         console.log('Uso la cache, data es: {}', data);
         return Array.from(data.values());
@@ -24,7 +24,15 @@ export async function getUsers(): Promise<User[]> {
     }
     try {
         console.log('Hago la pegada a /users', data);
-        const response = await fetch(`${process.env.REACT_APP_USERS_URL}`);
+        const headers = new Headers();
+        headers.append("Authorization", `Bearer ${token}`);
+
+        const options = {
+            method: "GET",
+            headers: headers,
+          };
+
+        const response = await fetch(`${process.env.REACT_APP_USERS_URL}`,options);
         if (response.ok) {
             const userResponse = await response.json();
             for (const user of userResponse) {
@@ -41,9 +49,9 @@ export async function getUsers(): Promise<User[]> {
     }
 }
 
-export async function getUser(userId?: string): Promise<User | undefined> {
+export async function getUser(token: string,userId?: string): Promise<User | undefined> {
     if (data.size === 0) {
-        await getUsers();
+        await getUsers(token);
     }
     return data.get(userId || '');
 }
