@@ -1,0 +1,19 @@
+@import '../../../index.scss';
+
+.modal-container {
+    width: 500px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid $color-tertiary ;
+    border-radius: 10px !important;
+    background-color: $color-primary !important;
+
+    .modal-content {
+        padding: 0;
+        &:last-child {
+            padding-bottom: 0;
+        }
+    }
+}

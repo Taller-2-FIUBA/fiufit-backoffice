@@ -4,7 +4,7 @@ import './Users.scss';
 import BlockIcon from '@mui/icons-material/Block';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import React from 'react';
-import Profile from './user-profile/UserProfile';
+import ModalWrapper from '../common/modal-wrapper/ModalWrapper';
 
 const headerRowItems = ['Status', 'Username', 'Name', 'Surname', 'Email', 'Registration date', 'Location', 'Role', 'Actions'];
 
@@ -76,14 +76,12 @@ export default function Users() {
         </div>}
         {isLoading && <div>Loading...</div>}
       </TableContainer>
-      <Modal
+      <ModalWrapper
         open={!!selectedUser}
-        onClose={handleProfileClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Profile user={selectedUser}></Profile>
-      </Modal>
+        handleOnClose={handleProfileClose}
+        type='user-details'
+        value={selectedUser}
+      />
     </Container>
   );
 }

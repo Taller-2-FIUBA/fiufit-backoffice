@@ -1,22 +1,6 @@
 @import '../../../index.scss';
 
 .user-profile {
-    width: 500px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border: 2px solid $color-tertiary ;
-    border-radius: 10px !important;
-    background-color: $color-primary !important;
-
-    .user-profile-content {
-        padding: 0;
-        &:last-child {
-            padding-bottom: 0;
-        }
-    }
-
     .user-avatar {
         width: 100px;
         height: 100px;
@@ -30,26 +14,6 @@
     .user-details {
         margin: 0 auto;
         border-top: 2px solid $color-tertiary;
-    }
-
-    .profile-item {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        background-color: $color-secondary;
-        color: $color-white;
-        padding: 10px;
-    }
-
-    .profile-item-title {
-        font-size: 18px;
-        font-weight: bold;
-    }
-
-    .icon-title-container {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
     }
 
     .user-name {

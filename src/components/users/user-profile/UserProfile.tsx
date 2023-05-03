@@ -10,8 +10,8 @@ interface UserProfileProps {
 
 const UserProfile: React.FC<UserProfileProps> = ({user}) => {
   return (
-    <Card className="user-profile">
-      <CardContent className='user-profile-content'>
+    <Card className="modal-container user-profile">
+      <CardContent className='modal-content'>
         {user &&
           <Box>
             <Avatar className='user-avatar'

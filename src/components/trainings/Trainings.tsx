@@ -1,10 +1,10 @@
-import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Container, IconButton, Modal } from '@mui/material';
+import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Container, IconButton } from '@mui/material';
 import './Trainings.scss';
 import { useTrainingsData, Training, useTrainingUpdate } from '../../api/TrainingService';
 import BlockIcon from '@mui/icons-material/Block';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import React from 'react';
-import TrainingDetailView from './training-detail-view/TrainingDetailView';
+import ModalWrapper from '../common/modal-wrapper/ModalWrapper';
 
 const headerRowItems = ['Status', 'Title', 'Description', 'Type', 'Difficulty', 'Media', 'Goals', 'Actions'];
 
@@ -19,7 +19,7 @@ export default function Trainings() {
     setSelectedTraining(training);
   };
 
-  const handleProfileClose = () => {
+  const handleDetailTrainingClose = () => {
     setSelectedTraining(null);
   }
   const handleBlockClick = (training: Training) => { 
@@ -76,14 +76,12 @@ export default function Trainings() {
         </div>}
         {isLoading && <div>Loading...</div>}
       </TableContainer>
-      <Modal
+      <ModalWrapper
         open={!!selectedTraining}
-        onClose={handleProfileClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <TrainingDetailView training={selectedTraining}></TrainingDetailView>
-      </Modal>
+        handleOnClose={handleDetailTrainingClose}
+        type='training-details'
+        value={selectedTraining}
+      />
     </Container>
   );
 }
