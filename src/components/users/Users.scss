@@ -1,57 +1,6 @@
 @import '../../table.scss';
 
 .users {
-
     padding: 25px;
-    .table-row.blocked {
-        
-        .table-row-cell {
-            color: $color-grey-one;
-        }
-
-        .table-row-cell.status {
-            background: $color-red;
-        }
-
-        .user-table-icon {
-            color: $color-red;
-        }
-    
-    }
-
-    .table-row-cell.status {
-        position: relative;
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        background: $color-tertiary;
-        margin-left: 15px;
-        padding: 0;
-
-        span {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: inherit;
-            border-radius: inherit;
-            opacity: .8;
-            -webkit-animation: circleAnimate 1s ease-out infinite;
-            animation: circleAnimate 1s ease-out infinite;
-        }
-    }
-
-
-    .user-table-icon {
-        color: $color-white;
-        font-size: 20px;
-        cursor: pointer;
-    }
-
-    @keyframes circleAnimate {
-        100% {
-            transform: scale(2);
-            opacity: 0;
-        }
-    }
-   
+    max-width: fit-content !important;
 }

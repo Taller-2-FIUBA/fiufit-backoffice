@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export interface Training {
     id: string,
@@ -8,9 +8,29 @@ export interface Training {
     difficulty: string,
     media: string,
     goals: Array<string>,
+    is_blocked: boolean,
 }
 
 const baseTrainingsUrl = `${process.env.REACT_APP_TRAININGS_URL}`;
+
+async function updateTraining(training: Training): Promise<Training> {
+    const body = {is_blocked: training.is_blocked};
+    try {
+        const response = await fetch(baseTrainingsUrl + "/" + training.id, {
+            method: 'patch',
+            body: JSON.stringify(body),
+            headers: {'Content-Type': 'application/json'}
+        });
+        if (response.ok) {
+          const data = await response.json();
+          return data;
+        } else {
+          throw new Error(`Request failed with status ${response.status}`);
+        }
+    } catch (error: any) {
+        throw new Error(`Failed to fetch data: ${error.message}`);
+    }
+}
 
 async function getTrainings(): Promise<Training[]> {
     try {
@@ -26,20 +46,6 @@ async function getTrainings(): Promise<Training[]> {
     }
 }
 
-async function getTraining(trainingId?: string): Promise<Training | undefined> {
-    try {
-        const response = await fetch(baseTrainingsUrl + "/" + trainingId);
-        if (response.ok) {
-            const trainingResponse = await response.json();
-            return trainingResponse;
-        } else {
-            throw new Error(`Request failed with status ${response.status}`);
-        }
-    } catch (error: any) {
-        throw new Error(`Failed to fetch data: ${error.message}`);
-    }
-}
-
 export function useTrainingsData() {
     return useQuery(['trainings'], () => getTrainings(), {
         refetchOnWindowFocus: false,
@@ -48,10 +54,19 @@ export function useTrainingsData() {
     });
 }
 
-export function useTrainingData(trainingId?: string) {
-    return useQuery(['training', trainingId], () => getTraining(trainingId), {
-        refetchOnWindowFocus: false,
-        refetchOnMount: true,
-        staleTime: 60000,
+export function useTrainingUpdate() {
+    const queryClient = useQueryClient();
+    return useMutation(updateTraining, {
+        onSuccess: (data) => {
+            queryClient.setQueryData(['trainings'], (old: Training[] | undefined) => {
+                if (old) {
+                    const index = old.findIndex((training) => training.id === data.id);
+                    if (index !== -1) {
+                        old[index] = data;
+                    }
+                }
+                return old;
+            });
+        }
     });
 }

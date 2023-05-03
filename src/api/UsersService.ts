@@ -52,30 +52,8 @@ async function getUsers(): Promise<User[]> {
     }
 }
 
-async function getUser(userId?: string): Promise<User | undefined> {
-    try {
-        const response = await fetch(baseUsersUrl + "/" + userId);
-        if (response.ok) {
-            const userResponse = await response.json();
-            return userResponse;
-        } else {
-            throw new Error(`Request failed with status ${response.status}`);
-        }
-    } catch (error: any) {
-        throw new Error(`Failed to fetch data: ${error.message}`);
-    }
-}
-
 export function useUsersData() {
     return useQuery(['users'], () => getUsers(), {
-        refetchOnWindowFocus: false,
-        refetchOnMount: true,
-        staleTime: 60000,
-    });
-}
-
-export function useUserData(userId?: string) {
-    return useQuery(['users', userId], () => getUser(userId), {
         refetchOnWindowFocus: false,
         refetchOnMount: true,
         staleTime: 60000,
