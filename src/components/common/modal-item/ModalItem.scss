@@ -1,0 +1,23 @@
+@import '../../../index.scss';
+
+.modal-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: $color-secondary;
+    color: $color-white;
+    padding: 10px;
+
+    .modal-item-title {
+        font-size: 18px;
+        font-weight: bold;
+    }
+    
+    .icon-title-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+}
+
+

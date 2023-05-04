@@ -1,3 +1,5 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
 export interface Training {
     id: string,
     title: string,
@@ -6,44 +8,65 @@ export interface Training {
     difficulty: string,
     media: string,
     goals: Array<string>,
+    is_blocked: boolean,
 }
 
+const baseTrainingsUrl = `${process.env.REACT_APP_TRAININGS_URL}`;
 
-const data = new Map<String, Training>();
-
-export async function getTrainings(): Promise<Training[]> {
-    if (data.size > 0) {
-        return Array.from(data.values());
-        
-    }
+async function updateTraining(training: Training): Promise<Training> {
+    const body = {is_blocked: training.is_blocked};
     try {
-        /* const response = await fetch(`${process.env.REACT_APP_USERS_URL}`);
+        const response = await fetch(baseTrainingsUrl + "/" + training.id, {
+            method: 'patch',
+            body: JSON.stringify(body),
+            headers: {'Content-Type': 'application/json'}
+        });
         if (response.ok) {
-            const userResponse = await response.json();
-            for (const user of userResponse) {
-                data.set(user.id, user);
-            }
-            return Array.from(data.values());
+          const data = await response.json();
+          return data;
+        } else {
+          throw new Error(`Request failed with status ${response.status}`);
+        }
+    } catch (error: any) {
+        throw new Error(`Failed to fetch data: ${error.message}`);
+    }
+}
+
+async function getTrainings(): Promise<Training[]> {
+    try {
+        const response = await fetch(baseTrainingsUrl);
+        if (response.ok) {
+            const trainingResponse = await response.json();
+            return trainingResponse;
         } else {
             throw new Error(`Request failed with status ${response.status}`);
-        } */
-        return [{
-            id: "001",
-            title: "Running",
-            description: "Running training",
-            type: "running",
-            difficulty: "easy",
-            media: "http://localhost",
-            goals:  ["goal1", "goal2", "goal3"]
-        }];
+        }
     } catch (error: any) {
         throw new Error(`Failed to fetch trainings: ${error.message}`);
     }
 }
 
-export async function getTraining(trainingId?: string): Promise<Training | undefined> {
-    if (data.size === 0) {
-        await getTraining();
-    }
-    return data.get(trainingId || '');
+export function useTrainingsData() {
+    return useQuery(['trainings'], () => getTrainings(), {
+        refetchOnWindowFocus: false,
+        refetchOnMount: true,
+        staleTime: 60000,
+    });
+}
+
+export function useTrainingUpdate() {
+    const queryClient = useQueryClient();
+    return useMutation(updateTraining, {
+        onSuccess: (data) => {
+            queryClient.setQueryData(['trainings'], (old: Training[] | undefined) => {
+                if (old) {
+                    const index = old.findIndex((training) => training.id === data.id);
+                    if (index !== -1) {
+                        old[index] = data;
+                    }
+                }
+                return old;
+            });
+        }
+    });
 }

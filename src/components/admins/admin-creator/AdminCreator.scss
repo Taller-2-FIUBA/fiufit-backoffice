@@ -1,0 +1,58 @@
+@import "../../../index.scss";
+
+.admin-creator-container {
+    .admin-creator-details {
+        margin: 0 auto;
+        border-top: 2px solid $color-tertiary;
+        padding: 10px;
+    }
+
+    .admin-creator-field {
+        display: flex;
+        justify-content: flex-start;
+        font-size: 18px;
+        font-weight: bold;
+        color: $color-white;
+        width: 100%;
+        padding: 0 15px;
+        margin: 10px auto;
+        align-items: center;
+    }
+
+    .add-new-admin-button {
+        display: flex;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: bold;
+        color: $color-white;
+        width: 100%;
+        background-color: $color-tertiary;
+        margin-top: 24px;
+
+        &:hover {
+            background-color: $color-secondary;
+        }
+    }
+
+    .admin-creator-field-input {
+        width: 50%;
+        padding: 5px;
+        border-radius: 5px;
+        border: 2px solid $color-tertiary;
+        background-color: $color-secondary;
+        color: $color-white;
+        font-size: 18px;
+        margin-left: 15px;
+
+        &.disabled {
+            background-color: $color-grey-one;
+        }
+    }
+
+    .admin-creator-error {
+        color: $color-red;
+        font-size: 14px;
+        display: flex;
+        justify-content: center;
+    }
+}
