@@ -11,8 +11,10 @@ import {
   Paper,
   Button,
 } from "@mui/material";
-
+import "./Admins.scss";
 import { Admin, getAdmins, createAdmin } from "../../api/AdminsService";
+
+const headerRowItems = ["ID", "Username", "Email", "Password"];
 
 const AdminsTablePage: React.FC = () => {
   const [admins, setAdmins] = useState<Admin[]>([]);
@@ -86,24 +88,28 @@ const AdminsTablePage: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="md">
-      <TableContainer component={Paper}>
+    <Container className="admins">
+      <TableContainer component={Paper} className='table-container'>
         <Table>
-          <TableHead style={{ marginTop: 20, backgroundColor: "#ccc" }}>
+          <TableHead className='table-header'>
             <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Username</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Password</TableCell>
+              {headerRowItems.map((item) => (
+                <TableCell className='table-row-cell' key={item}>{item}</TableCell>
+              ))}
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody className='table-body'>
             {admins.map((admin) => (
-              <TableRow key={admin.id}>
-                <TableCell>{admin.id}</TableCell>
-                <TableCell>{admin.username}</TableCell>
-                <TableCell>{admin.email}</TableCell>
-                <TableCell> *** </TableCell>
+              <TableRow 
+                className='table-row'
+                key={admin.id}
+                hover
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                  <TableCell className='table-row-cell'>{admin.id}</TableCell>
+                  <TableCell className='table-row-cell'>{admin.username}</TableCell>
+                  <TableCell className='table-row-cell'>{admin.email}</TableCell>
+                  <TableCell className='table-row-cell'> *** </TableCell>
               </TableRow>
             ))}
             {isAdding && (
@@ -157,9 +163,8 @@ const AdminsTablePage: React.FC = () => {
       </TableContainer>
       <Button
         variant="contained"
-        color="primary"
         onClick={handleAddAdmin}
-        style={{ marginTop: 20, backgroundColor: "#45C4B0" }}
+        className='add-admin-button'
       >
         {addAdminButtonText} {/* Me devuelve el texto del botón */}
       </Button>

@@ -1,0 +1,14 @@
+@import '../../table.scss';
+
+.admins {
+    padding: 25px;
+
+    .add-admin-button {
+        margin-top: 20px;
+        background-color: $color-tertiary;
+
+        &:hover {
+            background-color: $color-secondary;
+        }
+    }
+}

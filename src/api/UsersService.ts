@@ -11,6 +11,7 @@ export interface User {
     name: string,
     is_athlete: boolean,
     avatar?: string
+    is_blocked: boolean,
 }
 
 

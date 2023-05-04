@@ -1,0 +1,23 @@
+@import 'index.scss';
+
+.table-header {
+    background-color: $color-secondary;
+   
+    .table-row-cell{
+      font-size: 20px;
+      color: $color-white;
+      text-align: left;
+      font-weight: bold;
+    }
+}
+  
+.table-body {
+    background-color: $color-primary;
+  
+    .table-row-cell {
+      color: $color-tertiary;
+      padding: 16px;
+    }
+}
+  
+  
