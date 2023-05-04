@@ -11,14 +11,23 @@ export interface LoggedAdmin {
     token: string
 }
 
-export async function createAdmin(admin: Admin): Promise<Admin> {
+export async function createAdmin(token: String, admin: Admin): Promise<Admin> {
     const body = {password: admin.password, email: admin.email, username: admin.username};
     try {
+        const headers = new Headers();
+        headers.append("Authorization", `Bearer ${token}`);
+
+        const options = {
+            method: "GET",
+            headers: headers,
+          };
+
         const response = await fetch(`${process.env.REACT_APP_ADMINS_URL}`, {
             method: 'post',
             body: JSON.stringify(body),
             headers: {'Content-Type': 'application/json'}
         });
+
         if (response.ok) {
           const data = await response.json();
           return data;
