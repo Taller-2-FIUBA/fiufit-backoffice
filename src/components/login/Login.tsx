@@ -1,5 +1,6 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 
 import {
   Container,
@@ -45,10 +46,11 @@ const LoginScreen: React.FC = () => {
         formData.email,
         formData.password
       );
+      // Guardo el token en el local storage
+      window.localStorage.setItem("token", loggedAdmin.token);
       console.log("Admin loggeado: ", loggedAdmin);
-
       // OK
-      navigate("/users", { state: { loggedAdmin } }); //Página principal para ver el listado de users
+      navigate("/users"); //Página principal para ver el listado de users
     } catch (error: any) {
       //TODO esto para el caso de 500, sino identificar el error en particular
       setServerError(true);

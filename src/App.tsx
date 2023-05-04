@@ -1,13 +1,18 @@
+import { QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import './App.scss';
 import AppRouter from './AppRouter';
-import Navigator from './components/Navigator/Navigator';
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <div className="App">
-      <Navigator></Navigator>
-      <AppRouter></AppRouter>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <div className="App">
+        <AppRouter></AppRouter>
+      </div>
+      <ReactQueryDevtools initialIsOpen={false} position='bottom-right'/>
+    </QueryClientProvider>
   );
 }
 

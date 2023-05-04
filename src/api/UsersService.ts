@@ -1,3 +1,5 @@
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+
 export interface User {
     id: string;
     username: string,
@@ -14,34 +16,40 @@ export interface User {
     is_blocked: boolean,
 }
 
+const baseUsersUrl = `${process.env.REACT_APP_USERS_URL}`;
 
-const data = new Map<String, User>();
 
-export async function getUsers(token: string): Promise<User[]> {
-    if (data.size > 0) {
-        console.log('Uso la cache, data es: {}', data);
-        return Array.from(data.values());
-        
-    }
+async function updateUser(user: User): Promise<User> {
+    const token = localStorage.getItem('token');
+    const body = {is_blocked: user.is_blocked};
     try {
-        console.log('Hago la pegada a /users', data);
         const headers = new Headers();
+        headers.append('Content-Type', 'application/json')
         headers.append("Authorization", `Bearer ${token}`);
+        
+        const response = await fetch(baseUsersUrl + "/status/" + user.id, {
+            mode: 'no-cors',
+            method: 'patch',
+            body: JSON.stringify(body),
+            headers: headers
+        });
+        if (response.ok) {
+          const data = await response.json();
+          return data;
+        } else {
+          throw new Error(`Request failed with status ${response.status}`);
+        }
+    } catch (error: any) {
+        throw new Error(`Failed to fetch data: ${error.message}`);
+    }
+}
 
-        const options = {
-            method: "GET",
-            headers: headers,
-          };
-
-        const response = await fetch(`${process.env.REACT_APP_USERS_URL}`,options);
+async function getUsers(): Promise<User[]> {
+    try {
+        const response = await fetch(baseUsersUrl);
         if (response.ok) {
             const userResponse = await response.json();
-            for (const user of userResponse) {
-                data.set(user.id, user);
-            }
-            console.log('data es: {}', data);
-            console.log('El tamaño de data es: {}', data.size);
-            return Array.from(data.values());
+            return userResponse.items;
         } else {
             throw new Error(`Request failed with status ${response.status}`);
         }
@@ -50,9 +58,29 @@ export async function getUsers(token: string): Promise<User[]> {
     }
 }
 
-export async function getUser(token: string,userId?: string): Promise<User | undefined> {
-    if (data.size === 0) {
-        await getUsers(token);
-    }
-    return data.get(userId || '');
+export function useUsersData() {
+    return useQuery(['users'], () => getUsers(), {
+        refetchOnWindowFocus: false,
+        refetchOnMount: true,
+        staleTime: 60000,
+        retry: false
+    });
+}
+
+export function useUserUpdate() {
+    const queryClient = useQueryClient();
+    return useMutation(updateUser, {
+        onSuccess: (data) => {
+            console.log("User updated: ", data)
+            queryClient.setQueryData(['users'], (old: User[] | undefined) => {
+                if (old) {
+                    const index = old.findIndex((user) => user.id === data.id);
+                    if (index !== -1) {
+                        old[index] = data;
+                    }
+                }
+                return old;
+            });
+        }
+    });
 }

@@ -1,3 +1,5 @@
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+
 export interface Admin {
     id: string
     username: string,
@@ -11,21 +13,15 @@ export interface LoggedAdmin {
     token: string
 }
 
-export async function createAdmin(token: String, admin: Admin): Promise<Admin> {
+async function createAdmin(admin: Admin): Promise<Admin> {
     const body = {password: admin.password, email: admin.email, username: admin.username};
     try {
         const headers = new Headers();
-        headers.append("Authorization", `Bearer ${token}`);
-
-        const options = {
-            method: "GET",
-            headers: headers,
-          };
-
+        headers.append('Content-Type', 'application/json');
         const response = await fetch(`${process.env.REACT_APP_ADMINS_URL}`, {
             method: 'post',
             body: JSON.stringify(body),
-            headers: {'Content-Type': 'application/json'}
+            headers: headers
         });
 
         if (response.ok) {
@@ -42,11 +38,10 @@ export async function createAdmin(token: String, admin: Admin): Promise<Admin> {
 export async function loginAdmin(email: string ,password: string): Promise<LoggedAdmin> {
     const body = {password: password, email: email};
     try {
-        console.log("Login con ", body)
         const response = await fetch(`${process.env.REACT_APP_ADMIN_LOGIN}`, {
             method: 'post',
             body: JSON.stringify(body),
-           headers: {'Content-Type': 'application/json'}
+            headers: {'Content-Type': 'application/json'}
         });
         console.log(response)
         if (response.ok) {
@@ -55,35 +50,49 @@ export async function loginAdmin(email: string ,password: string): Promise<Logge
           return data;
         } else {
             console.log("Response error: ", response)
-          throw new Error(`Request failed with status ${response.status}`);
+            throw new Error(`Request failed with status ${response.status}`);
         }
     } catch (error: any) {
         console.log(error)
-
         throw new Error(`Failed to fetch data: ${error.message}`);
     }
 }
 
-const data = new Map<String, Admin>();
 
-export async function getAdmins(): Promise<Admin[]> {
-    if (data.size > 0) {
-        console.log('Uso la cache, data es: {}', data);
-        return Array.from(data.values());
-    }
+async function getAdmins(): Promise<Admin[]> {
+    const token = localStorage.getItem('token');
     try {
-        const response = await fetch(`${process.env.REACT_APP_ADMINS_URL}`)
-        console.log(response)
+        const response = await fetch(`${process.env.REACT_APP_ADMINS_URL}`, {
+            mode: 'no-cors',
+            method: 'get',
+            headers: {'Authorization-Type': `Bearer ${token}`}
+        })
         if (response.ok) {
             const adminResponse = await response.json();
-            for (const admin of adminResponse) {
-                data.set(admin.id, admin);
-            }
-            return Array.from(data.values());
+            return adminResponse;
       } else {
           throw new Error(`Request failed with status ${response.status}`);
        }
     } catch (error: any) {
         throw new Error(`Failed to fetch data: ${error.message}`);
     }
+}
+
+export function useAdminsData() {
+    return useQuery(['admins'], () => getAdmins(), {
+        refetchOnWindowFocus: false,
+        refetchOnMount: true,
+        staleTime: 60000,
+        retry: false
+    });
+}
+
+export function useCreateAdmin() {
+    const queryClient = useQueryClient();
+    return useMutation(createAdmin, {
+        onSuccess: (data) => {
+            queryClient.setQueryData(['admins'], 
+                (old: any) => [...old, data]);
+        }
+    });
 }

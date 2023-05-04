@@ -1,20 +1,10 @@
-import { useEffect, useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  IconButton,
-} from "@mui/material";
-import { getUsers, User } from "../../api/UsersService";
-import "./Users.scss";
-import { useNavigate } from "react-router-dom";
-import BlockIcon from "@mui/icons-material/Block";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import { useLocation } from "react-router-dom";
+import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Typography, Container} from '@mui/material';
+import { useUsersData, User, useUserUpdate } from '../../api/UsersService';
+import './Users.scss';
+import BlockIcon from '@mui/icons-material/Block';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import React from 'react';
+import ModalWrapper from '../common/modal-wrapper/ModalWrapper';
 
 const headerRowItems = [
   "Status",
@@ -29,36 +19,26 @@ const headerRowItems = [
 ];
 
 export default function Users() {
-  const [users, setUsers] = useState<User[]>([]);
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { loggedAdmin } = location.state;
+  const {isLoading, isError, error, data} = useUsersData();
+  const {mutate: updateUser} = useUserUpdate();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const data: User[] = await getUsers(loggedAdmin.token);
-      setUsers(data);
-    };
-
-    fetchData().catch((error) => {
-      //        raise HTTPException(status_code=403, detail="Invalid credentials")
-
-      throw new Error(error);
-    });
-  }, []);
-
+  const [selectedUser, setSelectedUser] = React.useState<User | null>(null);
+  
   const handleProfileClick = (user: User) => {
-    navigate(`/profile/${user.id}`);
+    setSelectedUser(user);
   };
 
-  const handleBlockClick = (user: User) => {
+  const handleProfileClose = () => {
+    setSelectedUser(null);
+  }
+  const handleBlockClick = (user: User) => { 
     user.is_blocked = !user.is_blocked;
-    setUsers([...users]);
+    updateUser(user);
   };
 
   return (
-    <div className="users">
-      <TableContainer component={Paper} className="table-container">
+    <Container className="users">
+      <TableContainer component={Paper} className='table-container'>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead className="table-header">
             <TableRow hover>
@@ -69,14 +49,13 @@ export default function Users() {
               ))}
             </TableRow>
           </TableHead>
-
-          <TableBody className="table-body">
-            {users.map((user) => (
+          <TableBody className='table-body'>
+            {data && data.map((user) => (
               <TableRow
                 className={user.is_blocked ? "table-row blocked" : "table-row"}
                 hover
-                key={user.username}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                key={user.id}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                 <TableCell>
                   <div className="table-row-cell status">
@@ -99,18 +78,10 @@ export default function Users() {
                   {user.is_athlete ? "Athlete" : "Trainer"}
                 </TableCell>
                 <TableCell>
-                  <IconButton
-                    className="user-table-icon"
-                    size="large"
-                    onClick={() => handleProfileClick(user)}
-                  >
+                  <IconButton className='table-icon' size="large" onClick={() => handleProfileClick(user)}>
                     <VisibilityIcon></VisibilityIcon>
                   </IconButton>
-                  <IconButton
-                    className="user-table-icon"
-                    size="large"
-                    onClick={() => handleBlockClick(user)}
-                  >
+                  <IconButton className='table-icon' size="large" onClick={() => handleBlockClick(user)}>
                     <BlockIcon></BlockIcon>
                   </IconButton>
                 </TableCell>
@@ -118,7 +89,19 @@ export default function Users() {
             ))}
           </TableBody>
         </Table>
+        {isError && <div>
+          <Typography color="error" variant="body1">
+            {(error as Error).message}
+          </Typography>
+        </div>}
+        {isLoading && <div>Loading...</div>}
       </TableContainer>
-    </div>
+      <ModalWrapper
+        open={!!selectedUser}
+        handleOnClose={handleProfileClose}
+        type='user-details'
+        value={selectedUser}
+      />
+    </Container>
   );
 }
