@@ -62,10 +62,11 @@ export async function loginAdmin(email: string ,password: string): Promise<Logge
 async function getAdmins(): Promise<Admin[]> {
     const token = localStorage.getItem('token');
     try {
+        const headers = new Headers();
+        headers.append("Authorization", `Bearer ${token}`);
         const response = await fetch(`${process.env.REACT_APP_ADMINS_URL}`, {
-            mode: 'no-cors',
             method: 'get',
-            headers: {'Authorization-Type': `Bearer ${token}`}
+            headers: headers
         })
         if (response.ok) {
             const adminResponse = await response.json();

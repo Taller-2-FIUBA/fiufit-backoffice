@@ -32,7 +32,6 @@ export default function Users() {
     setSelectedUser(null);
   }
   const handleBlockClick = (user: User) => { 
-    user.is_blocked = !user.is_blocked;
     updateUser(user);
   };
 

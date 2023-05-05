@@ -21,16 +21,12 @@ const baseUsersUrl = `${process.env.REACT_APP_USERS_URL}`;
 
 async function updateUser(user: User): Promise<User> {
     const token = localStorage.getItem('token');
-    const body = {is_blocked: user.is_blocked};
     try {
         const headers = new Headers();
-        headers.append('Content-Type', 'application/json')
         headers.append("Authorization", `Bearer ${token}`);
         
         const response = await fetch(baseUsersUrl + "/status/" + user.id, {
-            mode: 'no-cors',
             method: 'patch',
-            body: JSON.stringify(body),
             headers: headers
         });
         if (response.ok) {
