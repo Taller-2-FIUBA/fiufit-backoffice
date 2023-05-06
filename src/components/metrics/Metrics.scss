@@ -1,0 +1,13 @@
+@import '../../index.scss';
+
+.App .dashboard {
+    .card {
+        background-color: $color-secondary;
+        color: $color-quaternary;
+        margin: 10px auto;
+        height: 100px;
+    }
+    .cardTitle {
+        color: $color-tertiary
+    }
+}
