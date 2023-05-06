@@ -5,6 +5,7 @@ import Users from './components/users/Users';
 import LoginScreen from "./components/login/Login";
 import Admins from "./components/admins/Admins";
 import Trainings from './components/trainings/Trainings';
+import Metrics from './components/metrics/Metrics';
 
 const AppRouter = () => {
     return (
@@ -17,6 +18,7 @@ const AppRouter = () => {
           <Route path="/admins" element={<Admins />} />
           <Route path="/trainings" element={<Trainings />} />
           <Route path="/training/:trainingId" element={<Profile />} />
+          <Route path="/metrics" element={<Metrics />} />
         </Routes>
       </Router>
     );

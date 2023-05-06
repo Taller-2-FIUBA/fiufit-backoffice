@@ -13,7 +13,7 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 
-const pages = [{title: 'Users', link: "/users"}, {title: 'Admins', link: "/admins"}, {title: 'trainings', link: "/trainings"}];
+const pages = [{title: 'Users', link: "/users"}, {title: 'Admins', link: "/admins"}, {title: 'trainings', link: "/trainings"}, {title: 'metrics', link: "/metrics"}];
 const settings = ['Logout'];
 
 function Navigator() {
