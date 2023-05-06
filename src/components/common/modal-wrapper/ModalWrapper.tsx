@@ -1,17 +1,17 @@
 import React from 'react';
-import { Box, Modal } from '@mui/material';
+import { Modal } from '@mui/material';
 import UserProfile from '../../users/user-profile/UserProfile';
 import TrainingDetailView from '../../trainings/training-detail-view/TrainingDetailView';
 import AdminCreator from '../../admins/admin-creator/AdminCreator';
 import { Training } from '../../../api/TrainingService';
-import { User } from '../../../api/UsersService';
+import { UserItem } from '../../../api/UsersService';
 import './ModalWrapper.scss';
 
 interface ModalProps {
     open: boolean;
     handleOnClose: () => void;
     type: 'user-details' | 'admin-creator' | 'training-details';
-    value?: User | Training | null;
+    value?: UserItem | Training | null;
 }
 
 

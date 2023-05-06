@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { doFetch } from './utils/fetchUtils';
 
 export interface Training {
     id: string,
@@ -14,36 +15,15 @@ export interface Training {
 const baseTrainingsUrl = `${process.env.REACT_APP_TRAININGS_URL}`;
 
 async function updateTraining(training: Training): Promise<Training> {
-    const body = {is_blocked: training.is_blocked};
-    try {
-        const response = await fetch(baseTrainingsUrl + "/" + training.id, {
-            method: 'patch',
-            body: JSON.stringify(body),
-            headers: {'Content-Type': 'application/json'}
-        });
-        if (response.ok) {
-          const data = await response.json();
-          return data;
-        } else {
-          throw new Error(`Request failed with status ${response.status}`);
-        }
-    } catch (error: any) {
-        throw new Error(`Failed to fetch data: ${error.message}`);
-    }
+    return doFetch(baseTrainingsUrl, false, { 
+        method: 'patch'
+    });
 }
 
 async function getTrainings(): Promise<Training[]> {
-    try {
-        const response = await fetch(baseTrainingsUrl);
-        if (response.ok) {
-            const trainingResponse = await response.json();
-            return trainingResponse;
-        } else {
-            throw new Error(`Request failed with status ${response.status}`);
-        }
-    } catch (error: any) {
-        throw new Error(`Failed to fetch trainings: ${error.message}`);
-    }
+    return doFetch(baseTrainingsUrl, true, {
+        method: 'get'
+    });
 }
 
 export function useTrainingsData() {
