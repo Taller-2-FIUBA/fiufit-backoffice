@@ -22,7 +22,7 @@ const AdminsTablePage: React.FC = () => {
 
   const {isLoading, isError, error, data } = useAdminsData();
   const [isAdding, setIsAdding] = useState(false);
-  const buttonText = "+ Agregar Admin"; 
+  const buttonText = "+ Agregar Admin";
   
   const handleAddAdmin = () => {
     setIsAdding(true);
@@ -35,12 +35,14 @@ const AdminsTablePage: React.FC = () => {
 
   return (
     <Container className="admins">
-      <TableContainer component={Paper} className='table-container'>
+      <TableContainer component={Paper} className="table-container">
         <Table>
-          <TableHead className='table-header'>
+          <TableHead className="table-header">
             <TableRow>
               {headerRowItems.map((item) => (
-                <TableCell className='table-row-cell' key={item}>{item}</TableCell>
+                <TableCell className="table-row-cell" key={item}>
+                  {item}
+                </TableCell>
               ))}
             </TableRow>
           </TableHead>
@@ -50,12 +52,14 @@ const AdminsTablePage: React.FC = () => {
                 className='table-row'
                 key={admin.id}
                 hover
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                  <TableCell className='table-row-cell'>{admin.id}</TableCell>
-                  <TableCell className='table-row-cell'>{admin.username}</TableCell>
-                  <TableCell className='table-row-cell'>{admin.email}</TableCell>
-                  <TableCell className='table-row-cell'> *** </TableCell>
+                <TableCell className="table-row-cell">{admin.id}</TableCell>
+                <TableCell className="table-row-cell">
+                  {admin.username}
+                </TableCell>
+                <TableCell className="table-row-cell">{admin.email}</TableCell>
+                <TableCell className="table-row-cell"> *** </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -70,7 +74,7 @@ const AdminsTablePage: React.FC = () => {
       <Button
         variant="contained"
         onClick={handleAddAdmin}
-        className='add-admin-button'
+        className="add-admin-button"
       >
         {buttonText}
       </Button>

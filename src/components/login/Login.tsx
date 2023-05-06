@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+
 import {
   Container,
   Paper,
@@ -44,6 +46,8 @@ const LoginScreen: React.FC = () => {
         formData.email,
         formData.password
       );
+      // Guardo el token en el local storage
+      window.localStorage.setItem("token", loggedAdmin.token);
       console.log("Admin loggeado: ", loggedAdmin);
       // OK
       navigate("/users"); //Página principal para ver el listado de users

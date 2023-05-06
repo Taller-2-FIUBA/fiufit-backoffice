@@ -16,11 +16,14 @@ export interface LoggedAdmin {
 async function createAdmin(admin: Admin): Promise<Admin> {
     const body = {password: admin.password, email: admin.email, username: admin.username};
     try {
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/json');
         const response = await fetch(`${process.env.REACT_APP_ADMINS_URL}`, {
             method: 'post',
             body: JSON.stringify(body),
-            headers: {'Content-Type': 'application/json'}
+            headers: headers
         });
+
         if (response.ok) {
           const data = await response.json();
           return data;
@@ -35,11 +38,10 @@ async function createAdmin(admin: Admin): Promise<Admin> {
 export async function loginAdmin(email: string ,password: string): Promise<LoggedAdmin> {
     const body = {password: password, email: email};
     try {
-        console.log("Login con ", body)
         const response = await fetch(`${process.env.REACT_APP_ADMIN_LOGIN}`, {
             method: 'post',
             body: JSON.stringify(body),
-           headers: {'Content-Type': 'application/json'}
+            headers: {'Content-Type': 'application/json'}
         });
         console.log(response)
         if (response.ok) {
@@ -58,9 +60,14 @@ export async function loginAdmin(email: string ,password: string): Promise<Logge
 
 
 async function getAdmins(): Promise<Admin[]> {
+    const token = localStorage.getItem('token');
     try {
-        const response = await fetch(`${process.env.REACT_APP_ADMINS_URL}`)
-        console.log(response)
+        const headers = new Headers();
+        headers.append("Authorization", `Bearer ${token}`);
+        const response = await fetch(`${process.env.REACT_APP_ADMINS_URL}`, {
+            method: 'get',
+            headers: headers
+        })
         if (response.ok) {
             const adminResponse = await response.json();
             return adminResponse;
@@ -77,6 +84,7 @@ export function useAdminsData() {
         refetchOnWindowFocus: false,
         refetchOnMount: true,
         staleTime: 60000,
+        retry: false
     });
 }
 

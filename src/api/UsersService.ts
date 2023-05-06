@@ -20,12 +20,14 @@ const baseUsersUrl = `${process.env.REACT_APP_USERS_URL}`;
 
 
 async function updateUser(user: User): Promise<User> {
-    const body = {is_blocked: user.is_blocked};
+    const token = localStorage.getItem('token');
     try {
-        const response = await fetch(baseUsersUrl + "/" + user.id, {
+        const headers = new Headers();
+        headers.append("Authorization", `Bearer ${token}`);
+        
+        const response = await fetch(baseUsersUrl + "/status/" + user.id, {
             method: 'patch',
-            body: JSON.stringify(body),
-            headers: {'Content-Type': 'application/json'}
+            headers: headers
         });
         if (response.ok) {
           const data = await response.json();
@@ -43,7 +45,7 @@ async function getUsers(): Promise<User[]> {
         const response = await fetch(baseUsersUrl);
         if (response.ok) {
             const userResponse = await response.json();
-            return userResponse;
+            return userResponse.items;
         } else {
             throw new Error(`Request failed with status ${response.status}`);
         }
@@ -57,6 +59,7 @@ export function useUsersData() {
         refetchOnWindowFocus: false,
         refetchOnMount: true,
         staleTime: 60000,
+        retry: false
     });
 }
 
