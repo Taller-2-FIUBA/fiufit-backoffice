@@ -1,3 +1,5 @@
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+
 export interface User {
     id: string;
     username: string,
@@ -14,26 +16,34 @@ export interface User {
     is_blocked: boolean,
 }
 
+const baseUsersUrl = `${process.env.REACT_APP_USERS_URL}`;
 
-const data = new Map<String, User>();
 
-export async function getUsers(): Promise<User[]> {
-    if (data.size > 0) {
-        console.log('Uso la cache, data es: {}', data);
-        return Array.from(data.values());
-        
-    }
+async function updateUser(user: User): Promise<User> {
+    const body = {is_blocked: user.is_blocked};
     try {
-        console.log('Hago la pegada a /users', data);
-        const response = await fetch(`${process.env.REACT_APP_USERS_URL}`);
+        const response = await fetch(baseUsersUrl + "/" + user.id, {
+            method: 'patch',
+            body: JSON.stringify(body),
+            headers: {'Content-Type': 'application/json'}
+        });
+        if (response.ok) {
+          const data = await response.json();
+          return data;
+        } else {
+          throw new Error(`Request failed with status ${response.status}`);
+        }
+    } catch (error: any) {
+        throw new Error(`Failed to fetch data: ${error.message}`);
+    }
+}
+
+async function getUsers(): Promise<User[]> {
+    try {
+        const response = await fetch(baseUsersUrl);
         if (response.ok) {
             const userResponse = await response.json();
-            for (const user of userResponse) {
-                data.set(user.id, user);
-            }
-            console.log('data es: {}', data);
-            console.log('El tamaño de data es: {}', data.size);
-            return Array.from(data.values());
+            return userResponse;
         } else {
             throw new Error(`Request failed with status ${response.status}`);
         }
@@ -42,9 +52,28 @@ export async function getUsers(): Promise<User[]> {
     }
 }
 
-export async function getUser(userId?: string): Promise<User | undefined> {
-    if (data.size === 0) {
-        await getUsers();
-    }
-    return data.get(userId || '');
+export function useUsersData() {
+    return useQuery(['users'], () => getUsers(), {
+        refetchOnWindowFocus: false,
+        refetchOnMount: true,
+        staleTime: 60000,
+    });
+}
+
+export function useUserUpdate() {
+    const queryClient = useQueryClient();
+    return useMutation(updateUser, {
+        onSuccess: (data) => {
+            console.log("User updated: ", data)
+            queryClient.setQueryData(['users'], (old: User[] | undefined) => {
+                if (old) {
+                    const index = old.findIndex((user) => user.id === data.id);
+                    if (index !== -1) {
+                        old[index] = data;
+                    }
+                }
+                return old;
+            });
+        }
+    });
 }

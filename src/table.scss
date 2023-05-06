@@ -1,5 +1,9 @@
 @import 'index.scss';
 
+.table-container {
+  overflow-x: scroll;
+}
+
 .table-header {
     background-color: $color-secondary;
    
@@ -13,11 +17,60 @@
   
 .table-body {
     background-color: $color-primary;
+
+    .table-row.blocked {
+        
+      .table-row-cell {
+          color: $color-grey-one;
+      }
+
+      .table-row-cell.status {
+          background: $color-red;
+      }
+
+      .table-icon {
+          color: $color-red;
+      }
   
+    }
+
+    .table-icon {
+      color: $color-white;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .table-row-cell.status {
+      position: relative;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: $color-tertiary;
+      margin-left: 15px;
+      padding: 0;
+
+      span {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          background: inherit;
+          border-radius: inherit;
+          opacity: .8;
+          -webkit-animation: circleAnimate 1s ease-out infinite;
+          animation: circleAnimate 1s ease-out infinite;
+      }
+    }
+
     .table-row-cell {
       color: $color-tertiary;
-      padding: 16px;
     }
+}
+
+@keyframes circleAnimate {
+  100% {
+      transform: scale(2);
+      opacity: 0;
+  }
 }
   
   

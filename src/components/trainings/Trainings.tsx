@@ -1,31 +1,34 @@
-import { useEffect, useState } from 'react';
-import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Container, IconButton } from '@mui/material';
 import './Trainings.scss';
-import { useNavigate } from 'react-router-dom';
-import { getTrainings, Training } from '../../api/TrainingService';
+import { useTrainingsData, Training, useTrainingUpdate } from '../../api/TrainingService';
+import BlockIcon from '@mui/icons-material/Block';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import React from 'react';
+import ModalWrapper from '../common/modal-wrapper/ModalWrapper';
 
-const headerRowItems = ['Title', 'Description', 'Type', 'Difficulty', 'Media', 'Goals'];
+const headerRowItems = ['Status', 'Title', 'Description', 'Type', 'Difficulty', 'Media', 'Goals', 'Actions'];
 
 export default function Trainings() {
-  const [rows, setRows] = useState<Training[]>([]);
-  const navigate = useNavigate();
-  useEffect(() => {
-    const fetchData = async () => {
-      const data: Training[] = await getTrainings();
-      console.log(data);
-      setRows(data);
-    }
-  
-    fetchData()
-      .catch(console.error);
-  }, []);
+  const {isLoading, isError, error, data} = useTrainingsData();
+  const {mutate: updateTraining} = useTrainingUpdate();
 
-  const handleRowClick = (training: Training) => {
-    navigate(`/training/${training.id}`);
+  const [selectedTraining, setSelectedTraining] = React.useState<Training | null>(null);
+  
+  
+  const handleDetailViewClick = (training: Training) => {
+    setSelectedTraining(training);
+  };
+
+  const handleDetailTrainingClose = () => {
+    setSelectedTraining(null);
+  }
+  const handleBlockClick = (training: Training) => { 
+    training.is_blocked = !training.is_blocked;
+    updateTraining(training);
   };
 
   return (
-    <div className="trainings">
+    <Container className="trainings">
       <TableContainer component={Paper} className='table-container'>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead className='table-header'>
@@ -36,25 +39,49 @@ export default function Trainings() {
             </TableRow>
           </TableHead>
           <TableBody className='table-body'>
-            {rows.map((row) => (
+            {data && data.map((training) => (
               <TableRow
-                className='table-row' 
+              className={training.is_blocked ? 'table-row blocked' : 'table-row'}
                 hover
-                key={row.title}
+                key={training.title}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                onClick={() => handleRowClick(row)}
               >
-                <TableCell className='table-row-cell'>{row.title}</TableCell>
-                <TableCell className='table-row-cell'>{row.description}</TableCell>
-                <TableCell className='table-row-cell'>{row.type}</TableCell>
-                <TableCell className='table-row-cell'>{row.difficulty}</TableCell>
-                <TableCell className='table-row-cell'>{row.media}</TableCell>
-                <TableCell className='table-row-cell'>{row.goals}</TableCell>
+                <TableCell>
+                  <div className='table-row-cell status'>
+                    <span></span>
+                  </div>
+                </TableCell>
+                <TableCell className='table-row-cell'>{training.title}</TableCell>
+                <TableCell className='table-row-cell'>{training.description}</TableCell>
+                <TableCell className='table-row-cell'>{training.type}</TableCell>
+                <TableCell className='table-row-cell'>{training.difficulty}</TableCell>
+                <TableCell className='table-row-cell'>{training.media}</TableCell>
+                <TableCell className='table-row-cell'>{training.goals}</TableCell>
+                <TableCell>
+                  <IconButton className='table-icon' size="large" onClick={() => handleDetailViewClick(training)}>
+                    <VisibilityIcon></VisibilityIcon>
+                  </IconButton>
+                  <IconButton className='table-icon' size="large" onClick={() => handleBlockClick(training)}>
+                    <BlockIcon></BlockIcon>
+                  </IconButton>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
+        {isError && <div>
+          <Typography color="error" variant="body1">
+            {(error as Error).message}
+          </Typography>
+        </div>}
+        {isLoading && <div>Loading...</div>}
       </TableContainer>
-    </div>
+      <ModalWrapper
+        open={!!selectedTraining}
+        handleOnClose={handleDetailTrainingClose}
+        type='training-details'
+        value={selectedTraining}
+      />
+    </Container>
   );
 }
