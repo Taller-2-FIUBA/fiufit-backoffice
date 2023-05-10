@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { doFetch } from "./utils/fetchUtils";
+import { doFetch, reactQueryDefaultConfig } from "./utils/fetchUtils";
 import { setLoginInfo } from "./utils/localStorageUtils";
 
 export interface Admin {
@@ -19,9 +19,11 @@ export interface LoginRequestData {
     password: string
 }
 
+const baseAdminsUrl = `${process.env.REACT_APP_API_URL}/admins`;
+
 async function createAdmin(admin: Admin): Promise<Admin> {
     const body = {password: admin.password, email: admin.email, username: admin.username};
-    return doFetch(`${process.env.REACT_APP_ADMINS_URL}`, false, { 
+    return doFetch(baseAdminsUrl, false, { 
         method: 'post',
         body: JSON.stringify(body),
         headers: {'Content-Type': 'application/json'}
@@ -29,7 +31,7 @@ async function createAdmin(admin: Admin): Promise<Admin> {
 }
 
 export async function loginAdmin(loginRequestData: LoginRequestData): Promise<LoggedAdmin> {
-    const response: LoggedAdmin = await doFetch(`${process.env.REACT_APP_ADMIN_LOGIN}`, false, {
+    const response: LoggedAdmin = await doFetch(baseAdminsUrl + "/login", false, {
         method: 'post',
         body: JSON.stringify(loginRequestData),
         headers: {'Content-Type': 'application/json'}
@@ -40,18 +42,13 @@ export async function loginAdmin(loginRequestData: LoginRequestData): Promise<Lo
 
 
 async function getAdmins(): Promise<Admin[]> {
-    return doFetch(`${process.env.REACT_APP_ADMINS_URL}`, true, {
+    return doFetch(baseAdminsUrl, true, {
         method: 'get'
     });
 }
 
 export function useAdminsData() {
-    return useQuery(['admins'], () => getAdmins(), {
-        refetchOnWindowFocus: false,
-        refetchOnMount: true,
-        staleTime: 60000,
-        retry: false
-    });
+    return useQuery(['admins'], () => getAdmins(), reactQueryDefaultConfig);
 }
 
 export function useCreateAdmin() {

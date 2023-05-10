@@ -14,6 +14,13 @@ function addTokenToRequest(options: FetchOptions) {
     options.headers['Authorization'] = `Bearer ${token}`;
 }
 
+export const reactQueryDefaultConfig = {
+    refetchOnWindowFocus: false,
+    refetchOnMount: true,
+    staleTime: 60000,
+    retry: false
+}
+
 
 export async function doFetch<T>(url: string, useToken: boolean, options: FetchOptions): Promise<T> {
     try {

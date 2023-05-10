@@ -1,37 +1,49 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { doFetch } from './utils/fetchUtils';
+import { doFetch, reactQueryDefaultConfig } from './utils/fetchUtils';
 
+
+export interface Excercise {
+    name: string,
+    type: string,
+    count: number,
+    series: number
+}
 export interface Training {
     id: string,
+    trainer_id: string,
     title: string,
     description: string,
     type: string,
     difficulty: string,
     media: string,
-    goals: Array<string>,
-    is_blocked: boolean,
+    exercises: Excercise[],
+    blocked: boolean,
+    ranking: number
 }
 
-const baseTrainingsUrl = `${process.env.REACT_APP_TRAININGS_URL}`;
+export interface TrainingResponse {
+    items: Training[],
+    offset: number,
+    limit: number
+}
+
+const baseTrainingsUrl = `${process.env.REACT_APP_API_URL}/trainings`;
 
 async function updateTraining(training: Training): Promise<Training> {
-    return doFetch(baseTrainingsUrl, false, { 
-        method: 'patch'
+    return doFetch(baseTrainingsUrl + `/${training.id}`, true, { 
+        method: 'patch',
+        body: JSON.stringify({blocked: !training.blocked}),
     });
 }
 
-async function getTrainings(): Promise<Training[]> {
-    return doFetch(baseTrainingsUrl, true, {
+async function getTrainings(): Promise<TrainingResponse> {
+    return doFetch(baseTrainingsUrl, false, {
         method: 'get'
     });
 }
 
 export function useTrainingsData() {
-    return useQuery(['trainings'], () => getTrainings(), {
-        refetchOnWindowFocus: false,
-        refetchOnMount: true,
-        staleTime: 60000,
-    });
+    return useQuery(['trainings'], () => getTrainings(), reactQueryDefaultConfig);
 }
 
 export function useTrainingUpdate() {

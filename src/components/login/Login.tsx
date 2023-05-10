@@ -11,7 +11,7 @@ import {
   Grid,
 } from "@mui/material";
 
-import { loginAdmin, LoggedAdmin, LoginRequestData } from "../../api/AdminsService";
+import { loginAdmin, LoginRequestData } from "../../api/AdminsService";
 
 const LoginScreen: React.FC = () => {
   const [formData, setFormData] = useState<LoginRequestData>({

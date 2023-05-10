@@ -20,7 +20,7 @@ const TrainingDetailView: React.FC<TrainingDetailViewProps> = ({training}) => {
                         <ModalItem title="Email" value={training?.type} icon="Email"/>
                         <ModalItem title="Registration Date" value={training?.difficulty} icon="CalendarToday"/>
                         <ModalItem title="Birth Date" value={training?.media} icon="Cake"/>
-                        <ModalItem title="Weight" value={training?.goals[0]} />
+                        <ModalItem title="Weight" value={training?.exercises[0].name} />
                     </Box>
                 } 
             </CardContent>

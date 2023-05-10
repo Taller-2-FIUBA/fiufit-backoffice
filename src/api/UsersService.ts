@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { doFetch } from './utils/fetchUtils';
+import { doFetch, reactQueryDefaultConfig } from './utils/fetchUtils';
 
 
 export interface UserItem {
@@ -21,11 +21,11 @@ export interface UserResponse {
     items: UserItem[],
 }
 
-const baseUsersUrl = `${process.env.REACT_APP_USERS_URL}`;
+const baseUsersUrl = `${process.env.REACT_APP_API_URL}/users`;
 
 
 async function updateUser(user: UserItem): Promise<UserItem> {
-    return doFetch(baseUsersUrl, true, {
+    return doFetch(baseUsersUrl + `/status/${user.id}` , true, {
         method: 'patch'
     });
 }
@@ -37,12 +37,7 @@ async function getUsers(): Promise<UserResponse> {
 }
 
 export function useUsersData() {
-    return useQuery(['users'], () => getUsers(), {
-        refetchOnWindowFocus: false,
-        refetchOnMount: true,
-        staleTime: 60000,
-        retry: false
-    });
+    return useQuery(['users'], () => getUsers(), reactQueryDefaultConfig);
 }
 
 export function useUserUpdate() {
