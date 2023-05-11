@@ -21,7 +21,6 @@ export const reactQueryDefaultConfig = {
     retry: false
 }
 
-
 export async function doFetch<T>(url: string, useToken: boolean, options: FetchOptions): Promise<T> {
     try {
         if (useToken) {
