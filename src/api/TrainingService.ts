@@ -33,8 +33,14 @@ async function updateTraining(training: Training): Promise<Training> {
 }
 
 async function getTrainings(): Promise<Training[]> {
+    const token = localStorage.getItem('token');
     try {
-        const response = await fetch(baseTrainingsUrl);
+        const headers = new Headers();
+        headers.append("Authorization", `Bearer ${token}`);
+        const response = await fetch(baseTrainingsUrl, {
+            method: 'get',
+            headers: headers
+        })
         if (response.ok) {
             const trainingResponse = await response.json();
             return trainingResponse;
