@@ -23,7 +23,6 @@ export default function Trainings() {
     setSelectedTraining(null);
   }
   const handleBlockClick = (training: Training) => { 
-    training.is_blocked = !training.is_blocked;
     updateTraining(training);
   };
 
@@ -39,9 +38,9 @@ export default function Trainings() {
             </TableRow>
           </TableHead>
           <TableBody className='table-body'>
-            {data && data.map((training) => (
+            {data && data.items && data.items.map((training) => (
               <TableRow
-              className={training.is_blocked ? 'table-row blocked' : 'table-row'}
+              className={training.blocked ? 'table-row blocked' : 'table-row'}
                 hover
                 key={training.title}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -56,7 +55,7 @@ export default function Trainings() {
                 <TableCell className='table-row-cell'>{training.type}</TableCell>
                 <TableCell className='table-row-cell'>{training.difficulty}</TableCell>
                 <TableCell className='table-row-cell'>{training.media}</TableCell>
-                <TableCell className='table-row-cell'>{training.goals}</TableCell>
+                <TableCell className='table-row-cell'>{training.exercises.map(e => e.name)}</TableCell>
                 <TableCell>
                   <IconButton className='table-icon' size="large" onClick={() => handleDetailViewClick(training)}>
                     <VisibilityIcon></VisibilityIcon>

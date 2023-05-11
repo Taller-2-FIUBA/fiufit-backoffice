@@ -11,10 +11,10 @@ import {
   Grid,
 } from "@mui/material";
 
-import { loginAdmin, LoggedAdmin } from "../../api/AdminsService";
+import { loginAdmin, LoginRequestData } from "../../api/AdminsService";
 
 const LoginScreen: React.FC = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<LoginRequestData>({
     email: "",
     password: "",
   });
@@ -42,15 +42,8 @@ const LoginScreen: React.FC = () => {
     }
 
     try {
-      const loggedAdmin: LoggedAdmin = await loginAdmin(
-        formData.email,
-        formData.password
-      );
-      // Guardo el token en el local storage
-      window.localStorage.setItem("token", loggedAdmin.token);
-      console.log("Admin loggeado: ", loggedAdmin);
-      // OK
-      navigate("/users"); //Página principal para ver el listado de users
+      await loginAdmin(formData);
+      navigate("/users");
     } catch (error: any) {
       //TODO esto para el caso de 500, sino identificar el error en particular
       setServerError(true);

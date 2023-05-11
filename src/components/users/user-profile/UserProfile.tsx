@@ -1,11 +1,11 @@
 import { Avatar, Card, CardContent, Box} from '@mui/material';
 import React from 'react';
 import './UserProfile.scss';
-import { User } from '../../../api/UsersService';
+import { UserItem } from '../../../api/UsersService';
 import ModalItem from '../../common/modal-item/ModalItem';
 
 interface UserProfileProps {
-  user: User | null;
+  user: UserItem | null;
 }
 
 const UserProfile: React.FC<UserProfileProps> = ({user}) => {

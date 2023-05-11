@@ -1,6 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { doFetch, reactQueryDefaultConfig } from './utils/fetchUtils';
 
-export interface User {
+
+export interface UserItem {
     id: string;
     username: string,
     surname: string,
@@ -15,52 +17,27 @@ export interface User {
     avatar?: string
     is_blocked: boolean,
 }
-
-const baseUsersUrl = `${process.env.REACT_APP_USERS_URL}`;
-
-
-async function updateUser(user: User): Promise<User> {
-    const token = localStorage.getItem('token');
-    try {
-        const headers = new Headers();
-        headers.append("Authorization", `Bearer ${token}`);
-        
-        const response = await fetch(baseUsersUrl + "/status/" + user.id, {
-            method: 'patch',
-            headers: headers
-        });
-        if (response.ok) {
-          const data = await response.json();
-          return data;
-        } else {
-          throw new Error(`Request failed with status ${response.status}`);
-        }
-    } catch (error: any) {
-        throw new Error(`Failed to fetch data: ${error.message}`);
-    }
+export interface UserResponse {
+    items: UserItem[],
 }
 
-async function getUsers(): Promise<User[]> {
-    try {
-        const response = await fetch(baseUsersUrl);
-        if (response.ok) {
-            const userResponse = await response.json();
-            return userResponse.items;
-        } else {
-            throw new Error(`Request failed with status ${response.status}`);
-        }
-    } catch (error: any) {
-        throw new Error(`Failed to fetch data: ${error.message}`);
-    }
+const baseUsersUrl = `${process.env.REACT_APP_API_URL}/users`;
+
+
+async function updateUser(user: UserItem): Promise<UserItem> {
+    return doFetch(baseUsersUrl + `/status/${user.id}` , true, {
+        method: 'patch'
+    });
+}
+
+async function getUsers(): Promise<UserResponse> {
+    return doFetch(baseUsersUrl, false, {
+        method: 'get'
+    });
 }
 
 export function useUsersData() {
-    return useQuery(['users'], () => getUsers(), {
-        refetchOnWindowFocus: false,
-        refetchOnMount: true,
-        staleTime: 60000,
-        retry: false
-    });
+    return useQuery(['users'], () => getUsers(), reactQueryDefaultConfig);
 }
 
 export function useUserUpdate() {
@@ -68,11 +45,11 @@ export function useUserUpdate() {
     return useMutation(updateUser, {
         onSuccess: (data) => {
             console.log("User updated: ", data)
-            queryClient.setQueryData(['users'], (old: User[] | undefined) => {
-                if (old) {
-                    const index = old.findIndex((user) => user.id === data.id);
+            queryClient.setQueryData(['users'], (old: UserResponse | undefined) => {
+                if (old && old.items) {
+                    const index = old.items.findIndex((user) => user.id === data.id);
                     if (index !== -1) {
-                        old[index] = data;
+                        old.items[index] = data;
                     }
                 }
                 return old;
