@@ -11,7 +11,7 @@ export interface Excercise {
 export interface Training {
     id: string,
     trainer_id: string,
-    title: string,
+    tittle: string,
     description: string,
     type: string,
     difficulty: string,

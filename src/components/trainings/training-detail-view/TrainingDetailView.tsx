@@ -26,7 +26,7 @@ const TrainingDetailView: React.FC<TrainingDetailViewProps> = ({
               value={training?.trainer_id}
               icon="Hiking"
             />
-            <ModalItem title="Title" value={training?.title} icon="Person" />
+            <ModalItem title="Title" value={training?.tittle} icon="Person" />
             <ModalItem
               title="Description"
               value={training?.description}
