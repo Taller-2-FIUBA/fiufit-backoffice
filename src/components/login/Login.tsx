@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import './Login.scss'
 
 import {
   Container,
@@ -8,7 +8,7 @@ import {
   TextField,
   Button,
   Typography,
-  Grid,
+  Box,
 } from "@mui/material";
 
 import { loginAdmin, LoginRequestData } from "../../api/AdminsService";
@@ -52,28 +52,14 @@ const LoginScreen: React.FC = () => {
   };
 
   return (
-    <Container
-      maxWidth="xs"
-      style={{minHeight: "100%" }}
-    >
-      <Grid
-        container
-        spacing={2}
-        alignItems="center"
-        style={{ minHeight: "100vh" }}
-      >
-        <Grid item xs={12}>
-          {/* Encabezado */}
-          <Typography
-            variant="h4"
-            align="center"
-            gutterBottom
-            style={{ color: "#fff" }}
-          >
-            Fiufit {/* La idea acá es agregar el logo */}
-          </Typography>
-        </Grid>
-        <Grid item xs={12}>
+    <Container maxWidth="xs" style={{height: "100vh" }}>
+      <Box className="login-container">
+        <img
+          src="/fiufit-logo.png"
+          alt="logo"
+          loading="lazy"
+        />
+        <Box className="login-form-container">
           {/* Formulario de inicio de sesión */}
           <Paper style={{ padding: 20, backgroundColor: "#fff" }}>
             <Typography variant="h5" align="center" gutterBottom>
@@ -128,8 +114,8 @@ const LoginScreen: React.FC = () => {
               </Typography>
             )}
           </Paper>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
     </Container>
   );
 };

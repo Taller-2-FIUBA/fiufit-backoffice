@@ -1,19 +1,33 @@
 {
-  "trainings": [
-    {
-      "id": "001",
-      "title": "Running",
-      "description": "Running training",
-      "type": "running",
-      "difficulty": "easy",
-      "media": "http://localhost",
-      "goals": [
-        "goal1",
-        "goal2",
-        "goal3"
-      ]
-    }
-  ],
+  "trainings": {
+    "items": [
+      {
+          "trainer_id": "Ju6JXm1S8rVQf7C18mqL418JdgE2",
+          "tittle": "A training created with POST.",
+          "description": "A training created with POST.",
+          "type": "Arm",
+          "difficulty": "Medium",
+          "media": "a_firebase_id",
+          "exercises": [
+              {
+                  "name": "Hammer curl",
+                  "type": "Arm",
+                  "count": 15,
+                  "series": 3
+              },
+              {
+                  "name": "Arnold press",
+                  "type": "Arm",
+                  "count": 10,
+                  "series": 4
+              }
+          ],
+          "id": 1,
+          "rating": 0,
+          "blocked": true
+      }
+    ]
+  },
   "admins": [
     {
       "username": "test-mariano-admin",

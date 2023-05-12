@@ -1,14 +1,19 @@
 import { LoggedAdmin } from "../AdminsService";
 
-export function getToken(): string {
-    const token = localStorage.getItem('token');
-    if (!token) {
-        throw new Error('Token not found');
-    }
-    return token;
+export function getToken(): string | null {
+    const adminInfo = localStorage.getItem('admin');
+    return adminInfo ? JSON.parse(adminInfo).token : null;
 }
 
-export function setLoginInfo(loggedAdmin: LoggedAdmin) {
-    localStorage.setItem('token', loggedAdmin.token);
-    localStorage.setItem('adminId', loggedAdmin.id);
+export function setAdminInfo(loggedAdmin: LoggedAdmin) {
+    localStorage.setItem('admin', JSON.stringify(loggedAdmin));
+}
+
+export function clearAdminInfo() {
+    localStorage.removeItem('admin');
+}
+
+export function getAdminInfo(): LoggedAdmin | null {
+    const adminInfo = localStorage.getItem('admin');
+    return adminInfo ? JSON.parse(adminInfo) : null;
 }

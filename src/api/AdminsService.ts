@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { doFetch, reactQueryDefaultConfig } from "./utils/fetchUtils";
-import { setLoginInfo } from "./utils/localStorageUtils";
+import { setAdminInfo } from "./utils/localStorageUtils";
 
 export interface Admin {
     id: string
@@ -36,7 +36,7 @@ export async function loginAdmin(loginRequestData: LoginRequestData): Promise<Lo
         body: JSON.stringify(loginRequestData),
         headers: {'Content-Type': 'application/json'}
     });
-    setLoginInfo(response);
+    setAdminInfo(response);
     return response;
 }
 

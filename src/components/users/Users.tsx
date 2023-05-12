@@ -5,6 +5,7 @@ import BlockIcon from '@mui/icons-material/Block';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import React from 'react';
 import ModalWrapper from '../common/modal-wrapper/ModalWrapper';
+import { useNavigate } from 'react-router-dom';
 
 const headerRowItems = [
   "Status",
@@ -21,6 +22,7 @@ const headerRowItems = [
 export default function Users() {
   const {isLoading, isError, error, data} = useUsersData();
   const {mutate: updateUser} = useUserUpdate();
+  const navigate = useNavigate();
 
   const [selectedUser, setSelectedUser] = React.useState<UserItem | null>(null);
   
@@ -34,6 +36,10 @@ export default function Users() {
   const handleBlockClick = (user: UserItem) => { 
     updateUser(user);
   };
+
+  if (isError && (error as Error).message === "Unauthorized") {
+    navigate("/login");
+  }
 
   return (
     <Container className="users">
