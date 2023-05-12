@@ -3,7 +3,8 @@ import { getToken } from "./localStorageUtils";
 interface FetchOptions {
     method: string,
     body?: any,
-    headers?: any
+    headers?: any,
+    mode?: RequestMode
 }
 
 function addTokenToRequest(options: FetchOptions) {
