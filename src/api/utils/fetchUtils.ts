@@ -1,4 +1,4 @@
-import { getToken } from "./localStorageUtils";
+import { clearAdminInfo, getToken } from "./localStorageUtils";
 
 interface FetchOptions {
     method: string,
@@ -31,6 +31,9 @@ export async function doFetch<T>(url: string, useToken: boolean, options: FetchO
         if (response.ok) {
             const responseJson = await response.json();
             return responseJson;
+        } else if (response.status === 401) {
+          clearAdminInfo();
+          throw new Error('Unauthorized');
         } else {
             throw new Error(`Request failed with status ${response.status}`);
         }

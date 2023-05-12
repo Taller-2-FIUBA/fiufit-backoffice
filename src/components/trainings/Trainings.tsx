@@ -5,12 +5,14 @@ import BlockIcon from '@mui/icons-material/Block';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import React from 'react';
 import ModalWrapper from '../common/modal-wrapper/ModalWrapper';
+import { useNavigate } from 'react-router-dom';
 
 const headerRowItems = ['Status', 'Title', 'Description', 'Type', 'Difficulty', 'Media', 'Goals', 'Actions'];
 
 export default function Trainings() {
   const {isLoading, isError, error, data} = useTrainingsData();
   const {mutate: updateTraining} = useTrainingUpdate();
+  const navigate = useNavigate();
 
   const [selectedTraining, setSelectedTraining] = React.useState<Training | null>(null);
   
@@ -25,6 +27,10 @@ export default function Trainings() {
   const handleBlockClick = (training: Training) => { 
     updateTraining(training);
   };
+
+  if (isError && (error as Error).message === "Unauthorized") {
+    navigate('/login');
+  }
 
   return (
     <Container className="trainings">
