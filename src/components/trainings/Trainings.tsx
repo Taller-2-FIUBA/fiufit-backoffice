@@ -9,7 +9,6 @@ import {
   Typography,
   Container,
   IconButton,
-  TextField,
   Select,
   MenuItem,
 } from "@mui/material";
@@ -24,6 +23,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import React from "react";
 import ModalWrapper from "../common/modal-wrapper/ModalWrapper";
 import { useNavigate } from "react-router-dom";
+import { createTypeReferenceDirectiveResolutionCache } from "typescript";
 
 const headerRowItems = [
   "Status",
@@ -36,40 +36,32 @@ const headerRowItems = [
   "Actions",
 ];
 
-const typesTraining = ["Arm", "Back", "Cardio"]; //TODO nos falta definir bien de qué tipos van a tener
-
+const typesTraining = ["Arm", "Chest", "Back", "Cardio"]; //TODO nos falta definir bien de qué tipos van a tener
 const difficultyLevels = ["Easy", "Medium", "Hard"];
-function handleKeyPress(event: any) {
+
+function handleKeyPress(type: string, event: any) {
   if (event.key === "Enter") {
     console.log("setTitleFilter", event);
     // Realizar acción cuando se presiona enter
+    // Acá debería llamar al servicio nuevamente y re cargar la tabla completamente.
   }
 }
 
-const setTrainerFilter = (value: any) => {
-  console.log("setTrainerFilter", value);
-  return value;
-};
-
-const setDifficultyFilter = (value: any) => {
-  console.log(value);
-  return value;
-};
-
-const setTypeFilter = (value: any) => {
-  // Acá se llama cuando elijo una opción.
-  console.log("setTupeFilter::: ", value);
-  return value;
-};
-
 export default function Trainings() {
   const { isLoading, isError, error, data } = useTrainingsData();
+
   const { mutate: updateTraining } = useTrainingUpdate();
 
   const navigate = useNavigate();
 
   const [selectedTraining, setSelectedTraining] =
     React.useState<Training | null>(null);
+
+  const [filters, setFilters] = React.useState({
+    type: "",
+    difficulty: "",
+  });
+  const { refetch } = useTrainingsData(filters);
 
   const handleDetailViewClick = (training: Training) => {
     setSelectedTraining(training);
@@ -81,6 +73,10 @@ export default function Trainings() {
   const handleBlockClick = (training: Training) => {
     updateTraining(training);
   };
+
+  function handleRefreshButtonClick(type: string, value: string) {
+    refetch();
+  }
 
   if (isError && (error as Error).message === "Unauthorized") {
     navigate("/login");
@@ -102,21 +98,20 @@ export default function Trainings() {
               <TableCell />
               <TableCell />
               <TableCell>
-                <TextField
+                {/*  <TextField
                   variant="standard"
                   size="small"
                   fullWidth
-                  onKeyPress={(e) => handleKeyPress}
-                  //   onChange={(e) => setTitleFilter(e.target.value)}
-                />
+                  onKeyPress={(e) => handleKeyPress("title", e)}
+                /> */}
               </TableCell>
               <TableCell>
-                <TextField
+                {/*   <TextField
                   variant="standard"
                   size="small"
                   fullWidth
-                  onChange={(e) => setTrainerFilter(e.target.value)}
-                />
+                  onKeyPress={(e) => handleKeyPress("trainer", e)}
+                />*/}
               </TableCell>
               <TableCell>
                 <Select
@@ -124,7 +119,17 @@ export default function Trainings() {
                   variant="standard"
                   size="small"
                   fullWidth
-                  onChange={(e) => setTypeFilter(e.target.value)}
+                  value={filters.type}
+                  onChange={(e) => {
+                    setFilters({
+                      ...filters,
+                      type: e.target.value as string,
+                    });
+                    handleRefreshButtonClick(
+                      filters.type,
+                      e.target.value as string
+                    );
+                  }}
                 >
                   {typesTraining.map((item) => (
                     <MenuItem value={item}>{item}</MenuItem>
@@ -137,7 +142,17 @@ export default function Trainings() {
                   variant="standard"
                   size="small"
                   fullWidth
-                  onChange={(e) => setDifficultyFilter(e.target.value)}
+                  value={filters.difficulty}
+                  onChange={(e) => {
+                    setFilters({
+                      ...filters,
+                      difficulty: e.target.value as string,
+                    });
+                    handleRefreshButtonClick(
+                      filters.type,
+                      e.target.value as string
+                    );
+                  }}
                 >
                   {difficultyLevels.map((item) => (
                     <MenuItem value={item}>{item}</MenuItem>
@@ -145,7 +160,7 @@ export default function Trainings() {
                 </Select>
               </TableCell>
               <TableCell>
-                <Select
+                {/* <Select
                   label="Rating"
                   variant="standard"
                   size="small"
@@ -155,7 +170,7 @@ export default function Trainings() {
                   {Array.from({ length: 6 }, (_, i) => i).map((item) => (
                     <MenuItem value={item}>{item}</MenuItem>
                   ))}
-                </Select>
+                  </Select>*/}
               </TableCell>
               <TableCell />
             </TableRow>

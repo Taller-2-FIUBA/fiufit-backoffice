@@ -36,15 +36,27 @@ async function updateTraining(training: Training): Promise<Training> {
     });
 }
 
-async function getTrainings(): Promise<TrainingResponse> {
-    return doFetch(baseTrainingsUrl, false, {
-        method: 'get'
-    });
+async function getTrainings(filters?: any): Promise<TrainingResponse> {
+    if(filters){
+        console.log("BUSQUEDA CON FILTROS")
+        console.log(filters)
+        
+        const queryParams = "training_type=Cardio";
+        return doFetch(baseTrainingsUrl + `?${new URLSearchParams(queryParams)}`, false, {
+            method: 'get'
+        });
+    }else{
+        return doFetch(baseTrainingsUrl, false, {
+            method: 'get'
+        });
+    }
+    
 }
 
-export function useTrainingsData() {
-    return useQuery(['trainings'], () => getTrainings(), reactQueryDefaultConfig);
+export function useTrainingsData(filters?: any) {
+    return useQuery(['trainings'], () => getTrainings(filters), reactQueryDefaultConfig);
 }
+
 
 export function useTrainingUpdate() {
     const queryClient = useQueryClient();
