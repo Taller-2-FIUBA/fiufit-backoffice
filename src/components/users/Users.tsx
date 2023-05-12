@@ -1,10 +1,11 @@
 import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Typography, Container} from '@mui/material';
-import { useUsersData, User, useUserUpdate } from '../../api/UsersService';
+import { useUsersData, useUserUpdate, UserItem } from '../../api/UsersService';
 import './Users.scss';
 import BlockIcon from '@mui/icons-material/Block';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import React from 'react';
 import ModalWrapper from '../common/modal-wrapper/ModalWrapper';
+import { useNavigate } from 'react-router-dom';
 
 const headerRowItems = [
   "Status",
@@ -21,19 +22,24 @@ const headerRowItems = [
 export default function Users() {
   const {isLoading, isError, error, data} = useUsersData();
   const {mutate: updateUser} = useUserUpdate();
+  const navigate = useNavigate();
 
-  const [selectedUser, setSelectedUser] = React.useState<User | null>(null);
+  const [selectedUser, setSelectedUser] = React.useState<UserItem | null>(null);
   
-  const handleProfileClick = (user: User) => {
+  const handleProfileClick = (user: UserItem) => {
     setSelectedUser(user);
   };
 
   const handleProfileClose = () => {
     setSelectedUser(null);
   }
-  const handleBlockClick = (user: User) => { 
+  const handleBlockClick = (user: UserItem) => { 
     updateUser(user);
   };
+
+  if (isError && (error as Error).message === "Unauthorized") {
+    navigate("/login");
+  }
 
   return (
     <Container className="users">
@@ -49,7 +55,7 @@ export default function Users() {
             </TableRow>
           </TableHead>
           <TableBody className='table-body'>
-            {data && data.map((user) => (
+            {data && data.items && data.items.map((user) => (
               <TableRow
                 className={user.is_blocked ? "table-row blocked" : "table-row"}
                 hover

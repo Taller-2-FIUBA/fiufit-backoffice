@@ -5,12 +5,14 @@ import BlockIcon from '@mui/icons-material/Block';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import React from 'react';
 import ModalWrapper from '../common/modal-wrapper/ModalWrapper';
+import { useNavigate } from 'react-router-dom';
 
 const headerRowItems = ['Status', 'Title', 'Description', 'Type', 'Difficulty', 'Media', 'Goals', 'Actions'];
 
 export default function Trainings() {
   const {isLoading, isError, error, data} = useTrainingsData();
   const {mutate: updateTraining} = useTrainingUpdate();
+  const navigate = useNavigate();
 
   const [selectedTraining, setSelectedTraining] = React.useState<Training | null>(null);
   
@@ -23,9 +25,12 @@ export default function Trainings() {
     setSelectedTraining(null);
   }
   const handleBlockClick = (training: Training) => { 
-    training.is_blocked = !training.is_blocked;
     updateTraining(training);
   };
+
+  if (isError && (error as Error).message === "Unauthorized") {
+    navigate('/login');
+  }
 
   return (
     <Container className="trainings">
@@ -39,9 +44,9 @@ export default function Trainings() {
             </TableRow>
           </TableHead>
           <TableBody className='table-body'>
-            {data && data.map((training) => (
+            {data && data.items && data.items.map((training) => (
               <TableRow
-              className={training.is_blocked ? 'table-row blocked' : 'table-row'}
+              className={training.blocked ? 'table-row blocked' : 'table-row'}
                 hover
                 key={training.title}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -56,7 +61,7 @@ export default function Trainings() {
                 <TableCell className='table-row-cell'>{training.type}</TableCell>
                 <TableCell className='table-row-cell'>{training.difficulty}</TableCell>
                 <TableCell className='table-row-cell'>{training.media}</TableCell>
-                <TableCell className='table-row-cell'>{training.goals}</TableCell>
+                <TableCell className='table-row-cell'>{training.exercises.map(e => e.name)}</TableCell>
                 <TableCell>
                   <IconButton className='table-icon' size="large" onClick={() => handleDetailViewClick(training)}>
                     <VisibilityIcon></VisibilityIcon>

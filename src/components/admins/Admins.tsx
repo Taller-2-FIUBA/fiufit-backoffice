@@ -14,6 +14,7 @@ import {
 import "./Admins.scss";
 import { useAdminsData } from "../../api/AdminsService";
 import ModalWrapper from "../common/modal-wrapper/ModalWrapper";
+import { useNavigate } from "react-router-dom";
 
 
 const headerRowItems = ["ID", "Username", "Email", "Password"];
@@ -22,6 +23,7 @@ const AdminsTablePage: React.FC = () => {
 
   const {isLoading, isError, error, data } = useAdminsData();
   const [isAdding, setIsAdding] = useState(false);
+  const navigate = useNavigate();
   const buttonText = "+ Agregar Admin";
   
   const handleAddAdmin = () => {
@@ -32,6 +34,9 @@ const AdminsTablePage: React.FC = () => {
     setIsAdding(false);
   }
 
+  if (isError && (error as Error).message === "Unauthorized") {
+    navigate("/login");
+  }
 
   return (
     <Container className="admins">
