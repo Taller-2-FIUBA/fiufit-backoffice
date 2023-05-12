@@ -18,7 +18,7 @@ export interface Training {
     media: string,
     exercises: Excercise[],
     blocked: boolean,
-    ranking: number
+    rating: number
 }
 
 export interface TrainingResponse {
