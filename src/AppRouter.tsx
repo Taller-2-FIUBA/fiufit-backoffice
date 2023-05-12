@@ -8,7 +8,7 @@ import Admins from './components/admins/Admins';
 import Trainings from './components/trainings/Trainings';
 import Metrics from './components/metrics/Metrics';
 import Navigator from './components/navigator/Navigator';
-import PrivateRoutes from './guard/PrivateRoutes';
+import PrivateRoutes from './PrivateRoutes';
 
 const AppRouter = () => {
     return (

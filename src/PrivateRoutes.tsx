@@ -1,5 +1,5 @@
 import {Outlet, Navigate } from "react-router-dom";
-import { getToken } from "../api/utils/localStorageUtils";
+import { getToken } from "./api/utils/localStorageUtils";
 
 const PrivateRoutes = () => {
     const token = getToken();
