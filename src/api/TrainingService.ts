@@ -31,29 +31,41 @@ const baseTrainingsUrl = `${process.env.REACT_APP_API_URL}/trainings`;
 
 async function updateTraining(training: Training): Promise<Training> {
     return doFetch(baseTrainingsUrl + `/${training.id}`, true, { 
-        method: 'patch',
+        method: 'PATCH',
         body: JSON.stringify({blocked: !training.blocked}),
     });
 }
 
-async function getTrainings(filters?: any): Promise<TrainingResponse> {
-    if(filters){
-        console.log("BUSQUEDA CON FILTROS")
-        console.log(filters)
-        
-        const queryParams = "training_type=Cardio";
+async function getTrainings(filters?: Filters): Promise<TrainingResponse> {
+    var queryParams = ""
+    var connection = ""
+    if(filters?.type && filters?.difficulty){
+        connection = "&"
+    } else { connection = ""}
+    if(filters?.type){
+        queryParams += connection + "training_type=" + filters.type;
+    if(filters?.difficulty){
+        queryParams += connection + "difficulty=" + filters.difficulty;
+    }
         return doFetch(baseTrainingsUrl + `?${new URLSearchParams(queryParams)}`, false, {
-            method: 'get'
+            method: 'GET'
         });
     }else{
         return doFetch(baseTrainingsUrl, false, {
-            method: 'get'
+            method: 'GET'
         });
     }
     
 }
 
-export function useTrainingsData(filters?: any) {
+async function getTrainingTypes(){
+
+}
+export interface Filters {
+    type: string;
+    difficulty: string;
+  }
+export function useTrainingsData(filters?: Filters) {
     return useQuery(['trainings'], () => getTrainings(filters), reactQueryDefaultConfig);
 }
 

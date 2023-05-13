@@ -9,8 +9,15 @@
       text-align: left;
       font-weight: bold;
     }
+      .table-row-filter{
+        font-size: 50px;
+        color: $color-red;
+        text-align: left;
+        font-weight: bold;
+      }
+    
 }
-  
+
 .table-body {
     background-color: $color-primary;
 

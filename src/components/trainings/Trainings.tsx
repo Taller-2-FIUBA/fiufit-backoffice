@@ -10,6 +10,7 @@ import {
   Container,
   IconButton,
   Select,
+  TextField,
   MenuItem,
 } from "@mui/material";
 import "./Trainings.scss";
@@ -17,13 +18,14 @@ import {
   useTrainingsData,
   Training,
   useTrainingUpdate,
+  Filters,
 } from "../../api/TrainingService";
 import BlockIcon from "@mui/icons-material/Block";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import React from "react";
 import ModalWrapper from "../common/modal-wrapper/ModalWrapper";
 import { useNavigate } from "react-router-dom";
-import { createTypeReferenceDirectiveResolutionCache } from "typescript";
+import { Filter } from "@mui/icons-material";
 
 const headerRowItems = [
   "Status",
@@ -44,6 +46,7 @@ function handleKeyPress(type: string, event: any) {
     console.log("setTitleFilter", event);
     // Realizar acción cuando se presiona enter
     // Acá debería llamar al servicio nuevamente y re cargar la tabla completamente.
+    // https://fiufit-ingress-taller2-marianocinalli.cloud.okteto.net/trainings/types/
   }
 }
 
@@ -57,7 +60,7 @@ export default function Trainings() {
   const [selectedTraining, setSelectedTraining] =
     React.useState<Training | null>(null);
 
-  const [filters, setFilters] = React.useState({
+  const [filters, setFilters] = React.useState<Filters>({
     type: "",
     difficulty: "",
   });
@@ -74,9 +77,10 @@ export default function Trainings() {
     updateTraining(training);
   };
 
-  function handleRefreshButtonClick(type: string, value: string) {
+  const handleRefreshFilters = (filters: Filters) => {
+    setFilters(filters);
     refetch();
-  }
+  };
 
   if (isError && (error as Error).message === "Unauthorized") {
     navigate("/login");
@@ -95,25 +99,27 @@ export default function Trainings() {
               ))}
             </TableRow>
             <TableRow>
-              <TableCell />
-              <TableCell />
-              <TableCell>
-                {/*  <TextField
+              <TableCell className="table-row-filter" />
+              <TableCell className="table-row-filter" />
+              <TableCell className="table-row-filter">
+                <TextField
+                  className="table-row-filter"
                   variant="standard"
                   size="small"
                   fullWidth
                   onKeyPress={(e) => handleKeyPress("title", e)}
-                /> */}
+                />
               </TableCell>
-              <TableCell>
-                {/*   <TextField
+              <TableCell className="table-row-filter">
+                <TextField
+                  className="table-row-filter"
                   variant="standard"
                   size="small"
                   fullWidth
                   onKeyPress={(e) => handleKeyPress("trainer", e)}
-                />*/}
+                />
               </TableCell>
-              <TableCell>
+              <TableCell className="table-row-filter">
                 <Select
                   label="Type"
                   variant="standard"
@@ -121,14 +127,10 @@ export default function Trainings() {
                   fullWidth
                   value={filters.type}
                   onChange={(e) => {
-                    setFilters({
-                      ...filters,
+                    handleRefreshFilters({
                       type: e.target.value as string,
+                      difficulty: filters.difficulty,
                     });
-                    handleRefreshButtonClick(
-                      filters.type,
-                      e.target.value as string
-                    );
                   }}
                 >
                   {typesTraining.map((item) => (
@@ -136,7 +138,7 @@ export default function Trainings() {
                   ))}
                 </Select>
               </TableCell>
-              <TableCell>
+              <TableCell className="table-row-filter">
                 <Select
                   label="Difficulty"
                   variant="standard"
@@ -144,14 +146,10 @@ export default function Trainings() {
                   fullWidth
                   value={filters.difficulty}
                   onChange={(e) => {
-                    setFilters({
-                      ...filters,
+                    handleRefreshFilters({
+                      type: filters.type,
                       difficulty: e.target.value as string,
                     });
-                    handleRefreshButtonClick(
-                      filters.type,
-                      e.target.value as string
-                    );
                   }}
                 >
                   {difficultyLevels.map((item) => (
@@ -159,19 +157,7 @@ export default function Trainings() {
                   ))}
                 </Select>
               </TableCell>
-              <TableCell>
-                {/* <Select
-                  label="Rating"
-                  variant="standard"
-                  size="small"
-                  fullWidth
-                  //    onChange={(e) => setRatingFilter(e.target.value)}
-                >
-                  {Array.from({ length: 6 }, (_, i) => i).map((item) => (
-                    <MenuItem value={item}>{item}</MenuItem>
-                  ))}
-                  </Select>*/}
-              </TableCell>
+              <TableCell className="table-row-filter"></TableCell>
               <TableCell />
             </TableRow>
           </TableHead>
