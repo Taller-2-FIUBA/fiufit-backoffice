@@ -24,7 +24,7 @@ const baseAdminsUrl = `${process.env.REACT_APP_API_URL}/admins`;
 async function createAdmin(admin: Admin): Promise<Admin> {
     const body = {password: admin.password, email: admin.email, username: admin.username};
     return doFetch(baseAdminsUrl, false, { 
-        method: 'post',
+        method: 'POST',
         body: JSON.stringify(body),
         headers: {'Content-Type': 'application/json'}
     });
@@ -32,7 +32,7 @@ async function createAdmin(admin: Admin): Promise<Admin> {
 
 export async function loginAdmin(loginRequestData: LoginRequestData): Promise<LoggedAdmin> {
     const response: LoggedAdmin = await doFetch(baseAdminsUrl + "/login", false, {
-        method: 'post',
+        method: 'POST',
         body: JSON.stringify(loginRequestData),
         headers: {'Content-Type': 'application/json'}
     });

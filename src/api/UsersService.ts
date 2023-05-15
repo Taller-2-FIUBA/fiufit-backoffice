@@ -26,13 +26,14 @@ const baseUsersUrl = `${process.env.REACT_APP_API_URL}/users`;
 
 async function updateUser(user: UserItem): Promise<UserItem> {
     return doFetch(baseUsersUrl + `/status/${user.id}` , true, {
-        method: 'patch'
+        method: 'PATCH',
+        headers: {'Content-Type': 'application/json'}
     });
 }
 
 async function getUsers(): Promise<UserResponse> {
     return doFetch(baseUsersUrl, false, {
-        method: 'get'
+        method: 'GET'
     });
 }
 

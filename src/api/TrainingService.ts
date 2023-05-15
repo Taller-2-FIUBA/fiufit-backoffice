@@ -31,14 +31,15 @@ const baseTrainingsUrl = `${process.env.REACT_APP_API_URL}/trainings`;
 
 async function updateTraining(training: Training): Promise<Training> {
     return doFetch(baseTrainingsUrl + `/${training.id}`, true, { 
-        method: 'patch',
+        method: 'PATCH',
         body: JSON.stringify({blocked: !training.blocked}),
+        headers: {'Content-Type': 'application/json'}
     });
 }
 
 async function getTrainings(): Promise<TrainingResponse> {
     return doFetch(baseTrainingsUrl, false, {
-        method: 'get'
+        method: 'GET'
     });
 }
 
