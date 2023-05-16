@@ -11,6 +11,7 @@ export function setAdminInfo(loggedAdmin: LoggedAdmin) {
 
 export function clearAdminInfo() {
     localStorage.removeItem('admin');
+    window.location.reload();
 }
 
 export function getAdminInfo(): LoggedAdmin | null {

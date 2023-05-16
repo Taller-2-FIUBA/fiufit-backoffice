@@ -33,6 +33,7 @@ async function updateTraining(training: Training): Promise<Training> {
     return doFetch(baseTrainingsUrl + `/${training.id}`, true, { 
         method: 'PATCH',
         body: JSON.stringify({blocked: !training.blocked}),
+        headers: {'Content-Type': 'application/json'}
     });
 }
 

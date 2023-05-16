@@ -40,7 +40,6 @@ function Navigator() {
 
   const handleLogout = () => {
     clearAdminInfo();
-    window.location.reload();
   }
 
   return (
