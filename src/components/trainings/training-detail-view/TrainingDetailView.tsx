@@ -15,7 +15,7 @@ const TrainingDetailView: React.FC<TrainingDetailViewProps> = ({training}) => {
             <CardContent className='modal-content'>
                 {training &&
                     <Box className="training-details" sx={{ flexGrow: 1, overflow: 'hidden'}}>
-                        <ModalItem title='Name' value={training?.title} icon="Person"/>
+                        <ModalItem title='Name' value={training?.tittle} icon="Person"/>
                         <ModalItem title="Surname" value={training?.description} icon="Person"/>
                         <ModalItem title="Email" value={training?.type} icon="Email"/>
                         <ModalItem title="Registration Date" value={training?.difficulty} icon="CalendarToday"/>

@@ -48,7 +48,7 @@ export default function Trainings() {
               <TableRow
               className={training.blocked ? 'table-row blocked' : 'table-row'}
                 hover
-                key={training.title}
+                key={training.tittle}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                 <TableCell>
@@ -56,7 +56,7 @@ export default function Trainings() {
                     <span></span>
                   </div>
                 </TableCell>
-                <TableCell className='table-row-cell'>{training.title}</TableCell>
+                <TableCell className='table-row-cell'>{training.tittle}</TableCell>
                 <TableCell className='table-row-cell'>{training.description}</TableCell>
                 <TableCell className='table-row-cell'>{training.type}</TableCell>
                 <TableCell className='table-row-cell'>{training.difficulty}</TableCell>
