@@ -39,9 +39,12 @@ async function updateTraining(training: Training): Promise<Training> {
     });
 }
 
-async function getTrainings(filters?: Filters): Promise<TrainingResponse> {
+async function getTrainings(filters?: Filters): Promise<TrainingResponse> { 
     var queryParams = ""
     var connection = ""
+    if(filters?.trainer_id){
+        queryParams += connection + "trainer_id=" + filters.trainer_id;
+    }
     if(filters?.type && filters?.difficulty){
         connection = "&"
     } else { connection = ""}
@@ -71,6 +74,8 @@ export async function getTrainingTypes(): Promise<TrainingTypesResponse> {
     });
 }
 export interface Filters {
+    title: string, 
+    trainer_id: string,
     type: string;
     difficulty: string;
   }

@@ -12,6 +12,7 @@ import {
   Select,
   TextField,
   MenuItem,
+  SelectChangeEvent,
 } from "@mui/material";
 import "./Trainings.scss";
 import {
@@ -40,18 +41,29 @@ const headerRowItems = [
 
 const difficultyLevels = ["Easy", "Medium", "Hard"];
 
-function handleKeyPress(type: string, event: any) {
-  if (event.key === "Enter") {
-    console.log("setTitleFilter", event);
-    // Realizar acción cuando se presiona enter
-    // Acá debería llamar al servicio nuevamente y re cargar la tabla completamente.
-    // https://fiufit-ingress-taller2-marianocinalli.cloud.okteto.net/trainings/types/
-  }
-}
-
 export default function Trainings() {
-  const typesTraining = useTrainingTypes(); //TODO nos falta definir bien de qué tipos van a tener
-  console.log(typesTraining.data);
+  const handleKeyPress = (type: string, value: string, event: any) => {
+    if (event.key === "Enter") {
+      if (type === "title") {
+        const newFilters = {
+          ...filters,
+          title: event.target.value,
+        };
+        setFilters(newFilters);
+        refetch();
+      }
+
+      if (type === "trainer") {
+        const newFilters = {
+          ...filters,
+          trainer_id: event.target.value,
+        };
+        setFilters(newFilters);
+        refetch();
+      }
+    }
+  };
+  const typesTraining = useTrainingTypes();
 
   const { isLoading, isError, error, data } = useTrainingsData();
 
@@ -62,10 +74,33 @@ export default function Trainings() {
   const [selectedTraining, setSelectedTraining] =
     React.useState<Training | null>(null);
 
+  const [tituloCargado, setTituloCargado] = React.useState<string>("");
+  const [trainerCargado, setTrainerCargado] = React.useState<string>("");
+
   const [filters, setFilters] = React.useState<Filters>({
+    title: "",
+    trainer_id: "",
     type: "",
     difficulty: "",
   });
+
+  const handleChangeType = (event: SelectChangeEvent<string>) => {
+    const newFilters = {
+      ...filters,
+      type: event.target.value,
+    };
+    setFilters(newFilters);
+    refetch();
+  };
+  const handleChangeDifficulty = (event: SelectChangeEvent<string>) => {
+    const newFilters = {
+      ...filters,
+      difficulty: event.target.value,
+    };
+    setFilters(newFilters);
+    refetch();
+  };
+
   const { refetch } = useTrainingsData(filters);
 
   const handleDetailViewClick = (training: Training) => {
@@ -77,11 +112,6 @@ export default function Trainings() {
   };
   const handleBlockClick = (training: Training) => {
     updateTraining(training);
-  };
-
-  const handleRefreshFilters = (filters: Filters) => {
-    setFilters(filters);
-    refetch();
   };
 
   if (isError && (error as Error).message === "Unauthorized") {
@@ -108,8 +138,12 @@ export default function Trainings() {
                   className="table-row-filter"
                   variant="standard"
                   size="small"
+                  value={tituloCargado}
                   fullWidth
-                  onKeyPress={(e) => handleKeyPress("title", e)}
+                  onChange={(e) => {
+                    setTituloCargado(e.target.value);
+                  }}
+                  onKeyPress={(e) => handleKeyPress("title", tituloCargado, e)}
                 />
               </TableCell>
               <TableCell className="table-row-filter">
@@ -117,8 +151,14 @@ export default function Trainings() {
                   className="table-row-filter"
                   variant="standard"
                   size="small"
+                  value={trainerCargado}
+                  onChange={(e) => {
+                    setTrainerCargado(e.target.value);
+                  }}
                   fullWidth
-                  onKeyPress={(e) => handleKeyPress("trainer", e)}
+                  onKeyPress={(e) =>
+                    handleKeyPress("trainer", trainerCargado, e)
+                  }
                 />
               </TableCell>
               <TableCell className="table-row-filter">
@@ -128,12 +168,9 @@ export default function Trainings() {
                   size="small"
                   fullWidth
                   value={filters.type}
-                  onChange={(e) => {
-                    handleRefreshFilters({
-                      type: e.target.value as string,
-                      difficulty: filters.difficulty,
-                    });
-                  }}
+                  onChange={(event) =>
+                    handleChangeType(event as SelectChangeEvent<string>)
+                  }
                 >
                   {typesTraining.data?.items.map((item: string) => (
                     <MenuItem value={item}>{item}</MenuItem>
@@ -147,12 +184,9 @@ export default function Trainings() {
                   size="small"
                   fullWidth
                   value={filters.difficulty}
-                  onChange={(e) => {
-                    handleRefreshFilters({
-                      type: filters.type,
-                      difficulty: e.target.value as string,
-                    });
-                  }}
+                  onChange={(event) =>
+                    handleChangeDifficulty(event as SelectChangeEvent<string>)
+                  }
                 >
                   {difficultyLevels.map((item) => (
                     <MenuItem value={item}>{item}</MenuItem>
