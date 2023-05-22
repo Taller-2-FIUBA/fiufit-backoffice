@@ -19,13 +19,13 @@ import {
   Training,
   useTrainingUpdate,
   Filters,
+  useTrainingTypes,
 } from "../../api/TrainingService";
 import BlockIcon from "@mui/icons-material/Block";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import React from "react";
 import ModalWrapper from "../common/modal-wrapper/ModalWrapper";
 import { useNavigate } from "react-router-dom";
-import { Filter } from "@mui/icons-material";
 
 const headerRowItems = [
   "Status",
@@ -38,7 +38,6 @@ const headerRowItems = [
   "Actions",
 ];
 
-const typesTraining = ["Arm", "Chest", "Back", "Cardio"]; //TODO nos falta definir bien de qué tipos van a tener
 const difficultyLevels = ["Easy", "Medium", "Hard"];
 
 function handleKeyPress(type: string, event: any) {
@@ -51,6 +50,9 @@ function handleKeyPress(type: string, event: any) {
 }
 
 export default function Trainings() {
+  const typesTraining = useTrainingTypes(); //TODO nos falta definir bien de qué tipos van a tener
+  console.log(typesTraining.data);
+
   const { isLoading, isError, error, data } = useTrainingsData();
 
   const { mutate: updateTraining } = useTrainingUpdate();
@@ -133,7 +135,7 @@ export default function Trainings() {
                     });
                   }}
                 >
-                  {typesTraining.map((item) => (
+                  {typesTraining.data?.items.map((item: string) => (
                     <MenuItem value={item}>{item}</MenuItem>
                   ))}
                 </Select>

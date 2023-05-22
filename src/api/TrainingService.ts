@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { doFetch, reactQueryDefaultConfig } from './utils/fetchUtils';
 
-
 export interface Excercise {
     name: string,
     type: string,
@@ -25,6 +24,9 @@ export interface TrainingResponse {
     items: Training[],
     offset: number,
     limit: number
+}
+export interface TrainingTypesResponse{
+    items: string[],
 }
 
 const baseTrainingsUrl = `${process.env.REACT_APP_API_URL}/trainings`;
@@ -59,8 +61,14 @@ async function getTrainings(filters?: Filters): Promise<TrainingResponse> {
     
 }
 
-async function getTrainingTypes(){
+export function useTrainingTypes() {
+    return useQuery<TrainingTypesResponse>(['trainingTypes'], getTrainingTypes);
+}
 
+export async function getTrainingTypes(): Promise<TrainingTypesResponse> {
+    return doFetch(baseTrainingsUrl + `/types/`, false, {
+        method: 'GET'
+    });
 }
 export interface Filters {
     type: string;
