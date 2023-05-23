@@ -218,7 +218,7 @@ export default function Trainings() {
                     {training.id}
                   </TableCell>
                   <TableCell className="table-row-cell">
-                    {training.tittle}
+                    {training.title}
                   </TableCell>
                   <TableCell className="table-row-cell">
                     {training.trainer_id}
