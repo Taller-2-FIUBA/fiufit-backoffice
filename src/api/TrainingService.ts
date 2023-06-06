@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { doFetch, reactQueryDefaultConfig } from './utils/fetchUtils';
 
-
 export interface Excercise {
     name: string,
     type: string,
@@ -11,20 +10,23 @@ export interface Excercise {
 export interface Training {
     id: string,
     trainer_id: string,
-    tittle: string,
+    title: string,
     description: string,
     type: string,
     difficulty: string,
     media: string,
     exercises: Excercise[],
     blocked: boolean,
-    ranking: number
+    rating: number
 }
 
 export interface TrainingResponse {
     items: Training[],
     offset: number,
     limit: number
+}
+export interface TrainingTypesResponse{
+    items: string[],
 }
 
 const baseTrainingsUrl = `${process.env.REACT_APP_API_URL}/trainings`;
@@ -37,15 +39,50 @@ async function updateTraining(training: Training): Promise<Training> {
     });
 }
 
-async function getTrainings(): Promise<TrainingResponse> {
-    return doFetch(baseTrainingsUrl, false, {
+async function getTrainings(filters?: Filters): Promise<TrainingResponse> { 
+    var queryParams = ""
+    var connection = ""
+    if(filters?.trainer_id){
+        queryParams += connection + "trainer_id=" + filters.trainer_id;
+    }
+    if(filters?.type && filters?.difficulty){
+        connection = "&"
+    } else { connection = ""}
+    if(filters?.type){
+        queryParams += connection + "training_type=" + filters.type;
+    if(filters?.difficulty){
+        queryParams += connection + "difficulty=" + filters.difficulty;
+    }
+        return doFetch(baseTrainingsUrl + `?${new URLSearchParams(queryParams)}`, false, {
+            method: 'GET'
+        });
+    }else{
+        return doFetch(baseTrainingsUrl, false, {
+            method: 'GET'
+        });
+    }
+    
+}
+
+export function useTrainingTypes() {
+    return useQuery<TrainingTypesResponse>(['trainingTypes'], getTrainingTypes);
+}
+
+export async function getTrainingTypes(): Promise<TrainingTypesResponse> {
+    return doFetch(baseTrainingsUrl + `/types/`, false, {
         method: 'GET'
     });
 }
-
-export function useTrainingsData() {
-    return useQuery(['trainings'], () => getTrainings(), reactQueryDefaultConfig);
+export interface Filters {
+    title: string, 
+    trainer_id: string,
+    type: string;
+    difficulty: string;
+  }
+export function useTrainingsData(filters?: Filters) {
+    return useQuery(['trainings'], () => getTrainings(filters), reactQueryDefaultConfig);
 }
+
 
 export function useTrainingUpdate() {
     const queryClient = useQueryClient();
