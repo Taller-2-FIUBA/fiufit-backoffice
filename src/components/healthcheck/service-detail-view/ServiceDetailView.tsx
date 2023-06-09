@@ -29,7 +29,11 @@ const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({ service }) => {
               value={service?.documentation_page}
               icon="Folder"
             />
-            <ModalItem title="Method " value="GET" icon="Http" />
+            <ModalItem
+              title="Method "
+              value={service?.http_method}
+              icon="Http"
+            />
             <ModalItem title="URL" value={service?.url} icon="Link" />
             <ModalItem
               title="Uptime (ms)"
