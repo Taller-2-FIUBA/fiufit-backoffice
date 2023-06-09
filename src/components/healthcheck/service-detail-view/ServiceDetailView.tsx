@@ -22,19 +22,24 @@ const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({ service }) => {
             <ModalItem
               title="Description"
               value={service?.description}
-              icon="Person"
+              icon="Description"
             />
             <ModalItem
               title="Doc"
               value={service?.documentation_page}
               icon="Folder"
             />
-            <ModalItem title="Method" value="GET" icon="Http" />
+            <ModalItem title="Method " value="GET" icon="Http" />
             <ModalItem title="URL" value={service?.url} icon="Link" />
             <ModalItem
               title="Uptime (ms)"
               value={service?.uptime}
               icon="ArrowUpward"
+            />
+            <ModalItem
+              title="Created date"
+              value={service?.created_date}
+              icon="DateRange"
             />
           </Box>
         )}
