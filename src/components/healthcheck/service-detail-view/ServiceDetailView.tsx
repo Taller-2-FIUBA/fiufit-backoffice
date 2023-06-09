@@ -1,4 +1,4 @@
-import { Card, CardContent, Box, Rating } from "@mui/material";
+import { Card, CardContent, Box } from "@mui/material";
 import React from "react";
 import "./ServiceDetailView.scss";
 
@@ -27,15 +27,15 @@ const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({ service }) => {
             <ModalItem
               title="Doc"
               value={service?.documentation_page}
-              icon="Hiking"
+              icon="Folder"
             />
+            <ModalItem title="Method" value="GET" icon="Http" />
+            <ModalItem title="URL" value={service?.url} icon="Link" />
             <ModalItem
-              title="Type"
-              value={service?.type}
-              icon="FitnessCenter"
+              title="Uptime (ms)"
+              value={service?.uptime}
+              icon="ArrowUpward"
             />
-            <ModalItem title="URL" value={service?.url} icon="ArrowUpward" />
-            <ModalItem title="URL" value={service?.uptime} icon="ArrowUpward" />
           </Box>
         )}
       </CardContent>

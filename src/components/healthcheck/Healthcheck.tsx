@@ -37,9 +37,10 @@ export default function Services() {
   var data = services;
 
   if (dataUsers !== undefined) {
-    for (const element of data) {
+    for (var element of data) {
       if (element.item.type == "users") {
         element.item.is_up = dataUsers.uptime ? true : false;
+        element.item.uptime = Math.floor(dataUsers.uptime);
       }
     }
     //data1.uptime es lo unico que me viene de la compu.

@@ -13,7 +13,7 @@ export interface ServiceItem {
     documentation_page: string
 }
 export interface ServiceResponse {
-    uptime: string,
+    uptime: number,
 }
 const baseUsersUrl = `${process.env.REACT_APP_API_URL}/users/`;
 const baseTrainingsUrl = `${process.env.REACT_APP_API_URL}/trainings/healthcheck/`;
