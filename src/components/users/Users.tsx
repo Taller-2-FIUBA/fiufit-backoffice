@@ -9,7 +9,9 @@ import {
   IconButton,
   Typography,
   Container,
+  TablePagination,
 } from "@mui/material";
+
 import { useUsersData, useUserUpdate, UserItem } from "../../api/UsersService";
 import "./Users.scss";
 import BlockIcon from "@mui/icons-material/Block";
@@ -31,7 +33,11 @@ const headerRowItems = [
 ];
 
 export default function Users() {
-  const { isLoading, isError, error, data } = useUsersData();
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const { isLoading, isError, error, data } = useUsersData(page, rowsPerPage);
+
+  //const { isLoading, isError, error, data } = useUsersData();
   const { mutate: updateUser } = useUserUpdate();
   const navigate = useNavigate();
 
@@ -119,6 +125,18 @@ export default function Users() {
               ))}
           </TableBody>
         </Table>
+        <TablePagination
+          component="div"
+          count={data?.total || 0} // Establece el número total de elementos
+          page={page}
+          onPageChange={(event, newPage) => setPage(newPage)} // Maneja el cambio de página
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={(event) => {
+            setRowsPerPage(parseInt(event.target.value, 10));
+            setPage(0); // Restablece la página actual al cambiar la cantidad de elementos por página
+          }}
+          labelRowsPerPage="Resultados por página:"
+        />
         {isError && (
           <div>
             <Typography color="error" variant="body1">

@@ -19,6 +19,10 @@ export interface UserItem {
 }
 export interface UserResponse {
     items: UserItem[],
+    total: number, 
+    page: number, 
+    size: number, 
+    pages: number
 }
 
 const baseUsersUrl = `${process.env.REACT_APP_API_URL}/users`;
@@ -37,7 +41,10 @@ async function getUsers(): Promise<UserResponse> {
     });
 }
 
-export function useUsersData() {
+export function useUsersData(page: any, rowsPerPage: any) {
+    console.log("ROWS PER PAGE", rowsPerPage);
+    console.log("PAGE", page);
+
     return useQuery(['users'], () => getUsers(), reactQueryDefaultConfig);
 }
 

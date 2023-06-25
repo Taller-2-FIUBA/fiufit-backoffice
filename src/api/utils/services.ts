@@ -291,5 +291,133 @@ export const services = [
     http_method: "GET",
     created_date: "21-06-2023",
     documentation_page: "https://fiufit-ingress-taller2-marianocinalli.cloud.okteto.net/trainings/documentation/#/default/get_trainings_trainings_get"
+}},{
+    item: {
+    type: "trainings",
+    name: "/trainings",
+    url: baseTrainingsUrl + "/trainings",
+    description: "Create a training.",
+    is_up: true,
+    uptime: 0,
+    http_method: "POST",
+    created_date: "21-06-2023",
+    documentation_page: "https://fiufit-ingress-taller2-marianocinalli.cloud.okteto.net/trainings/documentation/#/default/create_training_trainings_post"
+}
+},{
+    item: {
+    type: "trainings",
+    name: "/trainings",
+    url: baseTrainingsUrl + "/trainings/{training_id}",
+    description: "Get one training.",
+    is_up: true,
+    uptime: 0,
+    http_method: "GET",
+    created_date: "21-06-2023",
+    documentation_page: "https://fiufit-ingress-taller2-marianocinalli.cloud.okteto.net/trainings/documentation/#/"}
+},{
+    item: {
+    type: "trainings",
+    name: "/trainings",
+    url: baseTrainingsUrl + "/trainings/{training_id}",
+    description: "Modify one training.",
+    is_up: true,
+    uptime: 0,
+    http_method: "PATCH",
+    created_date: "21-06-2023",
+    documentation_page: "https://fiufit-ingress-taller2-marianocinalli.cloud.okteto.net/trainings/documentation/#/default/modify_training_trainings__training_id__patch"}
+},{
+    item: {
+    type: "trainings",
+    name: "/trainings/types",
+    url: baseTrainingsUrl + "/trainings/types",
+    description: "Get training types.",
+    is_up: true,
+    uptime: 0,
+    http_method: "GET",
+    created_date: "21-06-2023",
+    documentation_page: "https://fiufit-ingress-taller2-marianocinalli.cloud.okteto.net/trainings/documentation/#/default/get_types_trainings_types__get"
+}},{
+    item: {
+    type: "trainings",
+    name: "/trainings/exercises",
+    url: baseTrainingsUrl + "/trainings/exercises",
+    description: "Get training excercises.",
+    is_up: true,
+    uptime: 0,
+    http_method: "GET",
+    created_date: "21-06-2023",
+    documentation_page: "https://fiufit-ingress-taller2-marianocinalli.cloud.okteto.net/trainings/documentation/#/default/get_exercises_trainings_exercises__get"
 }}
-]
+,{
+    item: {
+    type: "trainings",
+    name: "/users/{user_id}/trainings",
+    url: baseTrainingsUrl + "/trainings/exercises",
+    description: "Return a user favourite trainings.",
+    is_up: true,
+    uptime: 0,
+    http_method: "GET",
+    created_date: "21-06-2023",
+    documentation_page: "https://fiufit-ingress-taller2-marianocinalli.cloud.okteto.net/trainings/documentation/#/default/get_exercises_trainings_exercises__get"
+}}
+    ,{
+        item: {
+        type: "trainings",
+        name: "/users/{user_id}/trainings",
+        url: baseTrainingsUrl + "/trainings/exercises",
+        description: "Save a training in user favourites.",
+        is_up: true,
+        uptime: 0,
+        http_method: "POST",
+        created_date: "21-06-2023",
+        documentation_page: "https://fiufit-ingress-taller2-marianocinalli.cloud.okteto.net/trainings/documentation/#/default/save_training_for_user_users__user_id__trainings_post"
+    }} 
+    ,{
+        item: {
+        type: "trainings",
+        name: "/users/{user_id}/trainings/{training_id}",
+        url: baseTrainingsUrl + "/users/{user_id}/trainings/{training_id}",
+        description: "Rate a training.",
+        is_up: true,
+        uptime: 0,
+        http_method: "PUT",
+        created_date: "21-06-2023",
+        documentation_page: "https://fiufit-ingress-taller2-marianocinalli.cloud.okteto.net/trainings/documentation/#/default/rate_training_users__user_id__trainings__training_id__put"
+    }} 
+    ,{
+        item: {
+        type: "trainings",
+        name: "/users/{user_id}/trainings/{training_id}",
+        url: baseTrainingsUrl + "/users/{user_id}/trainings/{training_id}",
+        description: "Delete a training in user favourites.",
+        is_up: true,
+        uptime: 0,
+        http_method: "DELETE",
+        created_date: "21-06-2023",
+        documentation_page: "https://fiufit-ingress-taller2-marianocinalli.cloud.okteto.net/trainings/documentation/#/default/delete_training_for_user_users__user_id__trainings__training_id__delete"
+    }} 
+    ,{
+        item: {
+        type: "trainings",
+        name: "/users/{user_id}/trainings/{training_id}/rating",
+        url: baseTrainingsUrl + "/users/{user_id}/trainings/{training_id}/rating",
+        description: "Get a training rating by a user.",
+        is_up: true,
+        uptime: 0,
+        http_method: "GET",
+        created_date: "21-06-2023",
+        documentation_page: "https://fiufit-ingress-taller2-marianocinalli.cloud.okteto.net/trainings/documentation/#/default/delete_training_for_user_users__user_id__trainings__training_id__delete"
+    }} 
+    ,{
+        item: {
+        type: "trainings",
+        name: "/users/{user_id}/trainings/{training_id}/rating",
+        url: baseTrainingsUrl + "/users/{user_id}/trainings/{training_id}/rating",
+        description: "Get a training rating by a user.",
+        is_up: true,
+        uptime: 0,
+        http_method: "GET",
+        created_date: "21-06-2023",
+        documentation_page: "https://fiufit-ingress-taller2-marianocinalli.cloud.okteto.net/trainings/documentation/#/default/delete_training_for_user_users__user_id__trainings__training_id__delete"
+    }} 
+ ]
