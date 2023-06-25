@@ -23,7 +23,8 @@ export interface Training {
 export interface TrainingResponse {
     items: Training[],
     offset: number,
-    limit: number
+    limit: number,
+    total:number
 }
 export interface TrainingTypesResponse{
     items: string[],
@@ -39,25 +40,31 @@ async function updateTraining(training: Training): Promise<Training> {
     });
 }
 
-async function getTrainings(filters?: Filters): Promise<TrainingResponse> { 
+async function getTrainings(page:number, rowsPerPage:number, filters?: Filters): Promise<TrainingResponse> { 
+    const offset = page * rowsPerPage;
+
     var queryParams = ""
     var connection = ""
     if(filters?.trainer_id){
         queryParams += connection + "trainer_id=" + filters.trainer_id;
     }
+
     if(filters?.type && filters?.difficulty){
         connection = "&"
     } else { connection = ""}
+    
     if(filters?.type){
         queryParams += connection + "training_type=" + filters.type;
-    if(filters?.difficulty){
+    
+        if(filters?.difficulty){
         queryParams += connection + "difficulty=" + filters.difficulty;
-    }
-        return doFetch(baseTrainingsUrl + `?${new URLSearchParams(queryParams)}`, false, {
+        }
+
+        return doFetch(baseTrainingsUrl + `?${new URLSearchParams(queryParams)}&offset=${offset}&limit=${rowsPerPage}`, false, {
             method: 'GET'
         });
     }else{
-        return doFetch(baseTrainingsUrl, false, {
+        return doFetch(baseTrainingsUrl + `?offset=${offset}&limit=${rowsPerPage}`, false, {
             method: 'GET'
         });
     }
@@ -79,24 +86,15 @@ export interface Filters {
     type: string;
     difficulty: string;
   }
-export function useTrainingsData(filters?: Filters) {
-    return useQuery(['trainings'], () => getTrainings(filters), reactQueryDefaultConfig);
+export function useTrainingsData(page:number, rowsPerPage:number, filters?: Filters) {
+    return useQuery(['trainings',page, rowsPerPage], () => getTrainings(page,rowsPerPage, filters), reactQueryDefaultConfig);
 }
-
 
 export function useTrainingUpdate() {
     const queryClient = useQueryClient();
     return useMutation(updateTraining, {
         onSuccess: (data) => {
-            queryClient.setQueryData(['trainings'], (old: Training[] | undefined) => {
-                if (old) {
-                    const index = old.findIndex((training) => training.id === data.id);
-                    if (index !== -1) {
-                        old[index] = data;
-                    }
-                }
-                return old;
-            });
+            queryClient.invalidateQueries(['trainings']);
         }
     });
 }

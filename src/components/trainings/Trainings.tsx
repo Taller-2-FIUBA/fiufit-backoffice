@@ -13,6 +13,7 @@ import {
   TextField,
   MenuItem,
   SelectChangeEvent,
+  TablePagination,
 } from "@mui/material";
 import "./Trainings.scss";
 import {
@@ -42,6 +43,9 @@ const headerRowItems = [
 const difficultyLevels = ["Easy", "Medium", "Hard"];
 
 export default function Trainings() {
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
   const handleKeyPress = (type: string, value: string, event: any) => {
     if (event.key === "Enter") {
       if (type === "title") {
@@ -65,8 +69,6 @@ export default function Trainings() {
   };
   const typesTraining = useTrainingTypes();
 
-  const { isLoading, isError, error, data } = useTrainingsData();
-
   const { mutate: updateTraining } = useTrainingUpdate();
 
   const navigate = useNavigate();
@@ -84,12 +86,19 @@ export default function Trainings() {
     difficulty: "",
   });
 
+  const { isLoading, isError, error, data } = useTrainingsData(
+    page,
+    rowsPerPage,
+    filters
+  );
+
   const handleChangeType = (event: SelectChangeEvent<string>) => {
     const newFilters = {
       ...filters,
       type: event.target.value,
     };
     setFilters(newFilters);
+    console.log("actualizar data");
     refetch();
   };
   const handleChangeDifficulty = (event: SelectChangeEvent<string>) => {
@@ -101,7 +110,7 @@ export default function Trainings() {
     refetch();
   };
 
-  const { refetch } = useTrainingsData(filters);
+  const { refetch } = useTrainingsData(page, rowsPerPage, filters);
 
   const handleDetailViewClick = (training: Training) => {
     setSelectedTraining(training);
@@ -252,6 +261,20 @@ export default function Trainings() {
               ))}
           </TableBody>
         </Table>
+        <TablePagination
+          component="div"
+          count={data?.limit || 0}
+          page={page}
+          onPageChange={(event, newPage) => {
+            setPage(newPage);
+          }}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={(event) => {
+            setRowsPerPage(parseInt(event.target.value, 10));
+            setPage(0); // Restablece la página actual al cambiar la cantidad de elementos por página
+          }}
+          labelRowsPerPage="Resultados por página:"
+        />
         {isError && (
           <div>
             <Typography color="error" variant="body1">

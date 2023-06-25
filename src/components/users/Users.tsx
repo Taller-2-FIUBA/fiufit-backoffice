@@ -37,7 +37,6 @@ export default function Users() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const { isLoading, isError, error, data } = useUsersData(page, rowsPerPage);
 
-  //const { isLoading, isError, error, data } = useUsersData();
   const { mutate: updateUser } = useUserUpdate();
   const navigate = useNavigate();
 
@@ -130,8 +129,6 @@ export default function Users() {
           count={data?.total || 0}
           page={page}
           onPageChange={(event, newPage) => {
-            console.log("actualizar resultados");
-
             setPage(newPage);
           }}
           rowsPerPage={rowsPerPage}

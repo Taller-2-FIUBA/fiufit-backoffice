@@ -8,6 +8,7 @@ import {
   Paper,
   Container,
   IconButton,
+  TablePagination,
 } from "@mui/material";
 import "./Healthcheck.scss";
 import { useNavigate } from "react-router-dom";
@@ -27,6 +28,9 @@ import ModalWrapper from "../common/modal-wrapper/ModalWrapper";
 const headerRowItems = ["Status", "Service", "Description", "Actions"];
 
 export default function Services() {
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
   const queryServiceA = useServiceUsersData();
   const queryServiceB = useServiceGoalsData();
   const queryServiceC = useServiceTrainingsData();
@@ -35,48 +39,26 @@ export default function Services() {
   const dataGoals: ServiceResponse | undefined = queryServiceB.data;
   const dataTrainings: ServiceResponse | undefined = queryServiceC.data;
 
-  var data = services;
+  for (var element of services) {
+    if (element.item.type == "users") {
+      element.item.is_up = dataUsers?.uptime ? true : false;
+      element.item.uptime = dataUsers?.uptime
+        ? Math.floor(dataUsers.uptime)
+        : 0;
+    }
 
-  if (dataUsers !== undefined) {
-    for (var element of data) {
-      if (element.item.type == "users") {
-        element.item.is_up = dataUsers.uptime ? true : false;
-        element.item.uptime = Math.floor(dataUsers.uptime);
-      }
+    if (element.item.type == "goals") {
+      element.item.is_up = dataGoals?.uptime ? true : false;
+      element.item.uptime = dataGoals?.uptime
+        ? Math.floor(dataGoals.uptime)
+        : 0;
     }
-  } else {
-    for (var element of data) {
-      if (element.item.type == "goals") {
-        element.item.is_up = false;
-      }
-    }
-  }
-  if (dataGoals !== undefined) {
-    for (var element of data) {
-      if (element.item.type == "goals") {
-        element.item.is_up = dataGoals.uptime ? true : false;
-        element.item.uptime = Math.floor(dataGoals.uptime);
-      }
-    }
-  } else {
-    for (var element of data) {
-      if (element.item.type == "goals") {
-        element.item.is_up = false;
-      }
-    }
-  }
-  if (dataTrainings !== undefined) {
-    for (var element of data) {
-      if (element.item.type == "trainings") {
-        element.item.is_up = dataTrainings.uptime ? true : false;
-        element.item.uptime = Math.floor(dataTrainings.uptime);
-      }
-    }
-  } else {
-    for (var element of data) {
-      if (element.item.type == "trainings") {
-        element.item.is_up = false;
-      }
+
+    if (element.item.type == "trainings") {
+      element.item.is_up = dataTrainings?.uptime ? true : false;
+      element.item.uptime = dataTrainings?.uptime
+        ? Math.floor(dataTrainings.uptime)
+        : 0;
     }
   }
 
@@ -116,8 +98,8 @@ export default function Services() {
             </TableRow>
           </TableHead>
           <TableBody className="table-body">
-            {data &&
-              data.map((service) => (
+            {services &&
+              services.map((service) => (
                 <TableRow
                   className={
                     service.item.is_up ? "table-row" : "table-row blocked"
@@ -150,6 +132,20 @@ export default function Services() {
               ))}
           </TableBody>
         </Table>
+        <TablePagination
+          component="div"
+          count={services.length || 0}
+          page={page}
+          onPageChange={(event, newPage) => {
+            setPage(newPage);
+          }}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={(event) => {
+            setRowsPerPage(parseInt(event.target.value, 10));
+            setPage(0); // Restablece la página actual al cambiar la cantidad de elementos por página
+          }}
+          labelRowsPerPage="Resultados por página:"
+        />
 
         {isLoading && <div>Loading...</div>}
       </TableContainer>
