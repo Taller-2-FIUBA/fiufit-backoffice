@@ -15,9 +15,11 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 
 import {
   useServiceUsersData,
+  useServiceGoalsData,
   services,
   ServiceResponse,
   ServiceItem,
+  useServiceTrainingsData,
 } from "../../api/HealthcheckService";
 import React from "react";
 import ModalWrapper from "../common/modal-wrapper/ModalWrapper";
@@ -26,14 +28,13 @@ const headerRowItems = ["Status", "Service", "Description", "Actions"];
 
 export default function Services() {
   const queryServiceA = useServiceUsersData();
-  //const queryServiceB = useServiceTrainingsData();
+  const queryServiceB = useServiceGoalsData();
+  const queryServiceC = useServiceTrainingsData();
 
-  const dataServiceA = queryServiceA.data;
-  //  const dataServiceB = queryServiceB.data;
   const dataUsers: ServiceResponse | undefined = queryServiceA.data;
-  // const data2: ServiceResponse | undefined = queryServiceB.data;
+  const dataGoals: ServiceResponse | undefined = queryServiceB.data;
+  const dataTrainings: ServiceResponse | undefined = queryServiceC.data;
 
-  //const data: ServiceResponse[] = [];
   var data = services;
 
   if (dataUsers !== undefined) {
@@ -43,15 +44,41 @@ export default function Services() {
         element.item.uptime = Math.floor(dataUsers.uptime);
       }
     }
-    //data1.uptime es lo unico que me viene de la compu.
-    /* data1.item.is_up = false;
-    data1.item.description = "Este es el ejemplo ";
-    data1.item.name = "";
-    data.push(data1);*/
+  } else {
+    for (var element of data) {
+      if (element.item.type == "goals") {
+        element.item.is_up = false;
+      }
+    }
   }
-  /* if (data2 !== undefined) {
-    data.push(data2);
-  }*/
+  if (dataGoals !== undefined) {
+    for (var element of data) {
+      if (element.item.type == "goals") {
+        element.item.is_up = dataGoals.uptime ? true : false;
+        element.item.uptime = Math.floor(dataGoals.uptime);
+      }
+    }
+  } else {
+    for (var element of data) {
+      if (element.item.type == "goals") {
+        element.item.is_up = false;
+      }
+    }
+  }
+  if (dataTrainings !== undefined) {
+    for (var element of data) {
+      if (element.item.type == "trainings") {
+        element.item.is_up = dataTrainings.uptime ? true : false;
+        element.item.uptime = Math.floor(dataTrainings.uptime);
+      }
+    }
+  } else {
+    for (var element of data) {
+      if (element.item.type == "trainings") {
+        element.item.is_up = false;
+      }
+    }
+  }
 
   const error = queryServiceA.error /* || queryServiceB.error*/
     ? queryServiceA.error

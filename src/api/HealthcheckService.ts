@@ -16,9 +16,9 @@ export interface ServiceItem {
 export interface ServiceResponse {
     uptime: number,
 }
-const baseUsersUrl = `${process.env.REACT_APP_API_URL}/users/`;
-const baseTrainingsUrl = `${process.env.REACT_APP_API_URL}/trainings/healthcheck/`;
-const baseGoalssUrl = `${process.env.REACT_APP_API_URL}/goals/healthcheck/`;
+const baseUsersUrl = `${process.env.REACT_APP_API_URL}`;
+const baseTrainingsUrl = `${process.env.REACT_APP_API_URL}`;
+const baseGoalssUrl = `${process.env.REACT_APP_API_URL}`;
 
 export const services = [
     {
@@ -38,7 +38,7 @@ export const services = [
         item: {
             type: "users",
             name: '/users',
-            url: baseUsersUrl,
+            url: baseUsersUrl + '/users',
             description: "Retrieve details for all users currently present in the database.",
             is_up: false,
             uptime: 0,
@@ -51,7 +51,7 @@ export const services = [
         item: {
             type: "users",
             name: "/users",
-            url: baseUsersUrl,
+            url: baseUsersUrl + '/users',
             description: "Create new user in Firebase, add it to the database if successful.",
             is_up: true,
             uptime: 0,
@@ -64,7 +64,7 @@ export const services = [
         item: {
             type: "users",
             name: "/users/usersIDP",
-            url: baseUsersUrl,
+            url: baseUsersUrl + '/users/usersIDP',
             description: "Create new user with federated identity in database.",
             is_up: true,
             uptime: 0,
@@ -77,7 +77,7 @@ export const services = [
         item: {
             type: "users",
             name: "/users/login/usersIDP",
-            url: baseUsersUrl,
+            url: baseUsersUrl + '/users/login/usersIDP',
             description: "Verify user is logged in through IDP and return token.",
             is_up: true,
             uptime: 0,
@@ -89,7 +89,7 @@ export const services = [
         item: {
             type: "users",
             name: "/users/{_id}",
-            url: baseUsersUrl,
+            url: baseUsersUrl + "/users/{_id}",
             description: "Retrieve details for users with specified id.",
             is_up: true,
             uptime: 0,
@@ -101,7 +101,7 @@ export const services = [
         item: {
             type: "users",
             name: "/users/{_id}",
-            url: baseUsersUrl,
+            url: baseUsersUrl + "/users/{_id}",
             description: "Update user data.",
             is_up: true,
             uptime: 0,
@@ -113,7 +113,7 @@ export const services = [
         item: {
             type: "users",
             name: "/users/{user_id}/wallet/",
-            url: baseUsersUrl,
+            url: baseUsersUrl +  "/users/{user_id}/wallet/",
             description: "Retrieve wallet for users with specified id.",
             is_up: true,
             uptime: 0,
@@ -124,7 +124,7 @@ export const services = [
             item: {
             type: "users",
             name: "/users/deposit",
-            url: baseUsersUrl,
+            url: baseUsersUrl + "/users/deposit",
             description: "Transfer specified money amount between specified users.",
             is_up: true,
             uptime: 0,
@@ -136,7 +136,7 @@ export const services = [
         item: {
         type: "users",
         name: "/users/status/{_id}",
-        url: baseUsersUrl,
+        url: baseUsersUrl + "/users/status/{_id}",
         description: "Invert blocked status of a user.Only admins allowed, can't block other admins",
         is_up: true,
         uptime: 0,
@@ -148,7 +148,7 @@ export const services = [
     item: {
     type: "users",
     name: "/users/recovery/{username}",
-    url: baseUsersUrl,
+    url: baseUsersUrl + "/users/recovery/{username}",
     description: "Request auth service to start password recovery for user_id.",
     is_up: true,
     uptime: 0,
@@ -160,7 +160,7 @@ export const services = [
     item: {
     type: "users",
     name: "/users/{user_id}/followed",
-    url: baseUsersUrl,
+    url: baseUsersUrl + "/users/{user_id}/followed",
     description: "Retrieve all users followed by user with specified id.",    
     is_up: true,
     uptime: 0,
@@ -172,7 +172,7 @@ export const services = [
     item: {
     type: "users",
     name: "/users/{user_id}/followers",
-    url: baseUsersUrl,
+    url: baseUsersUrl +  "/users/{user_id}/followers",
     description: "Retrieve all users followed by user with specified id.",
     is_up: true,
     uptime: 0,
@@ -184,7 +184,7 @@ export const services = [
     item: {
     type: "users",
     name: "/users/{user_id}/followed/{_id}",
-    url: baseUsersUrl,
+    url: baseUsersUrl + "/users/{user_id}/followed/{_id}",
     description: "Retrieve all users followed by user with specified id.",
     is_up: true,
     uptime: 0,
@@ -196,8 +196,8 @@ export const services = [
     item: {
     type: "users",
     name: "/users/{user_id}/followed/{_id}",
-    url: baseUsersUrl,
-    description: "Retrieve all users followed by user with specified id.",
+    url: baseUsersUrl +  "/users/{user_id}/followed/{_id}",
+    description: "Delete an user followed by user with specified id.",
     is_up: true,
     uptime: 0,
     http_method: "DELETE",
@@ -208,7 +208,7 @@ export const services = [
     item: {
     type: "users",
     name: "/admins",
-    url: baseUsersUrl,
+    url: baseUsersUrl + "/admins",
     description: "Return all administrators.",
     is_up: true,
     uptime: 0,
@@ -220,7 +220,7 @@ export const services = [
     item: {
     type: "users",
     name: "/admins",
-    url: baseUsersUrl,
+    url: baseUsersUrl + "/admins",
     description: "Create an admin.",
     is_up: true,
     uptime: 0,
@@ -232,7 +232,7 @@ export const services = [
     item: {
     type: "users",
     name: "/admins/login",
-    url: baseUsersUrl,
+    url: baseUsersUrl + "/admins/login",
     description: "Login as administrator. Return token if successful.",
     is_up: true,
     uptime: 0,
@@ -244,7 +244,7 @@ export const services = [
     item: {
     type: "goals",
     name: "/goals/{user_id}",
-    url: baseUsersUrl,
+    url: baseGoalssUrl + "/goals/{user_id}",
     description: "Return all goals in database.",
     is_up: true,
     uptime: 0,
@@ -256,7 +256,7 @@ export const services = [
     item: {
     type: "goals",
     name: "/goals/{user_id}",
-    url: baseUsersUrl,
+    url: baseGoalssUrl +  "/goals/{user_id}",
     description: "Create a new goal for user_id.",
     is_up: true,
     uptime: 0,
@@ -268,7 +268,7 @@ export const services = [
     item: {
     type: "goals",
     name: "/goals/metrics",
-    url: baseUsersUrl,
+    url: baseGoalssUrl + "/goals/metrics",
     description: "Return all metrics in database.",
     is_up: true,
     uptime: 0,
@@ -279,7 +279,7 @@ export const services = [
     item: {
     type: "goals",
     name: "/goals/{goal_id}",
-    url: baseUsersUrl,
+    url: baseGoalssUrl + "/goals/{goal_id}",
     description: "Delete goal with goal_id.",
     is_up: true,
     uptime: 0,
@@ -290,13 +290,24 @@ export const services = [
     item: {
     type: "goals",
     name: "/goals/{goal_id}",
-    url: baseUsersUrl,
+    url: baseGoalssUrl + "/goals/{goal_id}",
     description: "Update goal with goal_id.",
     is_up: true,
     uptime: 0,
     http_method: "PATCH",
     created_date: "01-06-2023",
     documentation_page: "https://fiufit-ingress-taller2-marianocinalli.cloud.okteto.net/goals/documentation/#/default/_update_goal_goals__goal_id__patch"
+}},{
+    item: {
+    type: "trainings",
+    name: "/trainings",
+    url: baseTrainingsUrl + "/trainings",
+    description: "Get trainings matching a filtering criteria.",
+    is_up: true,
+    uptime: 0,
+    http_method: "GET",
+    created_date: "21-06-2023",
+    documentation_page: "https://fiufit-ingress-taller2-marianocinalli.cloud.okteto.net/trainings/documentation/#/default/get_trainings_trainings_get"
 }}
 ]
 
@@ -304,16 +315,24 @@ async function getUsersService(): Promise<ServiceResponse> {
     return doFetch(baseUsersUrl + 'healthcheck/', false, {
         method: 'GET'
     });
-}/*
- async function getTrainingsService(): Promise<ServiceResponse> {
-    return doFetch(baseTrainingsUrl, false, {
+}
+ async function getGoalsService(): Promise<ServiceResponse> {
+    return doFetch(baseGoalssUrl + 'healthcheck/', false, {
         method: 'GET'
     });
-}*/
+}
+async function getTrainingService(): Promise<ServiceResponse> {
+    return doFetch(baseTrainingsUrl + 'healthcheck/', false, {
+        method: 'GET'
+    });
+}
 export function useServiceUsersData() {
     return useQuery(['userservices'], () => getUsersService(), reactQueryDefaultConfig);
-}/*
+}
+export function useServiceGoalsData() {
+    return useQuery(['goalsservices'], () => getGoalsService(), reactQueryDefaultConfig);
+}
 export function useServiceTrainingsData() {
-    return useQuery(['trainingservices'], () => getTrainingsService(), reactQueryDefaultConfig);
-}*/
+    return useQuery(['trainingsservices'], () => getTrainingService(), reactQueryDefaultConfig);
+}
 
