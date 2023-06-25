@@ -29,15 +29,13 @@ const headerRowItems = ["Status", "Service", "Description", "Actions"];
 
 export default function Services() {
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(50);
 
-  const queryServiceA = useServiceUsersData();
-  const queryServiceB = useServiceGoalsData();
-  const queryServiceC = useServiceTrainingsData();
-
-  const dataUsers: ServiceResponse | undefined = queryServiceA.data;
-  const dataGoals: ServiceResponse | undefined = queryServiceB.data;
-  const dataTrainings: ServiceResponse | undefined = queryServiceC.data;
+  const { isLoading, isError, error, data } = useServiceUsersData();
+  const dataUsers = data;
+  const dataGoals: ServiceResponse | undefined = useServiceGoalsData().data;
+  const dataTrainings: ServiceResponse | undefined =
+    useServiceTrainingsData().data;
 
   for (var element of services) {
     if (element.item.type == "users") {
@@ -61,13 +59,6 @@ export default function Services() {
         : 0;
     }
   }
-
-  const error = queryServiceA.error /* || queryServiceB.error*/
-    ? queryServiceA.error
-    : null;
-  const isError = queryServiceA.error; /*|| queryServiceB.error*/
-
-  const isLoading = queryServiceA.isLoading; /* || queryServiceB.isLoading;*/
 
   const navigate = useNavigate();
 
@@ -141,8 +132,8 @@ export default function Services() {
           }}
           rowsPerPage={rowsPerPage}
           onRowsPerPageChange={(event) => {
-            setRowsPerPage(parseInt(event.target.value, 10));
-            setPage(0); // Restablece la página actual al cambiar la cantidad de elementos por página
+            setRowsPerPage(parseInt(event.target.value, 50));
+            setPage(0);
           }}
           labelRowsPerPage="Resultados por página:"
         />
