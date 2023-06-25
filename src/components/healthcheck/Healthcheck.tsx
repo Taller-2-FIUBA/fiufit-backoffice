@@ -12,11 +12,11 @@ import {
 import "./Healthcheck.scss";
 import { useNavigate } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { services } from "../../api/utils/services";
 
 import {
   useServiceUsersData,
   useServiceGoalsData,
-  services,
   ServiceResponse,
   ServiceItem,
   useServiceTrainingsData,
