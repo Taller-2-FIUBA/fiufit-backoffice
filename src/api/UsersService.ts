@@ -36,7 +36,7 @@ async function updateUser(user: UserItem): Promise<UserItem> {
 }
 
 async function getUsers(page: number, limit:number): Promise<UserResponse> {
-    const offset = limit - ((page+1)*limit)
+    const offset = page * limit;
     const url = baseUsersUrl + "?offset=" + offset + "&limit=" + limit;
     return doFetch(url, false, {
         method: 'GET'
@@ -47,23 +47,15 @@ export function useUsersData(page: number, rowsPerPage: number) {
     console.log("ROWS PER PAGE", rowsPerPage);
     console.log("PAGE", page);
 
-    return useQuery(['users'], () => getUsers(page,rowsPerPage), reactQueryDefaultConfig);
+    return useQuery(['users', page, rowsPerPage], () => getUsers(page,rowsPerPage), reactQueryDefaultConfig);
 }
 
 export function useUserUpdate() {
     const queryClient = useQueryClient();
     return useMutation(updateUser, {
         onSuccess: (data) => {
-            console.log("User updated: ", data)
-            queryClient.setQueryData(['users'], (old: UserResponse | undefined) => {
-                if (old && old.items) {
-                    const index = old.items.findIndex((user) => user.id === data.id);
-                    if (index !== -1) {
-                        old.items[index] = data;
-                    }
-                }
-                return old;
-            });
+            console.log("User updated: ", data);
+            queryClient.invalidateQueries(['users']);
         }
     });
 }
