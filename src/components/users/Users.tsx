@@ -127,9 +127,13 @@ export default function Users() {
         </Table>
         <TablePagination
           component="div"
-          count={data?.total || 0} // Establece el número total de elementos
+          count={data?.total || 0}
           page={page}
-          onPageChange={(event, newPage) => setPage(newPage)} // Maneja el cambio de página
+          onPageChange={(event, newPage) => {
+            console.log("actualizar resultados");
+
+            setPage(newPage);
+          }}
           rowsPerPage={rowsPerPage}
           onRowsPerPageChange={(event) => {
             setRowsPerPage(parseInt(event.target.value, 10));

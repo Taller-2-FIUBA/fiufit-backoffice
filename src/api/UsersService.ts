@@ -35,17 +35,19 @@ async function updateUser(user: UserItem): Promise<UserItem> {
     });
 }
 
-async function getUsers(): Promise<UserResponse> {
-    return doFetch(baseUsersUrl, false, {
+async function getUsers(page: number, limit:number): Promise<UserResponse> {
+    const offset = limit - ((page+1)*limit)
+    const url = baseUsersUrl + "?offset=" + offset + "&limit=" + limit;
+    return doFetch(url, false, {
         method: 'GET'
     });
 }
 
-export function useUsersData(page: any, rowsPerPage: any) {
+export function useUsersData(page: number, rowsPerPage: number) {
     console.log("ROWS PER PAGE", rowsPerPage);
     console.log("PAGE", page);
 
-    return useQuery(['users'], () => getUsers(), reactQueryDefaultConfig);
+    return useQuery(['users'], () => getUsers(page,rowsPerPage), reactQueryDefaultConfig);
 }
 
 export function useUserUpdate() {
