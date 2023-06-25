@@ -1,11 +1,24 @@
-import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Typography, Container} from '@mui/material';
-import { useUsersData, useUserUpdate, UserItem } from '../../api/UsersService';
-import './Users.scss';
-import BlockIcon from '@mui/icons-material/Block';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import React from 'react';
-import ModalWrapper from '../common/modal-wrapper/ModalWrapper';
-import { useNavigate } from 'react-router-dom';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  Typography,
+  Container,
+  TablePagination,
+} from "@mui/material";
+
+import { useUsersData, useUserUpdate, UserItem } from "../../api/UsersService";
+import "./Users.scss";
+import BlockIcon from "@mui/icons-material/Block";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import React from "react";
+import ModalWrapper from "../common/modal-wrapper/ModalWrapper";
+import { useNavigate } from "react-router-dom";
 
 const headerRowItems = [
   "Status",
@@ -20,20 +33,24 @@ const headerRowItems = [
 ];
 
 export default function Users() {
-  const {isLoading, isError, error, data} = useUsersData();
-  const {mutate: updateUser} = useUserUpdate();
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const { isLoading, isError, error, data } = useUsersData(page, rowsPerPage);
+
+  //const { isLoading, isError, error, data } = useUsersData();
+  const { mutate: updateUser } = useUserUpdate();
   const navigate = useNavigate();
 
   const [selectedUser, setSelectedUser] = React.useState<UserItem | null>(null);
-  
+
   const handleProfileClick = (user: UserItem) => {
     setSelectedUser(user);
   };
 
   const handleProfileClose = () => {
     setSelectedUser(null);
-  }
-  const handleBlockClick = (user: UserItem) => { 
+  };
+  const handleBlockClick = (user: UserItem) => {
     updateUser(user);
   };
 
@@ -43,7 +60,7 @@ export default function Users() {
 
   return (
     <Container className="users">
-      <TableContainer component={Paper} className='table-container'>
+      <TableContainer component={Paper} className="table-container">
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead className="table-header">
             <TableRow hover>
@@ -54,57 +71,89 @@ export default function Users() {
               ))}
             </TableRow>
           </TableHead>
-          <TableBody className='table-body'>
-            {data && data.items && data.items.map((user) => (
-              <TableRow
-                className={user.is_blocked ? "table-row blocked" : "table-row"}
-                hover
-                key={user.id}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
-                <TableCell>
-                  <div className="table-row-cell status">
-                    <span></span>
-                  </div>
-                </TableCell>
-                <TableCell className="table-row-cell">
-                  {user.username}
-                </TableCell>
-                <TableCell className="table-row-cell">{user.name}</TableCell>
-                <TableCell className="table-row-cell">{user.surname}</TableCell>
-                <TableCell className="table-row-cell">{user.email}</TableCell>
-                <TableCell className="table-row-cell">
-                  {user.registration_date}
-                </TableCell>
-                <TableCell className="table-row-cell">
-                  {user.location}
-                </TableCell>
-                <TableCell className="table-row-cell">
-                  {user.is_athlete ? "Athlete" : "Trainer"}
-                </TableCell>
-                <TableCell>
-                  <IconButton className='table-icon' size="large" onClick={() => handleProfileClick(user)}>
-                    <VisibilityIcon></VisibilityIcon>
-                  </IconButton>
-                  <IconButton className='table-icon' size="large" onClick={() => handleBlockClick(user)}>
-                    <BlockIcon></BlockIcon>
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
+          <TableBody className="table-body">
+            {data &&
+              data.items &&
+              data.items.map((user) => (
+                <TableRow
+                  className={
+                    user.is_blocked ? "table-row blocked" : "table-row"
+                  }
+                  hover
+                  key={user.id}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell>
+                    <div className="table-row-cell status">
+                      <span></span>
+                    </div>
+                  </TableCell>
+                  <TableCell className="table-row-cell">
+                    {user.username}
+                  </TableCell>
+                  <TableCell className="table-row-cell">{user.name}</TableCell>
+                  <TableCell className="table-row-cell">
+                    {user.surname}
+                  </TableCell>
+                  <TableCell className="table-row-cell">{user.email}</TableCell>
+                  <TableCell className="table-row-cell">
+                    {user.registration_date}
+                  </TableCell>
+                  <TableCell className="table-row-cell">
+                    {user.location}
+                  </TableCell>
+                  <TableCell className="table-row-cell">
+                    {user.is_athlete ? "Athlete" : "Trainer"}
+                  </TableCell>
+                  <TableCell>
+                    <IconButton
+                      className="table-icon"
+                      size="large"
+                      onClick={() => handleProfileClick(user)}
+                    >
+                      <VisibilityIcon></VisibilityIcon>
+                    </IconButton>
+                    <IconButton
+                      className="table-icon"
+                      size="large"
+                      onClick={() => handleBlockClick(user)}
+                    >
+                      <BlockIcon></BlockIcon>
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
-        {isError && <div>
-          <Typography color="error" variant="body1">
-            {(error as Error).message}
-          </Typography>
-        </div>}
+        <TablePagination
+          component="div"
+          count={data?.total || 0}
+          page={page}
+          onPageChange={(event, newPage) => {
+            console.log("actualizar resultados");
+
+            setPage(newPage);
+          }}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={(event) => {
+            setRowsPerPage(parseInt(event.target.value, 10));
+            setPage(0); // Restablece la página actual al cambiar la cantidad de elementos por página
+          }}
+          labelRowsPerPage="Resultados por página:"
+        />
+        {isError && (
+          <div>
+            <Typography color="error" variant="body1">
+              {(error as Error).message}
+            </Typography>
+          </div>
+        )}
         {isLoading && <div>Loading...</div>}
       </TableContainer>
       <ModalWrapper
         open={!!selectedUser}
         handleOnClose={handleProfileClose}
-        type='user-details'
+        type="user-details"
         value={selectedUser}
       />
     </Container>

@@ -1,43 +1,62 @@
-import React from 'react';
-import { Modal } from '@mui/material';
-import UserProfile from '../../users/user-profile/UserProfile';
-import TrainingDetailView from '../../trainings/training-detail-view/TrainingDetailView';
-import AdminCreator from '../../admins/admin-creator/AdminCreator';
-import { Training } from '../../../api/TrainingService';
-import { UserItem } from '../../../api/UsersService';
-import './ModalWrapper.scss';
+import React from "react";
+import { Modal } from "@mui/material";
+import UserProfile from "../../users/user-profile/UserProfile";
+import TrainingDetailView from "../../trainings/training-detail-view/TrainingDetailView";
+import AdminCreator from "../../admins/admin-creator/AdminCreator";
+import { Training } from "../../../api/TrainingService";
+import { UserItem } from "../../../api/UsersService";
+import "./ModalWrapper.scss";
+import ServiceDetailView from "../../healthcheck/service-detail-view/ServiceDetailView";
+import { ServiceItem } from "../../../api/HealthcheckService";
 
 interface ModalProps {
-    open: boolean;
-    handleOnClose: () => void;
-    type: 'user-details' | 'admin-creator' | 'training-details';
-    value?: UserItem | Training | null;
+  open: boolean;
+  handleOnClose: () => void;
+  type:
+    | "user-details"
+    | "admin-creator"
+    | "training-details"
+    | "service-details";
+  value?: UserItem | Training | ServiceItem | null;
 }
 
-
-function renderSwitch(type: 'user-details' | 'admin-creator' | 'training-details', 
-    value: any, handleOnClose: () => void) {
-    switch(type) {
-        case 'user-details':
-            return <UserProfile user={value}></UserProfile>;
-        case 'admin-creator':
-            return <AdminCreator handleOnSuccess={handleOnClose}></AdminCreator>;
-        case 'training-details':
-            return <TrainingDetailView training={value}></TrainingDetailView>;
-    }
+function renderSwitch(
+  type:
+    | "user-details"
+    | "admin-creator"
+    | "training-details"
+    | "service-details",
+  value: any,
+  handleOnClose: () => void
+) {
+  switch (type) {
+    case "user-details":
+      return <UserProfile user={value}></UserProfile>;
+    case "admin-creator":
+      return <AdminCreator handleOnSuccess={handleOnClose}></AdminCreator>;
+    case "training-details":
+      return <TrainingDetailView training={value}></TrainingDetailView>;
+    case "service-details":
+      return <ServiceDetailView service={value}></ServiceDetailView>;
+  }
 }
 
-const ModalWrapper: React.FC<ModalProps> = ({open, handleOnClose, type, value}) => {
-    return <Modal
-        open={open}
-        onClose={handleOnClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+const ModalWrapper: React.FC<ModalProps> = ({
+  open,
+  handleOnClose,
+  type,
+  value,
+}) => {
+  return (
+    <Modal
+      open={open}
+      onClose={handleOnClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
     >
-        {renderSwitch(type, value, handleOnClose)}
-        
-    </Modal>;
-}
-
+      {renderSwitch(type, value, handleOnClose)}
+    </Modal>
+  );
+};
 
 export default ModalWrapper;
