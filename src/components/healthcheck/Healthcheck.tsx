@@ -38,21 +38,21 @@ export default function Services() {
     useServiceTrainingsData().data;
 
   for (var element of services) {
-    if (element.item.type == "users") {
+    if (element.item.type === "users") {
       element.item.is_up = dataUsers?.uptime ? true : false;
       element.item.uptime = dataUsers?.uptime
         ? Math.floor(dataUsers.uptime)
         : 0;
     }
 
-    if (element.item.type == "goals") {
+    if (element.item.type === "goals") {
       element.item.is_up = dataGoals?.uptime ? true : false;
       element.item.uptime = dataGoals?.uptime
         ? Math.floor(dataGoals.uptime)
         : 0;
     }
 
-    if (element.item.type == "trainings") {
+    if (element.item.type === "trainings") {
       element.item.is_up = dataTrainings?.uptime ? true : false;
       element.item.uptime = dataTrainings?.uptime
         ? Math.floor(dataTrainings.uptime)

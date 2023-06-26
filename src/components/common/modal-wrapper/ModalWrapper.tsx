@@ -8,6 +8,7 @@ import { UserItem } from "../../../api/UsersService";
 import "./ModalWrapper.scss";
 import ServiceDetailView from "../../healthcheck/service-detail-view/ServiceDetailView";
 import { ServiceItem } from "../../../api/HealthcheckService";
+import AddFunds from "../../users/add-funds/Addfunds";
 
 interface ModalProps {
   open: boolean;
@@ -16,7 +17,8 @@ interface ModalProps {
     | "user-details"
     | "admin-creator"
     | "training-details"
-    | "service-details";
+    | "service-details"
+    | "add-funds";
   value?: UserItem | Training | ServiceItem | null;
 }
 
@@ -25,7 +27,8 @@ function renderSwitch(
     | "user-details"
     | "admin-creator"
     | "training-details"
-    | "service-details",
+    | "service-details"
+    | "add-funds",
   value: any,
   handleOnClose: () => void
 ) {
@@ -38,6 +41,8 @@ function renderSwitch(
       return <TrainingDetailView training={value}></TrainingDetailView>;
     case "service-details":
       return <ServiceDetailView service={value}></ServiceDetailView>;
+    case "add-funds":
+      return <AddFunds user={value} handleOnSuccess={handleOnClose}></AddFunds>;
   }
 }
 

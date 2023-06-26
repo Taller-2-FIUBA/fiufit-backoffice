@@ -6,14 +6,14 @@ interface ItemProps {
   title: string;
   value?: string | number;
   icon?: keyof typeof MUIcon;
-  link?: string; // Nueva prop para el enlace
+  link?: string;
 }
-interface MyComponentProps {
+interface DocLinkProps {
   value: string | number | undefined;
   url: string;
 }
 
-export const MyComponent: React.FC<MyComponentProps> = ({ value, url }) => {
+export const DocLink: React.FC<DocLinkProps> = ({ value, url }) => {
   const externalLink = url;
 
   return (
@@ -25,7 +25,6 @@ export const MyComponent: React.FC<MyComponentProps> = ({ value, url }) => {
 
 const ModalItem: React.FC<ItemProps> = ({ title, value, icon }) => {
   const Icon = icon && MUIcon[icon];
-
   return (
     <Stack
       className="modal-item"
@@ -42,7 +41,7 @@ const ModalItem: React.FC<ItemProps> = ({ title, value, icon }) => {
         <Rating name="read-only" value={value} readOnly />
       ) : null}
       {title === "Doc" && typeof value === "string" ? (
-        <MyComponent url={value} value={value}></MyComponent>
+        <DocLink url={value} value={value}></DocLink>
       ) : (
         <p>{value}</p>
       )}
