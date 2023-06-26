@@ -31,10 +31,6 @@ export default function Transactions() {
   const [selectedTransaction, setSelectedTransaction] =
     React.useState<TransactionItem | null>(null);
 
-  const handleProfileClick = (transaction: TransactionItem) => {
-    setSelectedTransaction(transaction);
-  };
-
   if (isError && (error as Error).message === "Unauthorized") {
     navigate("/login");
   }
