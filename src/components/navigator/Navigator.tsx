@@ -24,6 +24,7 @@ const pages = [
   { title: "Trainings", link: "/trainings" },
   { title: "Metrics", link: "/metrics" },
   { title: "Services", link: "/services" },
+  { title: "Transactions", link: "/transactions" },
 ];
 const settings = ["Logout"];
 

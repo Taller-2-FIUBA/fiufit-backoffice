@@ -18,6 +18,12 @@ export interface UserItem {
     is_blocked: boolean,
     balance?: number
 }
+export interface TransactionItem {
+    sender: string,
+    receiver: string, 
+    amount: number, 
+    date: string
+}
 export interface UserResponse {
     items: UserItem[],
     total: number, 
@@ -28,6 +34,13 @@ export interface UserResponse {
 
 export interface BalanceResponse {
     balance: number
+}
+export interface TransactionsResponse {
+    items: TransactionItem[],
+    total: number, 
+    page: number, 
+    size: number, 
+    pages: number
 }
 
 const baseUsersUrl = `${process.env.REACT_APP_API_URL}/users`;
@@ -64,6 +77,18 @@ export async function getBalance(user: UserItem): Promise<BalanceResponse> {
 }
 export function useUsersData(page: number, rowsPerPage: number) {
     return useQuery(['users', page, rowsPerPage], () => getUsers(page,rowsPerPage), reactQueryDefaultConfig);
+}
+
+export function useTransactionsData(page: number, rowsPerPage: number) {
+    return useQuery(['transactions', page, rowsPerPage], () => getUsersTransactions(page,rowsPerPage), reactQueryDefaultConfig);
+}
+
+export function getUsersTransactions(page: number, limit:number): Promise<TransactionsResponse> {
+    const offset = page * limit;
+    const url = baseUsersUrl + "/transactions?offset=" + offset + "&limit=" + limit;
+    return doFetch(url, true, {
+        method: 'GET'
+    });
 }
 
 export function useUserUpdate() {

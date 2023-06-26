@@ -136,7 +136,7 @@ export default function Services() {
             setRowsPerPage(parseInt(event.target.value, 50));
             setPage(0);
           }}
-          labelRowsPerPage="Resultados por página:"
+          labelRowsPerPage="Rows per page:"
         />
 
         {isLoading && <div>Loading...</div>}
