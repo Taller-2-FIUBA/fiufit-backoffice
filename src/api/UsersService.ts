@@ -33,6 +33,9 @@ export interface UserResponse {
 }
 
 export interface BalanceResponse {
+    balance: Balance
+}
+export interface Balance {
     balance: number
 }
 export interface TransactionsResponse {

@@ -7,7 +7,7 @@ import {
   Input,
   Stack,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as MUIcon from "@mui/icons-material";
 import "./AddFunds.scss";
 import {
@@ -42,13 +42,15 @@ const AddFunds: React.FC<UserProfileProps> = ({ user, handleOnSuccess }) => {
     }
   };
 
-  const newBalance = async (user: UserItem) => {
-    //  user?.balance ? user?.balance :
-    const balanceResponse = await getBalance(user);
-    console.log("Balance", balanceResponse.balance);
-    return user?.balance ? user?.balance : 0;
-  };
-
+  const [data, setData] = useState<any>(null); // Estado para almacenar los datos de la API
+  useEffect(() => {
+    const newBalance = async (user: UserItem) => {
+      const balanceResponse = await getBalance(user);
+      user.balance = balanceResponse.balance.balance;
+      setData(user?.balance ? user?.balance : 0);
+    };
+    newBalance(user);
+  }, []);
   return (
     <Card className="modal-container user-profile">
       <CardContent className="modal-content">
@@ -66,7 +68,11 @@ const AddFunds: React.FC<UserProfileProps> = ({ user, handleOnSuccess }) => {
             >
               <ModalItem title="Name" value={user?.name} icon="Person" />
               <ModalItem title="Surname" value={user?.surname} icon="Person" />
-              <ModalItem title="Balance" value={0} icon="AttachMoney" />
+              <ModalItem
+                title="Balance"
+                value={data ? data : 0}
+                icon="AttachMoney"
+              />
               <Stack
                 className="modal-item"
                 spacing={2}
