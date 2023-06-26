@@ -14,12 +14,10 @@ import {
 
 import { useTransactionsData, TransactionItem } from "../../api/UsersService";
 import "./Transactions.scss";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import React from "react";
-import ModalWrapper from "../common/modal-wrapper/ModalWrapper";
 import { useNavigate } from "react-router-dom";
 
-const headerRowItems = ["Sender", "Receiver", "Date", "Amount", "Actions"];
+const headerRowItems = ["Sender", "Receiver", "Date", "Amount"];
 
 export default function Transactions() {
   const [page, setPage] = React.useState(0);
@@ -36,10 +34,6 @@ export default function Transactions() {
 
   const handleProfileClick = (transaction: TransactionItem) => {
     setSelectedTransaction(transaction);
-  };
-
-  const handleProfileClose = () => {
-    setSelectedTransaction(null);
   };
 
   if (isError && (error as Error).message === "Unauthorized") {
@@ -80,15 +74,6 @@ export default function Transactions() {
                   </TableCell>
                   <TableCell className="table-row-cell">
                     {transaction.amount}
-                  </TableCell>
-                  <TableCell>
-                    <IconButton
-                      className="table-icon"
-                      size="large"
-                      onClick={() => handleProfileClick(transaction)}
-                    >
-                      <VisibilityIcon></VisibilityIcon>
-                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))}
