@@ -8,6 +8,8 @@ import Trainings from "./components/trainings/Trainings";
 import Metrics from "./components/metrics/Metrics";
 import Navigator from "./components/navigator/Navigator";
 import Services from "./components/healthcheck/Healthcheck";
+import Transactions from "./components/transactions/Transactions";
+
 import PrivateRoutes from "./PrivateRoutes";
 
 const AppRouter = () => {
@@ -28,6 +30,7 @@ const AppRouter = () => {
                   <Route path="/trainings" element={<Trainings />} />
                   <Route path="/metrics" element={<Metrics />} />
                   <Route path="/services" element={<Services />} />
+                  <Route path="/transactions" element={<Transactions />} />
                 </Route>
               </Routes>
             </>
