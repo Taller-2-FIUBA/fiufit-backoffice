@@ -124,6 +124,7 @@ export default function Services() {
           </TableBody>
         </Table>
         <TablePagination
+          className="table-pagination"
           component="div"
           count={services.length || 0}
           page={page}

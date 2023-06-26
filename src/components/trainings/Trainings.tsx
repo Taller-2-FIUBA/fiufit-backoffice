@@ -262,6 +262,7 @@ export default function Trainings() {
           </TableBody>
         </Table>
         <TablePagination
+          className="table-pagination"
           component="div"
           count={data?.limit || 0}
           page={page}

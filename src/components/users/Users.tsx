@@ -125,6 +125,7 @@ export default function Users() {
           </TableBody>
         </Table>
         <TablePagination
+          className="table-pagination"
           component="div"
           count={data?.total || 0}
           page={page}
