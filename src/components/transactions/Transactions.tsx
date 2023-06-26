@@ -86,7 +86,7 @@ export default function Transactions() {
             setRowsPerPage(parseInt(event.target.value, 10));
             setPage(0);
           }}
-          labelRowsPerPage="Resultados por página:"
+          labelRowsPerPage="Rows per page:"
         />
         {isError && (
           <div>

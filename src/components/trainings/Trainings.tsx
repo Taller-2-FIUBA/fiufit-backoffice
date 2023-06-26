@@ -273,7 +273,7 @@ export default function Trainings() {
             setRowsPerPage(parseInt(event.target.value, 10));
             setPage(0); // Restablece la página actual al cambiar la cantidad de elementos por página
           }}
-          labelRowsPerPage="Resultados por página:"
+          labelRowsPerPage="Rows per page:"
         />
         {isError && (
           <div>
