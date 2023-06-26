@@ -6,7 +6,6 @@ import {
   TableHead,
   TableRow,
   Paper,
-  IconButton,
   Typography,
   Container,
   TablePagination,
@@ -89,7 +88,7 @@ export default function Transactions() {
           rowsPerPage={rowsPerPage}
           onRowsPerPageChange={(event) => {
             setRowsPerPage(parseInt(event.target.value, 10));
-            setPage(0); // Restablece la página actual al cambiar la cantidad de elementos por página
+            setPage(0);
           }}
           labelRowsPerPage="Resultados por página:"
         />
