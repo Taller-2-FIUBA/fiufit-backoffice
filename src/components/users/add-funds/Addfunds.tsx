@@ -42,7 +42,7 @@ const AddFunds: React.FC<UserProfileProps> = ({ user, handleOnSuccess }) => {
     }
   };
 
-  const [data, setData] = useState<any>(null); // Estado para almacenar los datos de la API
+  const [data, setData] = useState<any>(null);
   useEffect(() => {
     const newBalance = async (user: UserItem) => {
       const balanceResponse = await getBalance(user);
