@@ -21,8 +21,8 @@ import {
 const pages = [
   { title: "Users", link: "/users" },
   { title: "Admins", link: "/admins" },
-  { title: "trainings", link: "/trainings" },
-  { title: "metrics", link: "/metrics" },
+  { title: "Trainings", link: "/trainings" },
+  { title: "Metrics", link: "/metrics" },
   { title: "Services", link: "/services" },
 ];
 const settings = ["Logout"];

@@ -8,6 +8,7 @@ import {
   Paper,
   Container,
   IconButton,
+  TablePagination,
 } from "@mui/material";
 import "./Healthcheck.scss";
 import { useNavigate } from "react-router-dom";
@@ -27,65 +28,37 @@ import ModalWrapper from "../common/modal-wrapper/ModalWrapper";
 const headerRowItems = ["Status", "Service", "Description", "Actions"];
 
 export default function Services() {
-  const queryServiceA = useServiceUsersData();
-  const queryServiceB = useServiceGoalsData();
-  const queryServiceC = useServiceTrainingsData();
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(50);
 
-  const dataUsers: ServiceResponse | undefined = queryServiceA.data;
-  const dataGoals: ServiceResponse | undefined = queryServiceB.data;
-  const dataTrainings: ServiceResponse | undefined = queryServiceC.data;
+  const { isLoading, isError, error, data } = useServiceUsersData();
+  const dataUsers = data;
+  const dataGoals: ServiceResponse | undefined = useServiceGoalsData().data;
+  const dataTrainings: ServiceResponse | undefined =
+    useServiceTrainingsData().data;
 
-  var data = services;
-
-  if (dataUsers !== undefined) {
-    for (var element of data) {
-      if (element.item.type == "users") {
-        element.item.is_up = dataUsers.uptime ? true : false;
-        element.item.uptime = Math.floor(dataUsers.uptime);
-      }
+  for (var element of services) {
+    if (element.item.type == "users") {
+      element.item.is_up = dataUsers?.uptime ? true : false;
+      element.item.uptime = dataUsers?.uptime
+        ? Math.floor(dataUsers.uptime)
+        : 0;
     }
-  } else {
-    for (var element of data) {
-      if (element.item.type == "goals") {
-        element.item.is_up = false;
-      }
+
+    if (element.item.type == "goals") {
+      element.item.is_up = dataGoals?.uptime ? true : false;
+      element.item.uptime = dataGoals?.uptime
+        ? Math.floor(dataGoals.uptime)
+        : 0;
+    }
+
+    if (element.item.type == "trainings") {
+      element.item.is_up = dataTrainings?.uptime ? true : false;
+      element.item.uptime = dataTrainings?.uptime
+        ? Math.floor(dataTrainings.uptime)
+        : 0;
     }
   }
-  if (dataGoals !== undefined) {
-    for (var element of data) {
-      if (element.item.type == "goals") {
-        element.item.is_up = dataGoals.uptime ? true : false;
-        element.item.uptime = Math.floor(dataGoals.uptime);
-      }
-    }
-  } else {
-    for (var element of data) {
-      if (element.item.type == "goals") {
-        element.item.is_up = false;
-      }
-    }
-  }
-  if (dataTrainings !== undefined) {
-    for (var element of data) {
-      if (element.item.type == "trainings") {
-        element.item.is_up = dataTrainings.uptime ? true : false;
-        element.item.uptime = Math.floor(dataTrainings.uptime);
-      }
-    }
-  } else {
-    for (var element of data) {
-      if (element.item.type == "trainings") {
-        element.item.is_up = false;
-      }
-    }
-  }
-
-  const error = queryServiceA.error /* || queryServiceB.error*/
-    ? queryServiceA.error
-    : null;
-  const isError = queryServiceA.error; /*|| queryServiceB.error*/
-
-  const isLoading = queryServiceA.isLoading; /* || queryServiceB.isLoading;*/
 
   const navigate = useNavigate();
 
@@ -116,8 +89,8 @@ export default function Services() {
             </TableRow>
           </TableHead>
           <TableBody className="table-body">
-            {data &&
-              data.map((service) => (
+            {services &&
+              services.map((service) => (
                 <TableRow
                   className={
                     service.item.is_up ? "table-row" : "table-row blocked"
@@ -150,6 +123,21 @@ export default function Services() {
               ))}
           </TableBody>
         </Table>
+        <TablePagination
+          className="table-pagination"
+          component="div"
+          count={services.length || 0}
+          page={page}
+          onPageChange={(event, newPage) => {
+            setPage(newPage);
+          }}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={(event) => {
+            setRowsPerPage(parseInt(event.target.value, 50));
+            setPage(0);
+          }}
+          labelRowsPerPage="Resultados por página:"
+        />
 
         {isLoading && <div>Loading...</div>}
       </TableContainer>

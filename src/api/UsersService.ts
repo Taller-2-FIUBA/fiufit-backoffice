@@ -44,9 +44,6 @@ async function getUsers(page: number, limit:number): Promise<UserResponse> {
 }
 
 export function useUsersData(page: number, rowsPerPage: number) {
-    console.log("ROWS PER PAGE", rowsPerPage);
-    console.log("PAGE", page);
-
     return useQuery(['users', page, rowsPerPage], () => getUsers(page,rowsPerPage), reactQueryDefaultConfig);
 }
 
