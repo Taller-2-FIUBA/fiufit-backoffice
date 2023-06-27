@@ -15,6 +15,7 @@ import {
 import { useUsersData, useUserUpdate, UserItem } from "../../api/UsersService";
 import "./Users.scss";
 import BlockIcon from "@mui/icons-material/Block";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import React from "react";
 import ModalWrapper from "../common/modal-wrapper/ModalWrapper";
@@ -41,6 +42,7 @@ export default function Users() {
   const navigate = useNavigate();
 
   const [selectedUser, setSelectedUser] = React.useState<UserItem | null>(null);
+  const [fundUser, setFundUser] = React.useState<UserItem | null>(null);
 
   const handleProfileClick = (user: UserItem) => {
     setSelectedUser(user);
@@ -49,8 +51,15 @@ export default function Users() {
   const handleProfileClose = () => {
     setSelectedUser(null);
   };
+
+  const handleFundClose = () => {
+    setFundUser(null);
+  };
   const handleBlockClick = (user: UserItem) => {
     updateUser(user);
+  };
+  const handleFundsClick = (user: UserItem) => {
+    setFundUser(user);
   };
 
   if (isError && (error as Error).message === "Unauthorized") {
@@ -119,6 +128,13 @@ export default function Users() {
                     >
                       <BlockIcon></BlockIcon>
                     </IconButton>
+                    <IconButton
+                      className="table-icon"
+                      size="large"
+                      onClick={() => handleFundsClick(user)}
+                    >
+                      <AttachMoneyIcon></AttachMoneyIcon>
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))}
@@ -153,6 +169,12 @@ export default function Users() {
         handleOnClose={handleProfileClose}
         type="user-details"
         value={selectedUser}
+      />
+      <ModalWrapper
+        open={!!fundUser}
+        handleOnClose={handleFundClose}
+        type="add-funds"
+        value={fundUser}
       />
     </Container>
   );

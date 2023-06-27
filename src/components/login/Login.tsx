@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import './Login.scss'
+import "./Login.scss";
 
 import {
   Container,
@@ -52,13 +52,9 @@ const LoginScreen: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="xs" style={{height: "100vh" }}>
+    <Container maxWidth="xs" style={{ height: "100vh" }}>
       <Box className="login-container">
-        <img
-          src="/fiufit-logo.png"
-          alt="logo"
-          loading="lazy"
-        />
+        <img src="/fiufit-logo.png" alt="logo" loading="lazy" />
         <Box className="login-form-container">
           {/* Formulario de inicio de sesión */}
           <Paper style={{ padding: 20, backgroundColor: "#fff" }}>
@@ -109,7 +105,7 @@ const LoginScreen: React.FC = () => {
                 align="center"
                 style={{ marginTop: 10 }}
               >
-                Error en el servidor. Por favor, intenta de nuevo más tarde.
+                Server error. Please, try again later.
                 {/* TODO sacar el mensaje de acá.*/}
               </Typography>
             )}

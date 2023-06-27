@@ -16,6 +16,7 @@ export interface UserItem {
     is_athlete: boolean,
     avatar?: string
     is_blocked: boolean,
+    balance?: number
 }
 export interface TransactionItem {
     sender: string,
@@ -31,6 +32,12 @@ export interface UserResponse {
     pages: number
 }
 
+export interface BalanceResponse {
+    balance: Balance
+}
+export interface Balance {
+    balance: number
+}
 export interface TransactionsResponse {
     items: TransactionItem[],
     total: number, 
@@ -51,6 +58,15 @@ async function updateUser(user: UserItem): Promise<UserItem> {
     return user;
 }
 
+export async function addFundsToUser(user: UserItem, amount: number): Promise<UserItem> {
+    const requestData = {amount: amount}
+    return doFetch(baseUsersUrl + `/${user.id}/wallet/balance` , true, {
+        method: 'PATCH',
+        body: JSON.stringify(requestData),
+        headers: {'Content-Type': 'application/json'}
+    });
+}
+
 async function getUsers(page: number, limit:number): Promise<UserResponse> {
     const offset = page * limit;
     const url = baseUsersUrl + "?offset=" + offset + "&limit=" + limit;
@@ -59,6 +75,12 @@ async function getUsers(page: number, limit:number): Promise<UserResponse> {
     });
 }
 
+export async function getBalance(user: UserItem): Promise<BalanceResponse> {
+    const url = baseUsersUrl + `/${user.id}/wallet/balance`;
+    return doFetch(url, true, {
+        method: 'GET'
+    });
+}
 export function useUsersData(page: number, rowsPerPage: number) {
     return useQuery(['users', page, rowsPerPage], () => getUsers(page,rowsPerPage), reactQueryDefaultConfig);
 }

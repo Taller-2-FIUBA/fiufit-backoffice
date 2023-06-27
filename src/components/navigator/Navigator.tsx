@@ -35,7 +35,7 @@ function Navigator() {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
-  const adminInfo = getAdminInfo();
+  getAdminInfo();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
