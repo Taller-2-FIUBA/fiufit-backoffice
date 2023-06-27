@@ -29,15 +29,18 @@ export async function doFetch<T>(url: string, useToken: boolean, options: FetchO
         }
         const response = await fetch(url, options);
         if (response.ok) {
+            if (response.status === 204) {
+                return {} as T;
+            }
             const responseJson = await response.json();
             return responseJson;
         } else if (response.status === 401) {
           clearAdminInfo();
           throw new Error('Unauthorized');
         } else {
-            throw new Error(`Request failed with status ${response.status}`);
+            throw new Error(`Request failed with status ${response.status} in: ${url}`);
         }
     } catch (error: any) {
-        throw new Error(`Failed to fetch data: ${error.message}`);
+        throw new Error(`Failed to fetch data: ${error.message} in: ${url}`);
     }
 }
