@@ -43,10 +43,12 @@ const baseUsersUrl = `${process.env.REACT_APP_API_URL}/users`;
 
 
 async function updateUser(user: UserItem): Promise<UserItem> {
-    return doFetch(baseUsersUrl + `/status/${user.id}` , true, {
+    await doFetch(baseUsersUrl + `/status/${user.id}` , true, {
         method: 'PATCH',
         headers: {'Content-Type': 'application/json'}
     });
+    user.is_blocked = !user.is_blocked;
+    return user;
 }
 
 async function getUsers(page: number, limit:number): Promise<UserResponse> {
@@ -77,8 +79,15 @@ export function useUserUpdate() {
     const queryClient = useQueryClient();
     return useMutation(updateUser, {
         onSuccess: (data) => {
-            console.log("User updated: ", data);
-            queryClient.invalidateQueries(['users']);
+            queryClient.setQueryData(['users'], (old: UserResponse | undefined) => {
+                if (old && old.items) {
+                    const index = old.items.findIndex((user) => user.id === data.id);
+                    if (index !== -1) {
+                        old.items[index] = data;
+                    }
+                }
+                return old;
+            });
         }
     });
 }

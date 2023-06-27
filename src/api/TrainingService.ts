@@ -33,11 +33,14 @@ export interface TrainingTypesResponse{
 const baseTrainingsUrl = `${process.env.REACT_APP_API_URL}/trainings`;
 
 async function updateTraining(training: Training): Promise<Training> {
-    return doFetch(baseTrainingsUrl + `/${training.id}`, true, { 
+    await doFetch(baseTrainingsUrl + `/${training.id}`, true, { 
         method: 'PATCH',
         body: JSON.stringify({blocked: !training.blocked}),
         headers: {'Content-Type': 'application/json'}
     });
+    training.blocked = !training.blocked;
+    return training;
+    
 }
 
 async function getTrainings(page:number, rowsPerPage:number, filters?: Filters): Promise<TrainingResponse> { 
@@ -86,15 +89,23 @@ export interface Filters {
     type: string;
     difficulty: string;
   }
-export function useTrainingsData(page:number, rowsPerPage:number, filters?: Filters) {
-    return useQuery(['trainings',page, rowsPerPage], () => getTrainings(page,rowsPerPage, filters), reactQueryDefaultConfig);
+export function useTrainingsData(page: number, rowsPerPage: number, filters?: Filters) {
+    return useQuery(['trainings', page, rowsPerPage], () => getTrainings(page, rowsPerPage, filters), reactQueryDefaultConfig);
 }
 
 export function useTrainingUpdate() {
     const queryClient = useQueryClient();
     return useMutation(updateTraining, {
         onSuccess: (data) => {
-            queryClient.invalidateQueries(['trainings']);
+            queryClient.setQueryData(['trainings'], (old: Training[] | undefined) => {
+                if (old) {
+                    const index = old.findIndex((training) => training.id === data.id);
+                    if (index !== -1) {
+                        old[index] = data;
+                    }
+                }
+                return old;
+            });
         }
     });
 }
