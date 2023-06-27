@@ -264,7 +264,7 @@ export default function Trainings() {
         <TablePagination
           className="table-pagination"
           component="div"
-          count={data?.limit || 0}
+          count={data?.count || 0}
           page={page}
           onPageChange={(event, newPage) => {
             setPage(newPage);
