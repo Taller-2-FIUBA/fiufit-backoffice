@@ -26,21 +26,20 @@ interface UserProfileProps {
 const AddFunds: React.FC<UserProfileProps> = ({ user, handleOnSuccess }) => {
   const Icon = MUIcon["AttachMoney"];
   const [inputValue, setInputValue] = useState("");
+  const [data, setData] = useState<any>(null);
+  const [errorAddFund, setErrorAddFund] = useState<string>("");
 
-  const handleClick = () => {
+  const handleClick = async () => {
     console.log("Valor: ", inputValue);
 
     try {
-      addFundsToUser(user, parseFloat(inputValue));
-    } catch (error) {
+      await addFundsToUser(user, parseFloat(inputValue));
+      handleOnSuccess();
+    } catch (error: any) {
       console.log("Error");
       setErrorAddFund("Error on load data. Please try again.");
     }
-    handleOnSuccess(); // Cierro el modal
   };
-
-  const [data, setData] = useState<any>(null);
-  const [errorAddFund, setErrorAddFund] = useState<string>("");
 
   useEffect(() => {
     const newBalance = async (user: UserItem) => {
@@ -50,6 +49,9 @@ const AddFunds: React.FC<UserProfileProps> = ({ user, handleOnSuccess }) => {
     };
     newBalance(user);
   }, []);
+  const inputStyles = {
+    color: "white",
+  };
 
   const ariaLabel = { "aria-label": "description", color: "#fff" };
 
@@ -87,7 +89,9 @@ const AddFunds: React.FC<UserProfileProps> = ({ user, handleOnSuccess }) => {
                   <h3 className="modal-item-title">{"Add Fund"}</h3>
                 </div>
                 <Input
-                  inputProps={ariaLabel}
+                  inputProps={{
+                    style: inputStyles,
+                  }}
                   placeholder="Amount"
                   onChange={(e) => setInputValue(e.target.value)}
                 />
@@ -99,12 +103,12 @@ const AddFunds: React.FC<UserProfileProps> = ({ user, handleOnSuccess }) => {
                   +
                 </Button>
               </Stack>
+              {errorAddFund && (
+                <Typography align="center" color="error" variant="body1">
+                  {errorAddFund}
+                </Typography>
+              )}
             </Box>
-            {errorAddFund && (
-              <Typography color="error" variant="body1">
-                {errorAddFund}
-              </Typography>
-            )}
           </Box>
         )}
       </CardContent>
