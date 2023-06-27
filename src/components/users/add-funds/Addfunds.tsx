@@ -6,6 +6,7 @@ import {
   Button,
   Input,
   Stack,
+  Typography,
 } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import * as MUIcon from "@mui/icons-material";
@@ -25,24 +26,22 @@ interface UserProfileProps {
 const AddFunds: React.FC<UserProfileProps> = ({ user, handleOnSuccess }) => {
   const Icon = MUIcon["AttachMoney"];
   const [inputValue, setInputValue] = useState("");
-  //  const { mutate: updateUserBalance } = useUpdateUserBalance(user);
 
   const handleClick = () => {
-    // Aquí puedes utilizar el valor de inputValue
     console.log("Valor: ", inputValue);
 
     try {
-      addFundsToUser(user, inputValue);
-      handleOnSuccess(); // Cierro el modal
+      addFundsToUser(user, parseFloat(inputValue));
     } catch (error) {
-      //TODO esto para el caso de 500, sino identificar el error en particular
-      /* setError(
-        "Error al guardar el admin. Por favor, inténtelo de nuevo."
-      );*/
+      console.log("Error");
+      setErrorAddFund("Error on load data. Please try again.");
     }
+    handleOnSuccess(); // Cierro el modal
   };
 
   const [data, setData] = useState<any>(null);
+  const [errorAddFund, setErrorAddFund] = useState<string>("");
+
   useEffect(() => {
     const newBalance = async (user: UserItem) => {
       const balanceResponse = await getBalance(user);
@@ -51,6 +50,9 @@ const AddFunds: React.FC<UserProfileProps> = ({ user, handleOnSuccess }) => {
     };
     newBalance(user);
   }, []);
+
+  const ariaLabel = { "aria-label": "description", color: "#fff" };
+
   return (
     <Card className="modal-container user-profile">
       <CardContent className="modal-content">
@@ -85,8 +87,8 @@ const AddFunds: React.FC<UserProfileProps> = ({ user, handleOnSuccess }) => {
                   <h3 className="modal-item-title">{"Add Fund"}</h3>
                 </div>
                 <Input
-                  value={inputValue}
-                  defaultValue={user?.balance ? user?.balance : 0}
+                  inputProps={ariaLabel}
+                  placeholder="Amount"
                   onChange={(e) => setInputValue(e.target.value)}
                 />
                 <Button
@@ -98,6 +100,11 @@ const AddFunds: React.FC<UserProfileProps> = ({ user, handleOnSuccess }) => {
                 </Button>
               </Stack>
             </Box>
+            {errorAddFund && (
+              <Typography color="error" variant="body1">
+                {errorAddFund}
+              </Typography>
+            )}
           </Box>
         )}
       </CardContent>

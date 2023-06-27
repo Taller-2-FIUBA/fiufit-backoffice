@@ -56,10 +56,11 @@ async function updateUser(user: UserItem): Promise<UserItem> {
     });
 }
 
-export async function addFundsToUser(user: UserItem, amount: string): Promise<UserItem> {
-    
+export async function addFundsToUser(user: UserItem, amount: number): Promise<UserItem> {
+    const requestData = { balance: {amount: amount}}
     return doFetch(baseUsersUrl + `/${user.id}/wallet/balance` , true, {
         method: 'PATCH',
+        body: JSON.stringify(requestData),
         headers: {'Content-Type': 'application/json'}
     });
 }
