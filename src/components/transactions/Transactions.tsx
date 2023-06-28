@@ -76,6 +76,7 @@ export default function Transactions() {
         </Table>
         <TablePagination
           component="div"
+          className="table-pagination"
           count={data?.total || 0}
           page={page}
           onPageChange={(event, newPage) => {

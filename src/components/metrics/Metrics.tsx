@@ -1,17 +1,22 @@
 import React, { useEffect } from "react";
 import "./Metrics.scss";
 import { Grid, Typography, Card } from "@mui/material";
-import { getAllMetrics, Metrics } from "../../api/MetricsService";
+import { getAllMetrics, MetricsResponse } from "../../api/MetricsService";
 
-export default function Metric() {
-  const [usersMetrics, setUsersMetrics] = React.useState<Metrics[] | null>();
+export default function Metrics() {
+  const [usersMetrics, setUsersMetrics] = React.useState<MetricsResponse[]>();
 
   useEffect(() => {
-    const fetchData = async () => {
-      const data: Metrics[] = await getAllMetrics();
-      setUsersMetrics(data);
+    const getMetrics = async () => {
+      const lametrica = await getAllMetrics();
+      setUsersMetrics(lametrica);
     };
+    getMetrics();
   }, []);
+
+  const divStyle = {
+    color: "white",
+  };
 
   return (
     <Grid container spacing={3} className="dashboard">
@@ -19,7 +24,7 @@ export default function Metric() {
         <Grid item xs={12} sm={6} key={metric.name}>
           <Card className="card">
             <Typography variant="h5" component="h2" className="cardTitle">
-              {metric.name}
+              {metric.title}
             </Typography>
             <Typography variant="body1">{metric.value}</Typography>
           </Card>

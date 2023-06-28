@@ -5,7 +5,8 @@ export interface UsersMetric {
     count: number,
 }
 
-export interface Metrics {
+export interface MetricsResponse {
+    title: string,
     name: string,
     value: number
 }
@@ -22,22 +23,16 @@ async function getMetric(metricName: string): Promise<UsersMetric[]> {
     });
 }
 
-export async function getAllMetrics(){
-    const miArr: Metrics[] = []
+export async function getAllMetrics(): Promise<MetricsResponse[]>{
+    const miArr: MetricsResponse[] = []
+    
+    const m = await getMetric('user_blocked_count')
 
-    try {
-        for (const e of metricsToShow) {
-        console.log("Nombre", e)
-         getMetric(e)
-         .then((responseBlockedUsers: UsersMetric[]) => {
-                const primerElemento = responseBlockedUsers[0];
-                miArr.push({name: e, value: primerElemento.count})
-                console.log(primerElemento);
-              })
-        }
-    }catch{
-        console.log(Error)
-    }
+        const primerElemento = m[0];
+        miArr.push({title: "Users blocked", name: 'user_blocked_count', value: primerElemento.count})
+        console.log(primerElemento);
+      
+    console.log("RESULTADO DEL SERVICE", miArr)
     return miArr
 }
 /*
