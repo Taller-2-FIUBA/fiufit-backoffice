@@ -26,8 +26,8 @@ async function getMetric(metricName: string): Promise<UsersMetric[]> {
 export async function getAllMetrics(): Promise<MetricsResponse[]>{
     const miArr: MetricsResponse[] = []
     
-    const m = await getMetric('user_blocked_count')
     for (const metric of metricsToShow) {
+        const m = await getMetric(metric)
         const primerElemento = m[0];
         miArr.push({title: "Users blocked", name: metric, value: primerElemento.count})
         console.log(primerElemento);
