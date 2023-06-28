@@ -26,7 +26,9 @@ export default function Metrics() {
             <Typography variant="h5" component="h2" className="cardTitle">
               {metric.title}
             </Typography>
-            <Typography variant="body1">{metric.value}</Typography>
+            <Typography variant="body1" style={{ marginTop: "10px" }}>
+              {metric.value}
+            </Typography>
           </Card>
         </Grid>
       ))}
