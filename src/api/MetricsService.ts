@@ -15,6 +15,7 @@ const baseMetricsUrl = `${process.env.REACT_APP_API_URL}`;
 
 const metricsToShow = [
     {title: "Users blocked", name: 'user_blocked_count'}
+    //TODO agregar acá el resto de métricas que vamos a mostrar
 ];
 
 async function getMetric(metricName: string): Promise<UsersMetric[]> {
