@@ -14,7 +14,7 @@ export interface MetricsResponse {
 const baseMetricsUrl = `${process.env.REACT_APP_API_URL}`;
 
 const metricsToShow = [
-    'user_blocked_count'
+    {title: "Users blocked", name: 'user_blocked_count'}
 ];
 
 async function getMetric(metricName: string): Promise<UsersMetric[]> {
@@ -27,9 +27,9 @@ export async function getAllMetrics(): Promise<MetricsResponse[]>{
     const miArr: MetricsResponse[] = []
     
     for (const metric of metricsToShow) {
-        const m = await getMetric(metric)
+        const m = await getMetric(metric.name)
         const primerElemento = m[0];
-        miArr.push({title: "Users blocked", name: metric, value: primerElemento.count})
+        miArr.push({title: metric.title, name: metric.name, value: primerElemento.count})
         console.log(primerElemento);
     }
     console.log("RESULTADO DEL SERVICE", miArr)
