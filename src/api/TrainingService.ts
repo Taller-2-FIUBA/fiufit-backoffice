@@ -24,7 +24,7 @@ export interface TrainingResponse {
     items: Training[],
     offset: number,
     limit: number,
-    total:number
+    count:number
 }
 export interface TrainingTypesResponse{
     items: string[],
