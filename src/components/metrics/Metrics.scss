@@ -5,9 +5,15 @@
         background-color: $color-secondary;
         color: $color-quaternary;
         margin: 10px auto;
-        height: 100px;
+        height: 150px;
     }
     .cardTitle {
         color: $color-tertiary
+    }
+    .card-extended {
+        background-color: $color-secondary;
+        color: $color-quaternary;
+        margin: 10px auto;
+        height: 150px;
     }
 }
